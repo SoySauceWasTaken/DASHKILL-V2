@@ -49,8 +49,36 @@ namespace Quantum {
   using RuntimeInitializeOnLoadMethodAttribute = UnityEngine.RuntimeInitializeOnLoadMethodAttribute;
   #endif //;
   
+  public enum KCCContactType : int {
+    NONE = 0,
+    GROUND = 1,
+    CEIL = 2,
+    WALL = 3,
+    SLOPE = 4,
+  }
+  public enum KCCState : int {
+    FREE_FALLING = 0,
+    GROUNDED = 1,
+    SLOPED = 2,
+    WALLED = 3,
+    DASHING = 4,
+    JUMPED = 5,
+    DOUBLE_JUMPED = 6,
+  }
   [System.FlagsAttribute()]
   public enum InputButtons : int {
+    _left = 1 << 0,
+    _right = 1 << 1,
+    _up = 1 << 2,
+    _down = 1 << 3,
+    _a = 1 << 4,
+    _b = 1 << 5,
+    _c = 1 << 6,
+    _d = 1 << 7,
+    _l1 = 1 << 8,
+    _r1 = 1 << 9,
+    _select = 1 << 10,
+    _start = 1 << 11,
   }
   public static unsafe partial class FlagsExtensions {
     public static Boolean IsFlagSet(this InputButtons self, InputButtons flag) {
@@ -511,13 +539,56 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct Input {
-    public const Int32 SIZE = 4;
+    public const Int32 SIZE = 160;
     public const Int32 ALIGNMENT = 4;
+    [FieldOffset(76)]
+    public Button _left;
+    [FieldOffset(100)]
+    public Button _right;
+    [FieldOffset(136)]
+    public Button _up;
+    [FieldOffset(52)]
+    public Button _down;
+    [FieldOffset(4)]
+    public Button _a;
+    [FieldOffset(16)]
+    public Button _b;
+    [FieldOffset(28)]
+    public Button _c;
+    [FieldOffset(40)]
+    public Button _d;
+    [FieldOffset(64)]
+    public Button _l1;
+    [FieldOffset(88)]
+    public Button _r1;
+    [FieldOffset(112)]
+    public Button _select;
+    [FieldOffset(124)]
+    public Button _start;
+    [FieldOffset(1)]
+    public Byte _analogRightTrigger;
     [FieldOffset(0)]
-    private fixed Byte _alignment_padding_[4];
+    public Byte _analogLeftTrigger;
+    [FieldOffset(148)]
+    public QuantumThumbSticks ThumbSticks;
     public override readonly Int32 GetHashCode() {
       unchecked { 
         var hash = 19249;
+        hash = hash * 31 + _left.GetHashCode();
+        hash = hash * 31 + _right.GetHashCode();
+        hash = hash * 31 + _up.GetHashCode();
+        hash = hash * 31 + _down.GetHashCode();
+        hash = hash * 31 + _a.GetHashCode();
+        hash = hash * 31 + _b.GetHashCode();
+        hash = hash * 31 + _c.GetHashCode();
+        hash = hash * 31 + _d.GetHashCode();
+        hash = hash * 31 + _l1.GetHashCode();
+        hash = hash * 31 + _r1.GetHashCode();
+        hash = hash * 31 + _select.GetHashCode();
+        hash = hash * 31 + _start.GetHashCode();
+        hash = hash * 31 + _analogRightTrigger.GetHashCode();
+        hash = hash * 31 + _analogLeftTrigger.GetHashCode();
+        hash = hash * 31 + ThumbSticks.GetHashCode();
         return hash;
       }
     }
@@ -526,21 +597,215 @@ namespace Quantum {
     }
     public Boolean IsDown(InputButtons button) {
       switch (button) {
+        case InputButtons._left: return _left.IsDown;
+        case InputButtons._right: return _right.IsDown;
+        case InputButtons._up: return _up.IsDown;
+        case InputButtons._down: return _down.IsDown;
+        case InputButtons._a: return _a.IsDown;
+        case InputButtons._b: return _b.IsDown;
+        case InputButtons._c: return _c.IsDown;
+        case InputButtons._d: return _d.IsDown;
+        case InputButtons._l1: return _l1.IsDown;
+        case InputButtons._r1: return _r1.IsDown;
+        case InputButtons._select: return _select.IsDown;
+        case InputButtons._start: return _start.IsDown;
         default: return false;
       }
     }
     public Boolean WasPressed(InputButtons button) {
       switch (button) {
+        case InputButtons._left: return _left.WasPressed;
+        case InputButtons._right: return _right.WasPressed;
+        case InputButtons._up: return _up.WasPressed;
+        case InputButtons._down: return _down.WasPressed;
+        case InputButtons._a: return _a.WasPressed;
+        case InputButtons._b: return _b.WasPressed;
+        case InputButtons._c: return _c.WasPressed;
+        case InputButtons._d: return _d.WasPressed;
+        case InputButtons._l1: return _l1.WasPressed;
+        case InputButtons._r1: return _r1.WasPressed;
+        case InputButtons._select: return _select.WasPressed;
+        case InputButtons._start: return _start.WasPressed;
         default: return false;
       }
     }
     static partial void SerializeCodeGen(void* ptr, FrameSerializer serializer) {
         var p = (Input*)ptr;
+        serializer.Stream.Serialize(&p->_analogLeftTrigger);
+        serializer.Stream.Serialize(&p->_analogRightTrigger);
+        Button.Serialize(&p->_a, serializer);
+        Button.Serialize(&p->_b, serializer);
+        Button.Serialize(&p->_c, serializer);
+        Button.Serialize(&p->_d, serializer);
+        Button.Serialize(&p->_down, serializer);
+        Button.Serialize(&p->_l1, serializer);
+        Button.Serialize(&p->_left, serializer);
+        Button.Serialize(&p->_r1, serializer);
+        Button.Serialize(&p->_right, serializer);
+        Button.Serialize(&p->_select, serializer);
+        Button.Serialize(&p->_start, serializer);
+        Button.Serialize(&p->_up, serializer);
+        Quantum.QuantumThumbSticks.Serialize(&p->ThumbSticks, serializer);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct KCCQueryResult {
+    public const Int32 SIZE = 112;
+    public const Int32 ALIGNMENT = 8;
+    [FieldOffset(24)]
+    public FPVector2 SurfaceTangent;
+    [FieldOffset(16)]
+    public FP ContactAngle;
+    [FieldOffset(8)]
+    public QBoolean Overlapping;
+    [FieldOffset(4)]
+    public QBoolean Ignore;
+    [FieldOffset(40)]
+    public Hit Contact;
+    [FieldOffset(0)]
+    public KCCContactType ContactType;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 3583;
+        hash = hash * 31 + SurfaceTangent.GetHashCode();
+        hash = hash * 31 + ContactAngle.GetHashCode();
+        hash = hash * 31 + Overlapping.GetHashCode();
+        hash = hash * 31 + Ignore.GetHashCode();
+        hash = hash * 31 + Contact.GetHashCode();
+        hash = hash * 31 + (Int32)ContactType;
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (KCCQueryResult*)ptr;
+        serializer.Stream.Serialize((Int32*)&p->ContactType);
+        QBoolean.Serialize(&p->Ignore, serializer);
+        QBoolean.Serialize(&p->Overlapping, serializer);
+        FP.Serialize(&p->ContactAngle, serializer);
+        FPVector2.Serialize(&p->SurfaceTangent, serializer);
+        Hit.Serialize(&p->Contact, serializer);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
+  [ExcludeFromPrototype()]
+  public unsafe partial struct QuantumDemoInputPlatformer2D {
+    public const Int32 SIZE = 128;
+    public const Int32 ALIGNMENT = 8;
+    [FieldOffset(112)]
+    public FPVector2 AimDirection;
+    [FieldOffset(60)]
+    public Button Left;
+    [FieldOffset(72)]
+    public Button Right;
+    [FieldOffset(84)]
+    public Button Up;
+    [FieldOffset(24)]
+    public Button Down;
+    [FieldOffset(48)]
+    public Button Jump;
+    [FieldOffset(12)]
+    public Button Dash;
+    [FieldOffset(36)]
+    public Button Fire;
+    [FieldOffset(0)]
+    public Button AltFire;
+    [FieldOffset(96)]
+    public Button Use;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 17191;
+        hash = hash * 31 + AimDirection.GetHashCode();
+        hash = hash * 31 + Left.GetHashCode();
+        hash = hash * 31 + Right.GetHashCode();
+        hash = hash * 31 + Up.GetHashCode();
+        hash = hash * 31 + Down.GetHashCode();
+        hash = hash * 31 + Jump.GetHashCode();
+        hash = hash * 31 + Dash.GetHashCode();
+        hash = hash * 31 + Fire.GetHashCode();
+        hash = hash * 31 + AltFire.GetHashCode();
+        hash = hash * 31 + Use.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (QuantumDemoInputPlatformer2D*)ptr;
+        Button.Serialize(&p->AltFire, serializer);
+        Button.Serialize(&p->Dash, serializer);
+        Button.Serialize(&p->Down, serializer);
+        Button.Serialize(&p->Fire, serializer);
+        Button.Serialize(&p->Jump, serializer);
+        Button.Serialize(&p->Left, serializer);
+        Button.Serialize(&p->Right, serializer);
+        Button.Serialize(&p->Up, serializer);
+        Button.Serialize(&p->Use, serializer);
+        FPVector2.Serialize(&p->AimDirection, serializer);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
+  [ExcludeFromPrototype()]
+  public unsafe partial struct QuantumHighresThumbSticks {
+    public const Int32 SIZE = 6;
+    public const Int32 ALIGNMENT = 2;
+    [FieldOffset(0)]
+    public Byte _leftThumbAngle;
+    [FieldOffset(1)]
+    public Byte _leftThumbMagnitude;
+    [FieldOffset(2)]
+    public Int16 _rightThumbX;
+    [FieldOffset(4)]
+    public Int16 _rightThumbY;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 18181;
+        hash = hash * 31 + _leftThumbAngle.GetHashCode();
+        hash = hash * 31 + _leftThumbMagnitude.GetHashCode();
+        hash = hash * 31 + _rightThumbX.GetHashCode();
+        hash = hash * 31 + _rightThumbY.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (QuantumHighresThumbSticks*)ptr;
+        serializer.Stream.Serialize(&p->_leftThumbAngle);
+        serializer.Stream.Serialize(&p->_leftThumbMagnitude);
+        serializer.Stream.Serialize(&p->_rightThumbX);
+        serializer.Stream.Serialize(&p->_rightThumbY);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
+  [ExcludeFromPrototype()]
+  public unsafe partial struct QuantumRegularThumbSticks {
+    public const Int32 SIZE = 4;
+    public const Int32 ALIGNMENT = 1;
+    [FieldOffset(0)]
+    public Byte _leftThumbAngle;
+    [FieldOffset(1)]
+    public Byte _leftThumbMagnitude;
+    [FieldOffset(2)]
+    public Byte _rightThumbAngle;
+    [FieldOffset(3)]
+    public Byte _rightThumbMagnitude;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 2731;
+        hash = hash * 31 + _leftThumbAngle.GetHashCode();
+        hash = hash * 31 + _leftThumbMagnitude.GetHashCode();
+        hash = hash * 31 + _rightThumbAngle.GetHashCode();
+        hash = hash * 31 + _rightThumbMagnitude.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (QuantumRegularThumbSticks*)ptr;
+        serializer.Stream.Serialize(&p->_leftThumbAngle);
+        serializer.Stream.Serialize(&p->_leftThumbMagnitude);
+        serializer.Stream.Serialize(&p->_rightThumbAngle);
+        serializer.Stream.Serialize(&p->_rightThumbMagnitude);
     }
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct _globals_ {
-    public const Int32 SIZE = 640;
+    public const Int32 SIZE = 1576;
     public const Int32 ALIGNMENT = 8;
     [FieldOffset(0)]
     public AssetRef<Map> Map;
@@ -564,12 +829,12 @@ namespace Quantum {
     public Int32 PlayerConnectedCount;
     [FieldOffset(604)]
     [FramePrinter.FixedArrayAttribute(typeof(Input), 6)]
-    private fixed Byte _input_[24];
-    [FieldOffset(632)]
+    private fixed Byte _input_[960];
+    [FieldOffset(1568)]
     public BitSet6 PlayerLastConnectionState;
     public readonly FixedArray<Input> input {
       get {
-        fixed (byte* p = _input_) { return new FixedArray<Input>(p, 4, 6); }
+        fixed (byte* p = _input_) { return new FixedArray<Input>(p, 160, 6); }
       }
     }
     public override readonly Int32 GetHashCode() {
@@ -606,9 +871,177 @@ namespace Quantum {
         Quantum.BitSet6.Serialize(&p->PlayerLastConnectionState, serializer);
     }
   }
+  [StructLayout(LayoutKind.Explicit)]
+  [Union()]
+  [ExcludeFromPrototype()]
+  public unsafe partial struct QuantumThumbSticks {
+    public const Int32 SIZE = 12;
+    public const Int32 ALIGNMENT = 4;
+    [FieldOffset(10)]
+    private fixed Byte _alignment_padding_[2];
+    [FieldOffset(0)]
+    private Int32 _field_used_;
+    [FieldOffset(4)]
+    [FieldOverlap(4)]
+    [FramePrinter.PrintIf("_field_used_", Quantum.QuantumThumbSticks.REGULAR)]
+    private QuantumRegularThumbSticks _Regular;
+    [FieldOffset(4)]
+    [FieldOverlap(4)]
+    [FramePrinter.PrintIf("_field_used_", Quantum.QuantumThumbSticks.HIGHRES)]
+    private QuantumHighresThumbSticks _HighRes;
+    public const Int32 REGULAR = 1;
+    public const Int32 HIGHRES = 2;
+    public readonly Int32 Field {
+      get {
+        return _field_used_;
+      }
+    }
+    public QuantumRegularThumbSticks* Regular {
+      get {
+        fixed (QuantumRegularThumbSticks* p = &_Regular) {
+          if (_field_used_ != REGULAR) {
+            Native.Utils.Clear(p, 4);
+            _field_used_ = REGULAR;
+          }
+          return p;
+        }
+      }
+    }
+    public QuantumHighresThumbSticks* HighRes {
+      get {
+        fixed (QuantumHighresThumbSticks* p = &_HighRes) {
+          if (_field_used_ != HIGHRES) {
+            Native.Utils.Clear(p, 6);
+            _field_used_ = HIGHRES;
+          }
+          return p;
+        }
+      }
+    }
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 8867;
+        hash = hash * 31 + _field_used_.GetHashCode();
+        hash = hash * 31 + _Regular.GetHashCode();
+        hash = hash * 31 + _HighRes.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (QuantumThumbSticks*)ptr;
+        if (serializer.InputMode) {
+          serializer.Stream.SerializeBuffer((byte*)p, Quantum.QuantumThumbSticks.SIZE);
+          return;
+        }
+        serializer.Stream.Serialize(&p->_field_used_);
+        if (p->_field_used_ == HIGHRES) {
+          Quantum.QuantumHighresThumbSticks.Serialize(&p->_HighRes, serializer);
+        }
+        if (p->_field_used_ == REGULAR) {
+          Quantum.QuantumRegularThumbSticks.Serialize(&p->_Regular, serializer);
+        }
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct KCC2D : Quantum.IComponent {
+    public const Int32 SIZE = 328;
+    public const Int32 ALIGNMENT = 8;
+    [FieldOffset(16)]
+    public AssetRef<KCC2DConfig> Config;
+    [FieldOffset(72)]
+    [ExcludeFromPrototype()]
+    public FPVector2 _kinematicVelocity;
+    [FieldOffset(56)]
+    [ExcludeFromPrototype()]
+    public FPVector2 _dynamicVelocity;
+    [FieldOffset(0)]
+    [ExcludeFromPrototype()]
+    public Int32 LastInputDirection;
+    [FieldOffset(88)]
+    [ExcludeFromPrototype()]
+    public KCCQueryResult Closest;
+    [FieldOffset(4)]
+    [ExcludeFromPrototype()]
+    public KCCState _state;
+    [FieldOffset(32)]
+    [ExcludeFromPrototype()]
+    public FrameTimer _stateTimer;
+    [FieldOffset(24)]
+    public FrameTimer GroundedJumpTimer;
+    [FieldOffset(200)]
+    [ExcludeFromPrototype()]
+    public QuantumDemoInputPlatformer2D Input;
+    [FieldOffset(40)]
+    [ExcludeFromPrototype()]
+    public FPVector2 InitialPosition;
+    [FieldOffset(8)]
+    [ExcludeFromPrototype()]
+    public QBoolean IgnoreStep;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 19979;
+        hash = hash * 31 + Config.GetHashCode();
+        hash = hash * 31 + _kinematicVelocity.GetHashCode();
+        hash = hash * 31 + _dynamicVelocity.GetHashCode();
+        hash = hash * 31 + LastInputDirection.GetHashCode();
+        hash = hash * 31 + Closest.GetHashCode();
+        hash = hash * 31 + (Int32)_state;
+        hash = hash * 31 + _stateTimer.GetHashCode();
+        hash = hash * 31 + GroundedJumpTimer.GetHashCode();
+        hash = hash * 31 + Input.GetHashCode();
+        hash = hash * 31 + InitialPosition.GetHashCode();
+        hash = hash * 31 + IgnoreStep.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (KCC2D*)ptr;
+        serializer.Stream.Serialize(&p->LastInputDirection);
+        serializer.Stream.Serialize((Int32*)&p->_state);
+        QBoolean.Serialize(&p->IgnoreStep, serializer);
+        AssetRef.Serialize(&p->Config, serializer);
+        FrameTimer.Serialize(&p->GroundedJumpTimer, serializer);
+        FrameTimer.Serialize(&p->_stateTimer, serializer);
+        FPVector2.Serialize(&p->InitialPosition, serializer);
+        FPVector2.Serialize(&p->_dynamicVelocity, serializer);
+        FPVector2.Serialize(&p->_kinematicVelocity, serializer);
+        Quantum.KCCQueryResult.Serialize(&p->Closest, serializer);
+        Quantum.QuantumDemoInputPlatformer2D.Serialize(&p->Input, serializer);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct PlayerLink : Quantum.IComponent {
+    public const Int32 SIZE = 4;
+    public const Int32 ALIGNMENT = 4;
+    [FieldOffset(0)]
+    public PlayerRef Player;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 21391;
+        hash = hash * 31 + Player.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (PlayerLink*)ptr;
+        PlayerRef.Serialize(&p->Player, serializer);
+    }
+  }
+  public unsafe partial interface ISignalOnKCC2DPreCollision : ISignal {
+    void OnKCC2DPreCollision(Frame f, EntityRef entity, KCC2D* kcc, KCCQueryResult* collision);
+  }
+  public unsafe partial interface ISignalOnKCC2DTrigger : ISignal {
+    void OnKCC2DTrigger(Frame f, EntityRef entity, KCC2D* kcc, Hit trigger);
+  }
+  public unsafe partial interface ISignalOnKCC2DSolverCollision : ISignal {
+    void OnKCC2DSolverCollision(Frame f, EntityRef entity, KCC2D* kcc, KCCQueryResult* collision, Int32 iteration);
+  }
   public static unsafe partial class Constants {
   }
   public unsafe partial class Frame {
+    private ISignalOnKCC2DPreCollision[] _ISignalOnKCC2DPreCollisionSystems;
+    private ISignalOnKCC2DTrigger[] _ISignalOnKCC2DTriggerSystems;
+    private ISignalOnKCC2DSolverCollision[] _ISignalOnKCC2DSolverCollisionSystems;
     partial void AllocGen() {
       _globals = (_globals_*)Context.Allocator.AllocAndClear(sizeof(_globals_));
     }
@@ -620,12 +1053,17 @@ namespace Quantum {
     }
     partial void InitGen() {
       Initialize(this, this.SimulationConfig.Entities, 256);
+      _ISignalOnKCC2DPreCollisionSystems = BuildSignalsArray<ISignalOnKCC2DPreCollision>();
+      _ISignalOnKCC2DTriggerSystems = BuildSignalsArray<ISignalOnKCC2DTrigger>();
+      _ISignalOnKCC2DSolverCollisionSystems = BuildSignalsArray<ISignalOnKCC2DSolverCollision>();
       _ComponentSignalsOnAdded = new ComponentReactiveCallbackInvoker[ComponentTypeId.Type.Length];
       _ComponentSignalsOnRemoved = new ComponentReactiveCallbackInvoker[ComponentTypeId.Type.Length];
       BuildSignalsArrayOnComponentAdded<CharacterController2D>();
       BuildSignalsArrayOnComponentRemoved<CharacterController2D>();
       BuildSignalsArrayOnComponentAdded<CharacterController3D>();
       BuildSignalsArrayOnComponentRemoved<CharacterController3D>();
+      BuildSignalsArrayOnComponentAdded<Quantum.KCC2D>();
+      BuildSignalsArrayOnComponentRemoved<Quantum.KCC2D>();
       BuildSignalsArrayOnComponentAdded<MapEntityLink>();
       BuildSignalsArrayOnComponentRemoved<MapEntityLink>();
       BuildSignalsArrayOnComponentAdded<NavMeshAvoidanceAgent>();
@@ -652,6 +1090,8 @@ namespace Quantum {
       BuildSignalsArrayOnComponentRemoved<PhysicsJoints2D>();
       BuildSignalsArrayOnComponentAdded<PhysicsJoints3D>();
       BuildSignalsArrayOnComponentRemoved<PhysicsJoints3D>();
+      BuildSignalsArrayOnComponentAdded<Quantum.PlayerLink>();
+      BuildSignalsArrayOnComponentRemoved<Quantum.PlayerLink>();
       BuildSignalsArrayOnComponentAdded<Transform2D>();
       BuildSignalsArrayOnComponentRemoved<Transform2D>();
       BuildSignalsArrayOnComponentAdded<Transform2DVertical>();
@@ -664,6 +1104,21 @@ namespace Quantum {
     partial void SetPlayerInputCodeGen(PlayerRef player, Input input) {
       if ((int)player >= (int)_globals->input.Length) { throw new System.ArgumentOutOfRangeException("player"); }
       var i = _globals->input.GetPointer(player);
+      i->_left = i->_left.Update(this.Number, input._left);
+      i->_right = i->_right.Update(this.Number, input._right);
+      i->_up = i->_up.Update(this.Number, input._up);
+      i->_down = i->_down.Update(this.Number, input._down);
+      i->_a = i->_a.Update(this.Number, input._a);
+      i->_b = i->_b.Update(this.Number, input._b);
+      i->_c = i->_c.Update(this.Number, input._c);
+      i->_d = i->_d.Update(this.Number, input._d);
+      i->_l1 = i->_l1.Update(this.Number, input._l1);
+      i->_r1 = i->_r1.Update(this.Number, input._r1);
+      i->_select = i->_select.Update(this.Number, input._select);
+      i->_start = i->_start.Update(this.Number, input._start);
+      i->_analogRightTrigger = input._analogRightTrigger;
+      i->_analogLeftTrigger = input._analogLeftTrigger;
+      i->ThumbSticks = input.ThumbSticks;
     }
     public Input* GetPlayerInput(PlayerRef player) {
       if ((int)player >= (int)_globals->input.Length) { throw new System.ArgumentOutOfRangeException("player"); }
@@ -677,6 +1132,33 @@ namespace Quantum {
       Physics3D?.Init(_globals->PhysicsState3D.MapStaticCollidersState.TrackedMap);
     }
     public unsafe partial struct FrameSignals {
+      public void OnKCC2DPreCollision(EntityRef entity, KCC2D* kcc, KCCQueryResult* collision) {
+        var array = _f._ISignalOnKCC2DPreCollisionSystems;
+        for (Int32 i = 0; i < array.Length; ++i) {
+          var s = array[i];
+          if (_f.SystemIsEnabledInHierarchy((SystemBase)s)) {
+            s.OnKCC2DPreCollision(_f, entity, kcc, collision);
+          }
+        }
+      }
+      public void OnKCC2DTrigger(EntityRef entity, KCC2D* kcc, Hit trigger) {
+        var array = _f._ISignalOnKCC2DTriggerSystems;
+        for (Int32 i = 0; i < array.Length; ++i) {
+          var s = array[i];
+          if (_f.SystemIsEnabledInHierarchy((SystemBase)s)) {
+            s.OnKCC2DTrigger(_f, entity, kcc, trigger);
+          }
+        }
+      }
+      public void OnKCC2DSolverCollision(EntityRef entity, KCC2D* kcc, KCCQueryResult* collision, Int32 iteration) {
+        var array = _f._ISignalOnKCC2DSolverCollisionSystems;
+        for (Int32 i = 0; i < array.Length; ++i) {
+          var s = array[i];
+          if (_f.SystemIsEnabledInHierarchy((SystemBase)s)) {
+            s.OnKCC2DSolverCollision(_f, entity, kcc, collision, iteration);
+          }
+        }
+      }
     }
   }
   public unsafe partial class Statics {
@@ -729,6 +1211,10 @@ namespace Quantum {
       typeRegistry.Register(typeof(IntVector3), IntVector3.SIZE);
       typeRegistry.Register(typeof(Joint), Joint.SIZE);
       typeRegistry.Register(typeof(Joint3D), Joint3D.SIZE);
+      typeRegistry.Register(typeof(Quantum.KCC2D), Quantum.KCC2D.SIZE);
+      typeRegistry.Register(typeof(Quantum.KCCContactType), 4);
+      typeRegistry.Register(typeof(Quantum.KCCQueryResult), Quantum.KCCQueryResult.SIZE);
+      typeRegistry.Register(typeof(Quantum.KCCState), 4);
       typeRegistry.Register(typeof(LayerMask), LayerMask.SIZE);
       typeRegistry.Register(typeof(MapEntityId), MapEntityId.SIZE);
       typeRegistry.Register(typeof(MapEntityLink), MapEntityLink.SIZE);
@@ -752,10 +1238,15 @@ namespace Quantum {
       typeRegistry.Register(typeof(PhysicsJoints3D), PhysicsJoints3D.SIZE);
       typeRegistry.Register(typeof(PhysicsQueryRef), PhysicsQueryRef.SIZE);
       typeRegistry.Register(typeof(PhysicsSceneSettings), PhysicsSceneSettings.SIZE);
+      typeRegistry.Register(typeof(Quantum.PlayerLink), Quantum.PlayerLink.SIZE);
       typeRegistry.Register(typeof(PlayerRef), PlayerRef.SIZE);
       typeRegistry.Register(typeof(Ptr), Ptr.SIZE);
       typeRegistry.Register(typeof(QBoolean), QBoolean.SIZE);
       typeRegistry.Register(typeof(Quantum.Ptr), Quantum.Ptr.SIZE);
+      typeRegistry.Register(typeof(Quantum.QuantumDemoInputPlatformer2D), Quantum.QuantumDemoInputPlatformer2D.SIZE);
+      typeRegistry.Register(typeof(Quantum.QuantumHighresThumbSticks), Quantum.QuantumHighresThumbSticks.SIZE);
+      typeRegistry.Register(typeof(Quantum.QuantumRegularThumbSticks), Quantum.QuantumRegularThumbSticks.SIZE);
+      typeRegistry.Register(typeof(Quantum.QuantumThumbSticks), Quantum.QuantumThumbSticks.SIZE);
       typeRegistry.Register(typeof(QueryOptions), 2);
       typeRegistry.Register(typeof(RNGSession), RNGSession.SIZE);
       typeRegistry.Register(typeof(Shape2D), Shape2D.SIZE);
@@ -769,8 +1260,10 @@ namespace Quantum {
       typeRegistry.Register(typeof(Quantum._globals_), Quantum._globals_.SIZE);
     }
     static partial void InitComponentTypeIdGen() {
-      ComponentTypeId.Reset(ComponentTypeId.BuiltInComponentCount + 0)
+      ComponentTypeId.Reset(ComponentTypeId.BuiltInComponentCount + 2)
         .AddBuiltInComponents()
+        .Add<Quantum.KCC2D>(Quantum.KCC2D.Serialize, null, null, ComponentFlags.None)
+        .Add<Quantum.PlayerLink>(Quantum.PlayerLink.Serialize, null, null, ComponentFlags.None)
         .Finish();
     }
     [Preserve()]
@@ -778,6 +1271,8 @@ namespace Quantum {
       FramePrinter.EnsureNotStripped();
       FramePrinter.EnsurePrimitiveNotStripped<CallbackFlags>();
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.InputButtons>();
+      FramePrinter.EnsurePrimitiveNotStripped<Quantum.KCCContactType>();
+      FramePrinter.EnsurePrimitiveNotStripped<Quantum.KCCState>();
       FramePrinter.EnsurePrimitiveNotStripped<QueryOptions>();
     }
   }

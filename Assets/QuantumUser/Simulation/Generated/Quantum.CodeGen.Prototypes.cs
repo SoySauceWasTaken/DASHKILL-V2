@@ -52,10 +52,171 @@ namespace Quantum.Prototypes {
   [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.Input))]
   public unsafe partial class InputPrototype : StructPrototype {
-    [HideInInspector()]
-    public Int32 _empty_prototype_dummy_field_;
+    public Button _left;
+    public Button _right;
+    public Button _up;
+    public Button _down;
+    public Button _a;
+    public Button _b;
+    public Button _c;
+    public Button _d;
+    public Button _l1;
+    public Button _r1;
+    public Button _select;
+    public Button _start;
+    public Byte _analogRightTrigger;
+    public Byte _analogLeftTrigger;
+    public Quantum.Prototypes.QuantumThumbSticksPrototype ThumbSticks;
     partial void MaterializeUser(Frame frame, ref Quantum.Input result, in PrototypeMaterializationContext context);
     public void Materialize(Frame frame, ref Quantum.Input result, in PrototypeMaterializationContext context = default) {
+        result._left = this._left;
+        result._right = this._right;
+        result._up = this._up;
+        result._down = this._down;
+        result._a = this._a;
+        result._b = this._b;
+        result._c = this._c;
+        result._d = this._d;
+        result._l1 = this._l1;
+        result._r1 = this._r1;
+        result._select = this._select;
+        result._start = this._start;
+        result._analogRightTrigger = this._analogRightTrigger;
+        result._analogLeftTrigger = this._analogLeftTrigger;
+        this.ThumbSticks.Materialize(frame, ref result.ThumbSticks, in context);
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.KCC2D))]
+  public unsafe partial class KCC2DPrototype : ComponentPrototype<Quantum.KCC2D> {
+    public AssetRef<KCC2DConfig> Config;
+    public Quantum.Prototypes.FrameTimerPrototype GroundedJumpTimer;
+    partial void MaterializeUser(Frame frame, ref Quantum.KCC2D result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.KCC2D component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.KCC2D result, in PrototypeMaterializationContext context = default) {
+        result.Config = this.Config;
+        this.GroundedJumpTimer.Materialize(frame, ref result.GroundedJumpTimer, in context);
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.KCCQueryResult))]
+  public unsafe partial class KCCQueryResultPrototype : StructPrototype {
+    public FPVector2 SurfaceTangent;
+    public FP ContactAngle;
+    public QBoolean Overlapping;
+    public QBoolean Ignore;
+    public Hit Contact;
+    public Quantum.QEnum32<KCCContactType> ContactType;
+    partial void MaterializeUser(Frame frame, ref Quantum.KCCQueryResult result, in PrototypeMaterializationContext context);
+    public void Materialize(Frame frame, ref Quantum.KCCQueryResult result, in PrototypeMaterializationContext context = default) {
+        result.SurfaceTangent = this.SurfaceTangent;
+        result.ContactAngle = this.ContactAngle;
+        result.Overlapping = this.Overlapping;
+        result.Ignore = this.Ignore;
+        result.Contact = this.Contact;
+        result.ContactType = this.ContactType;
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.PlayerLink))]
+  public unsafe partial class PlayerLinkPrototype : ComponentPrototype<Quantum.PlayerLink> {
+    public PlayerRef Player;
+    partial void MaterializeUser(Frame frame, ref Quantum.PlayerLink result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.PlayerLink component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.PlayerLink result, in PrototypeMaterializationContext context = default) {
+        result.Player = this.Player;
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [ExcludeFromPrototype()]
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.QuantumDemoInputPlatformer2D))]
+  public unsafe partial class QuantumDemoInputPlatformer2DPrototype : StructPrototype {
+    public FPVector2 AimDirection;
+    public Button Left;
+    public Button Right;
+    public Button Up;
+    public Button Down;
+    public Button Jump;
+    public Button Dash;
+    public Button Fire;
+    public Button AltFire;
+    public Button Use;
+    partial void MaterializeUser(Frame frame, ref Quantum.QuantumDemoInputPlatformer2D result, in PrototypeMaterializationContext context);
+    public void Materialize(Frame frame, ref Quantum.QuantumDemoInputPlatformer2D result, in PrototypeMaterializationContext context = default) {
+        result.AimDirection = this.AimDirection;
+        result.Left = this.Left;
+        result.Right = this.Right;
+        result.Up = this.Up;
+        result.Down = this.Down;
+        result.Jump = this.Jump;
+        result.Dash = this.Dash;
+        result.Fire = this.Fire;
+        result.AltFire = this.AltFire;
+        result.Use = this.Use;
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [ExcludeFromPrototype()]
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.QuantumHighresThumbSticks))]
+  public unsafe partial class QuantumHighresThumbSticksPrototype : StructPrototype {
+    public Byte _leftThumbAngle;
+    public Byte _leftThumbMagnitude;
+    public Int16 _rightThumbX;
+    public Int16 _rightThumbY;
+    partial void MaterializeUser(Frame frame, ref Quantum.QuantumHighresThumbSticks result, in PrototypeMaterializationContext context);
+    public void Materialize(Frame frame, ref Quantum.QuantumHighresThumbSticks result, in PrototypeMaterializationContext context = default) {
+        result._leftThumbAngle = this._leftThumbAngle;
+        result._leftThumbMagnitude = this._leftThumbMagnitude;
+        result._rightThumbX = this._rightThumbX;
+        result._rightThumbY = this._rightThumbY;
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [ExcludeFromPrototype()]
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.QuantumRegularThumbSticks))]
+  public unsafe partial class QuantumRegularThumbSticksPrototype : StructPrototype {
+    public Byte _leftThumbAngle;
+    public Byte _leftThumbMagnitude;
+    public Byte _rightThumbAngle;
+    public Byte _rightThumbMagnitude;
+    partial void MaterializeUser(Frame frame, ref Quantum.QuantumRegularThumbSticks result, in PrototypeMaterializationContext context);
+    public void Materialize(Frame frame, ref Quantum.QuantumRegularThumbSticks result, in PrototypeMaterializationContext context = default) {
+        result._leftThumbAngle = this._leftThumbAngle;
+        result._leftThumbMagnitude = this._leftThumbMagnitude;
+        result._rightThumbAngle = this._rightThumbAngle;
+        result._rightThumbMagnitude = this._rightThumbMagnitude;
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [ExcludeFromPrototype()]
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.QuantumThumbSticks))]
+  public unsafe partial class QuantumThumbSticksPrototype : UnionPrototype {
+    public string _field_used_;
+    public Quantum.Prototypes.QuantumRegularThumbSticksPrototype Regular;
+    public Quantum.Prototypes.QuantumHighresThumbSticksPrototype HighRes;
+    partial void MaterializeUser(Frame frame, ref Quantum.QuantumThumbSticks result, in PrototypeMaterializationContext context);
+    public void Materialize(Frame frame, ref Quantum.QuantumThumbSticks result, in PrototypeMaterializationContext context = default) {
+        switch (_field_used_) {
+          case "REGULAR": this.Regular.Materialize(frame, ref *result.Regular, in context); break;
+          case "HIGHRES": this.HighRes.Materialize(frame, ref *result.HighRes, in context); break;
+          case "": case null: break;
+          default: PrototypeValidator.UnknownUnionField(_field_used_, in context); break;
+        }
         MaterializeUser(frame, ref result, in context);
     }
   }

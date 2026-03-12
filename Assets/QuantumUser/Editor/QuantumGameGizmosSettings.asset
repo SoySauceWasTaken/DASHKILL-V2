@@ -57,12 +57,12 @@ MonoBehaviour:
         _value: 0
     KinematicColliders:
       Enabled: 1
-      Color: {r: 1, g: 1, b: 1, a: 0.5}
+      Color: {r: 1, g: 1, b: 1, a: 0.20392157}
       Scale: 0
       OnlyDrawSelected:
         _value: 0
       DisableFill:
-        _value: 0
+        _value: 1
     ParametricInertiaShape:
       Enabled: 1
       Color: {r: 1, g: 0.92156863, b: 0.015686275, a: 0.25}

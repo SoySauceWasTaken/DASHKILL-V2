@@ -79,25 +79,7 @@ MonoBehaviour:
     StartDisabled: 0
     Children: []
   - SystemType:
-      AssemblyQualifiedName: Quantum.Core.CullingSystem3D, Quantum.Simulation, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-    SystemName: 
-    StartDisabled: 0
-    Children: []
-  - SystemType:
       AssemblyQualifiedName: Quantum.Core.PhysicsSystem2D, Quantum.Simulation, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-    SystemName: 
-    StartDisabled: 0
-    Children: []
-  - SystemType:
-      AssemblyQualifiedName: Quantum.Core.PhysicsSystem3D, Quantum.Simulation, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-    SystemName: 
-    StartDisabled: 0
-    Children: []
-  - SystemType:
-      AssemblyQualifiedName: Quantum.Core.NavigationSystem, Quantum.Simulation, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
     SystemName: 
     StartDisabled: 0
@@ -111,6 +93,12 @@ MonoBehaviour:
   - SystemType:
       AssemblyQualifiedName: Quantum.Core.PlayerConnectedSystem, Quantum.Simulation,
         Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    SystemName: 
+    StartDisabled: 0
+    Children: []
+  - SystemType:
+      AssemblyQualifiedName: Quantum.PlayerSystem, Quantum.Simulation, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
     SystemName: 
     StartDisabled: 0
     Children: []
@@ -145,7 +133,7 @@ MonoBehaviour:
     RawValue: 13107
   MaxContacts: 4
   LayerMask:
-    BitMask: -1
+    BitMask: 128
   UseManifoldNormal: 0
   AirControl: 1
   Acceleration:
@@ -225,7 +213,7 @@ MonoBehaviour:
       RawValue: 1311
     AngularSleepToleranceInRad:
       RawValue: 2288
-    AllowCCD: 0
+    AllowCCD: 1
     CCDLinearVelocityThreshold:
       RawValue: 196608
     CCDAngularVelocityThreshold:

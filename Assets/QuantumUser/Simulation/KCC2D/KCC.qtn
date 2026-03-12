@@ -1,0 +1,75 @@
+
+
+component KCC2D { 
+    AssetRef<KCC2DConfig> Config;
+    
+    [ExcludeFromPrototype]
+    FPVector2 _kinematicVelocity;
+    [ExcludeFromPrototype]
+    FPVector2 _dynamicVelocity;
+
+    [ExcludeFromPrototype]
+    int LastInputDirection;
+    [ExcludeFromPrototype]
+    KCCQueryResult Closest;
+    [ExcludeFromPrototype]
+    KCCState _state;
+    [ExcludeFromPrototype]
+    FrameTimer _stateTimer;
+    FrameTimer GroundedJumpTimer;
+    
+    [ExcludeFromPrototype]
+    QuantumDemoInputPlatformer2D Input;
+    [ExcludeFromPrototype]
+    FPVector2 InitialPosition;
+    
+    [ExcludeFromPrototype]
+    bool IgnoreStep;
+}
+
+struct KCCQueryResult
+{
+    FPVector2 SurfaceTangent;
+    FP ContactAngle;
+    bool Overlapping;
+    bool Ignore;
+    Hit Contact;
+    KCCContactType ContactType;
+}
+
+enum KCCContactType
+{
+    NONE = 0,
+    GROUND = 1,
+    CEIL = 2,
+    WALL = 3,
+    SLOPE = 4
+}
+
+enum KCCState {
+    FREE_FALLING = 0,
+    GROUNDED = 1,
+    SLOPED = 2,
+    WALLED = 3,
+    DASHING = 4,
+    JUMPED = 5,
+    DOUBLE_JUMPED = 6
+}
+
+signal OnKCC2DPreCollision(EntityRef entity, KCC2D* kcc, KCCQueryResult* collision);
+signal OnKCC2DTrigger(EntityRef entity, KCC2D* kcc, Hit trigger);
+signal OnKCC2DSolverCollision(EntityRef entity, KCC2D* kcc, KCCQueryResult* collision, int iteration);
+
+event Jumped {
+    EntityRef Entity;
+    KCCState State;
+    KCCState PreviousState;
+    FPVector2 Impulse;
+}
+
+event Landed {
+    EntityRef Entity;
+    FP Velocity;
+    KCCState State;
+}
+

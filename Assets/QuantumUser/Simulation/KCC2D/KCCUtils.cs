@@ -78,7 +78,7 @@ namespace Quantum
       _stateTimer = default;
       IgnoreStep = true;
       GroundedJumpTimer = default;
-      Input = default;
+      //Input = default;
       LastInputDirection = default;
       if (f.Unsafe.TryGetPointer<Transform2D>(entity, out var transform))
       {

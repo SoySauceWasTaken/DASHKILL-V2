@@ -18,8 +18,8 @@ component KCC2D {
     FrameTimer _stateTimer;
     FrameTimer GroundedJumpTimer;
     
-    [ExcludeFromPrototype]
-    QuantumDemoInputPlatformer2D Input;
+    //[ExcludeFromPrototype]
+    //QuantumDemoInputPlatformer2D Input;
     [ExcludeFromPrototype]
     FPVector2 InitialPosition;
     

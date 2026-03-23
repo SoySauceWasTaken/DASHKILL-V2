@@ -83,9 +83,9 @@ namespace Quantum
       // based on current state
       IntegrateForces(f, entity, transform, KCC);
 
-      ProcessJump(f, entity, transform, KCC);
+      //ProcessJump(f, entity, transform, KCC);
 
-      ProcessDash(f, entity, transform, KCC);
+      //ProcessDash(f, entity, transform, KCC);
 
       int steps = 1;
       if (CCD)
@@ -129,78 +129,78 @@ namespace Quantum
       ComputeState(f, entity, transform, KCC);
     }
 
-    private void ProcessDash(Frame frame, EntityRef entity, Transform2D* transform, KCC2D* kcc)
-    {
-      if (kcc->State == KCCState.DASHING) return;
+    //private void ProcessDash(Frame frame, EntityRef entity, Transform2D* transform, KCC2D* kcc)
+    //{
+    //  if (kcc->State == KCCState.DASHING) return;
 
-      if (kcc->Closest.ContactType == KCCContactType.WALL)
-      {
-        var oppositeInput = kcc->Closest.Contact.Normal.X * kcc->LastInputDirection < 0;
-        if (oppositeInput) return;
-      }
+    //  if (kcc->Closest.ContactType == KCCContactType.WALL)
+    //  {
+    //    var oppositeInput = kcc->Closest.Contact.Normal.X * kcc->LastInputDirection < 0;
+    //    if (oppositeInput) return;
+    //  }
 
-      if (kcc->Input.Dash.WasPressed)
-      {
-        kcc->SetState(frame, KCCState.DASHING, DashDuration);
-        switch (DirectionType)
-        {
-          case DashDirection.Velocity:
-            kcc->KinematicHorizontalSpeed = FPMath.Sign(kcc->CombinedVelocity.X) * MaxDashSpeed;
-            break;
-          case DashDirection.Input:
-            kcc->KinematicHorizontalSpeed = kcc->LastInputDirection * MaxDashSpeed;
-            break;
-        }
-        if (DashSuspendsGravity) kcc->KinematicVerticalSpeed = 0;
-      }
-    }
+    //  if (kcc->Input.Dodge.WasPressed)
+    //  {
+    //    kcc->SetState(frame, KCCState.DASHING, DashDuration);
+    //    switch (DirectionType)
+    //    {
+    //      case DashDirection.Velocity:
+    //        kcc->KinematicHorizontalSpeed = FPMath.Sign(kcc->CombinedVelocity.X) * MaxDashSpeed;
+    //        break;
+    //      case DashDirection.Input:
+    //        kcc->KinematicHorizontalSpeed = kcc->LastInputDirection * MaxDashSpeed;
+    //        break;
+    //    }
+    //    if (DashSuspendsGravity) kcc->KinematicVerticalSpeed = 0;
+    //  }
+    //}
 
-    private void ProcessJump(Frame f, EntityRef entity, Transform2D* transform, KCC2D* kcc)
-    {
-      var prematureJump = kcc->GroundedJumpTimer.IsExpiredOrNotValid(f) == false;
-      if (kcc->Input.Jump.WasPressed || prematureJump)
-      {
-        var impulse = new FPVector2(kcc->KinematicHorizontalSpeed, JumpImpulse);
-        switch (kcc->State)
-        {
-          case KCCState.GROUNDED:
-            kcc->Jump(f, entity, impulse);
-            f.Events.Jumped(entity, KCCState.JUMPED, KCCState.GROUNDED, impulse);
-            kcc->SetState(f, KCCState.JUMPED);
-            break;
-          case KCCState.JUMPED:
-            if (DoubleJumpEnabled)
-            {
-              kcc->Jump(f, entity, impulse);
-              f.Events.Jumped(entity, KCCState.DOUBLE_JUMPED, KCCState.JUMPED, impulse);
-              kcc->SetState(f, KCCState.DOUBLE_JUMPED, 1);
-            }
-            else if (kcc->Input.Jump.WasPressed) kcc->GroundedJumpTimer = FrameTimer.FromSeconds(f, InputBufferTime);
-            break;
-          case KCCState.WALLED:
-            FP wallContactDirection = kcc->Closest.Contact.Normal.X > 0 ? 1 : -1;
-            impulse = WallJumpImpulse;
-            impulse.X *= wallContactDirection;
-            kcc->Jump(f, entity, impulse);
-            f.Events.Jumped(entity, KCCState.JUMPED, KCCState.WALLED, impulse);
-            kcc->SetState(f, KCCState.JUMPED);
-            break;
-          case KCCState.FREE_FALLING:
-            if (DoubleJumpEnabled && DoubleJumpWhenFreeFalling)
-            {
-              kcc->Jump(f, entity, impulse);
-              f.Events.Jumped(entity, KCCState.DOUBLE_JUMPED, KCCState.FREE_FALLING, impulse);
-              kcc->SetState(f, KCCState.DOUBLE_JUMPED, 1);
-            }
-            else if (kcc->Input.Jump.WasPressed) kcc->GroundedJumpTimer = FrameTimer.FromSeconds(f, InputBufferTime);
-            break;
-          case KCCState.DOUBLE_JUMPED:
-            if (kcc->Input.Jump.WasPressed) kcc->GroundedJumpTimer = FrameTimer.FromSeconds(f, InputBufferTime);
-            break;
+    //private void ProcessJump(Frame f, EntityRef entity, Transform2D* transform, KCC2D* kcc)
+    //{
+    //  var prematureJump = kcc->GroundedJumpTimer.IsExpiredOrNotValid(f) == false;
+    //  if (kcc->Input.Jump.WasPressed || prematureJump)
+    //  {
+    //    var impulse = new FPVector2(kcc->KinematicHorizontalSpeed, JumpImpulse);
+    //    switch (kcc->State)
+    //    {
+    //      case KCCState.GROUNDED:
+    //        kcc->Jump(f, entity, impulse);
+    //        f.Events.Jumped(entity, KCCState.JUMPED, KCCState.GROUNDED, impulse);
+    //        kcc->SetState(f, KCCState.JUMPED);
+    //        break;
+    //      case KCCState.JUMPED:
+    //        if (DoubleJumpEnabled)
+    //        {
+    //          kcc->Jump(f, entity, impulse);
+    //          f.Events.Jumped(entity, KCCState.DOUBLE_JUMPED, KCCState.JUMPED, impulse);
+    //          kcc->SetState(f, KCCState.DOUBLE_JUMPED, 1);
+    //        }
+    //        else if (kcc->Input.Jump.WasPressed) kcc->GroundedJumpTimer = FrameTimer.FromSeconds(f, InputBufferTime);
+    //        break;
+    //      case KCCState.WALLED:
+    //        FP wallContactDirection = kcc->Closest.Contact.Normal.X > 0 ? 1 : -1;
+    //        impulse = WallJumpImpulse;
+    //        impulse.X *= wallContactDirection;
+    //        kcc->Jump(f, entity, impulse);
+    //        f.Events.Jumped(entity, KCCState.JUMPED, KCCState.WALLED, impulse);
+    //        kcc->SetState(f, KCCState.JUMPED);
+    //        break;
+    //      case KCCState.FREE_FALLING:
+    //        if (DoubleJumpEnabled && DoubleJumpWhenFreeFalling)
+    //        {
+    //          kcc->Jump(f, entity, impulse);
+    //          f.Events.Jumped(entity, KCCState.DOUBLE_JUMPED, KCCState.FREE_FALLING, impulse);
+    //          kcc->SetState(f, KCCState.DOUBLE_JUMPED, 1);
+    //        }
+    //        else if (kcc->Input.Jump.WasPressed) kcc->GroundedJumpTimer = FrameTimer.FromSeconds(f, InputBufferTime);
+    //        break;
+    //      case KCCState.DOUBLE_JUMPED:
+    //        if (kcc->Input.Jump.WasPressed) kcc->GroundedJumpTimer = FrameTimer.FromSeconds(f, InputBufferTime);
+    //        break;
 
-        }
-      }
-    }
+    //    }
+    //  }
+    //}
 
     private void ComputeState(Frame f, EntityRef entity, Transform2D* transform, KCC2D* kcc)
     {
@@ -217,18 +217,19 @@ namespace Quantum
             kcc->_dynamicVelocity *= FPMath.Clamp01(1 - Deceleration * f.DeltaTime);
             //kcc->DynamicVelocity = default;
             break;
-          case KCCContactType.WALL:
-            if (RequiresOppositeInput)
-            {
-              var inputDirection = kcc->Input.Left.IsDown ? -1 : kcc->Input.Right.IsDown ? 1 : 0;
-              var oppositeInput = kcc->Closest.Contact.Normal.X * inputDirection < 0;
-              if (oppositeInput) kcc->SetState(f, KCCState.WALLED);
-            }
-            else
-            {
-              kcc->SetState(f, KCCState.WALLED);
-            }
-            break;
+                        // WE NEED TO HANDLE WALLS USING FACINGDIRECTION INSTEAD
+          //case KCCContactType.WALL:
+          //  if (RequiresOppositeInput)
+          //  {
+          //    var inputDirection = kcc->Input.Direction.X;
+          //    var oppositeInput = kcc->Closest.Contact.Normal.X * inputDirection < 0;
+          //    if (oppositeInput) kcc->SetState(f, KCCState.WALLED);
+          //  }
+          //  else
+          //  {
+          //    kcc->SetState(f, KCCState.WALLED);
+          //  }
+          //  break;
           case KCCContactType.SLOPE:
             kcc->SetState(f, KCCState.SLOPED);
             break;
@@ -244,34 +245,34 @@ namespace Quantum
       // apply stuff based on state
       switch (kcc->State)
       {
-        case KCCState.WALLED:
-          // keep the state hanging if still in contact
-          if (kcc->Closest.ContactType == KCCContactType.WALL)
-          {
-            var inputDirection = kcc->Input.Left.IsDown ? -1 : kcc->Input.Right.IsDown ? 1 : 0;
-            var oppositeInput = kcc->Closest.Contact.Normal.X * inputDirection < 0;
+        //case KCCState.WALLED:
+        //  // keep the state hanging if still in contact
+        //  if (kcc->Closest.ContactType == KCCContactType.WALL)
+        //  {
+        //    var inputDirection = kcc->Input.Direction.X;
+        //    var oppositeInput = kcc->Closest.Contact.Normal.X * inputDirection < 0;
 
-            if (previousState != KCCState.WALLED)
-            {
-              kcc->SetStateTimer(f, oppositeInput ? WalledStateExtention : 0);
-            }
-            if (RequiresOppositeInput == false || oppositeInput)
-            {
-              kcc->SetStateTimer(f, WalledStateExtention);
-            }
-          }
+        //    if (previousState != KCCState.WALLED)
+        //    {
+        //      kcc->SetStateTimer(f, oppositeInput ? WalledStateExtention : 0);
+        //    }
+        //    if (RequiresOppositeInput == false || oppositeInput)
+        //    {
+        //      kcc->SetStateTimer(f, WalledStateExtention);
+        //    }
+        //  }
 
-          if (previousState != KCCState.WALLED)
-          {
-            f.Events.Landed(entity, kcc->KinematicHorizontalSpeed, KCCState.WALLED);
-            kcc->KinematicHorizontalSpeed = 0;
-          }
+        //  if (previousState != KCCState.WALLED)
+        //  {
+        //    f.Events.Landed(entity, kcc->KinematicHorizontalSpeed, KCCState.WALLED);
+        //    kcc->KinematicHorizontalSpeed = 0;
+        //  }
 
-          break;
-        case KCCState.JUMPED:
-          // keep the state hanging if pressed
-          if (kcc->Input.Jump.IsDown) kcc->SetStateTimer(f, FP._1);
-          break;
+        //  break;
+        //case KCCState.JUMPED:
+        //  // keep the state hanging if pressed
+        //  if (kcc->Input.Jump.IsDown) kcc->SetStateTimer(f, FP._1);
+        //  break;
         case KCCState.DOUBLE_JUMPED:
           // keep the state hanging until bumping
           kcc->SetStateTimer(f, FP._1);
@@ -417,22 +418,25 @@ namespace Quantum
 
     private void IntegrateForces(Frame f, EntityRef entity, Transform2D* transform, KCC2D* KCC)
     {
-      var sideMovement = SideMovement(KCC);
+            // TODO: HANDLE EXTERNAL VELOCITY + ACCELARATION
 
-      Accelerate(f, KCC, sideMovement);
 
-      // drag
-      if (sideMovement == 0)
-      {
-        if (KCC->State == KCCState.GROUNDED)
-        {
-          KCC->_kinematicVelocity *= FPMath.Clamp01(1 - Deceleration * f.DeltaTime);
-        }
-        else
-        {
-          KCC->KinematicHorizontalSpeed *= FPMath.Clamp01(1 - DecelerationOnAir * f.DeltaTime);
-        }
-      }
+      //var sideMovement = SideMovement(KCC);
+
+      //Accelerate(f, KCC, sideMovement);
+
+      //// drag
+      //if (sideMovement == 0)
+      //{
+      //  if (KCC->State == KCCState.GROUNDED)
+      //  {
+      //    KCC->_kinematicVelocity *= FPMath.Clamp01(1 - Deceleration * f.DeltaTime);
+      //  }
+      //  else
+      //  {
+      //    KCC->KinematicHorizontalSpeed *= FPMath.Clamp01(1 - DecelerationOnAir * f.DeltaTime);
+      //  }
+      //}
 
       ApplyGravity(f, KCC);
 
@@ -481,8 +485,8 @@ namespace Quantum
       if (KCC->State != KCCState.GROUNDED && (DashSuspendsGravity == false || dashing == false))
       {
         FP gravityModifier = 1;
-        var buttonPressed = KCC->Input.Jump.IsDown || DownGravityOnRelease == false;
-        if (KCC->KinematicVerticalSpeed <= 0 || buttonPressed == false || KCC->State == KCCState.FREE_FALLING) gravityModifier = DownGravityMultiplier;
+        //var buttonPressed = KCC->Input.Jump.IsDown || DownGravityOnRelease == false;
+        if (KCC->KinematicVerticalSpeed <= 0 /*|| buttonPressed == false*/ || KCC->State == KCCState.FREE_FALLING) gravityModifier = DownGravityMultiplier;
         KCC->KinematicVerticalSpeed += BaseGravity * gravityModifier * f.DeltaTime;
       }
     }
@@ -503,22 +507,27 @@ namespace Quantum
       }
     }
 
-    private FP SideMovement(KCC2D* KCC)
-    {
-      FP sideMovement = 0;
-      if (KCC->Input.Left) sideMovement -= 1;
-      if (KCC->Input.Right) sideMovement += 1;
-      if (sideMovement != 0) KCC->LastInputDirection = sideMovement.AsInt;
-      if (KCC->State != KCCState.GROUNDED) sideMovement *= AirControlFactor;
+    //private FP SideMovement(KCC2D* KCC)
+    //{
+    //  FP sideMovement = KCC->Input.Direction.X;  // Direct from Direction vector
+    //  if (sideMovement != 0)
+    //  {
+    //    KCC->LastInputDirection = sideMovement.AsInt;
+    //  }
+      
+    //  if (KCC->State != KCCState.GROUNDED) 
+    //  {
+    //    sideMovement *= AirControlFactor;
+    //  }
+    
+    //  var oppositeDirection = KCC->CombinedVelocity.X * sideMovement < 0;
+    //  if (oppositeDirection && (KCC->State == KCCState.GROUNDED || FastFlipOnAir))
+    //  {
+    //    sideMovement *= FlipDirectionMultiplier;
+    //  }
 
-      var oppositeDirection = KCC->CombinedVelocity.X * sideMovement < 0;
-      if (oppositeDirection && (KCC->State == KCCState.GROUNDED || FastFlipOnAir))
-      {
-        sideMovement *= FlipDirectionMultiplier;
-      }
-
-      return sideMovement;
-    }
+    //  return sideMovement;
+    //}
 
     private static bool ComputePenetration(Frame f, FPVector2 position, ref Shape2D shape, ref Hit hit)
     {

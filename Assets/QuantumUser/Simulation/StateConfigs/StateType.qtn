@@ -1,0 +1,11 @@
+enum StateType
+{
+    // No request
+    NONE = 0,
+
+    // Movement
+    IDLE = 1,
+    RUN = 2,
+
+    // Attacks
+}

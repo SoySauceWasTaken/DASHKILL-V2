@@ -1,0 +1,181 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbe8d560d7779034b95e5ff38ecb9cdf, type: 3}
+  m_Name: AG_RedGuard
+  m_EditorClassIdentifier: Quantum.Simulation::Quantum.AnimatorGraph
+  Identifier:
+    Path: QuantumUser/Resources/AnimatorGraphs/AG_RedGuard
+    Guid:
+      Value: 461406378352413068
+  Controller: {fileID: 9100000, guid: 84b057f1111fcf949b7e07796f622b0e, type: 2}
+  IsValid: 1
+  WeightTableResolution: 32
+  Clips:
+  - {fileID: 7400000, guid: cc73aae51be0d884199618750f3a1e46, type: 2}
+  - {fileID: 7400000, guid: 29bfa2c0448d8544189ecb83935c2734, type: 2}
+  Layers:
+  - Id: 0
+    Name: Base Layer
+    DefaultWeight:
+      RawValue: 65536
+    States:
+    - Name: Run
+      Id: 1748754976
+      IsAny: 0
+      IsDefault: 1
+      CycleOffset:
+        RawValue: 0
+      Speed:
+        RawValue: 65536
+      Transitions: []
+      SerialisedMotions:
+      - IsAnimation: 1
+        Name: Run
+        AnimatorData:
+          ClipName: Run
+          MotionId: -1985798199
+          Length:
+            RawValue: 2184
+          Index: 0
+          FrameRate: 30
+          FrameCount: 1
+          Frames:
+          - Id: 0
+            Time:
+              RawValue: 0
+            Position:
+              X:
+                RawValue: 0
+              Y:
+                RawValue: 0
+              Z:
+                RawValue: 0
+            Rotation:
+              X:
+                RawValue: 0
+              Y:
+                RawValue: 0
+              Z:
+                RawValue: 0
+              W:
+                RawValue: 0
+            RotationY:
+              RawValue: 0
+          Events: []
+          LoopTime: 1
+          Mirror: 0
+          DisableRootMotion: 0
+        BlendParameterIndex: 0
+        BlendParameterIndexY: 0
+        Positions: []
+        TimesScale: []
+        Resolution: 0
+        WeightTable:
+          Data: []
+        TimeScaleTable:
+          Data: []
+        ChildCount: 0
+        IndexOfFirstChild: 1
+      StateAsset:
+        Id:
+          Value: 0
+      StateBehaviours: []
+    - Name: Idle
+      Id: 2081823275
+      IsAny: 0
+      IsDefault: 0
+      CycleOffset:
+        RawValue: 0
+      Speed:
+        RawValue: 65536
+      Transitions: []
+      SerialisedMotions:
+      - IsAnimation: 1
+        Name: Idle
+        AnimatorData:
+          ClipName: Idle
+          MotionId: 1266177044
+          Length:
+            RawValue: 5461
+          Index: 0
+          FrameRate: 12
+          FrameCount: 1
+          Frames:
+          - Id: 0
+            Time:
+              RawValue: 0
+            Position:
+              X:
+                RawValue: 0
+              Y:
+                RawValue: 0
+              Z:
+                RawValue: 0
+            Rotation:
+              X:
+                RawValue: 0
+              Y:
+                RawValue: 0
+              Z:
+                RawValue: 0
+              W:
+                RawValue: 0
+            RotationY:
+              RawValue: 0
+          Events: []
+          LoopTime: 1
+          Mirror: 0
+          DisableRootMotion: 0
+        BlendParameterIndex: 0
+        BlendParameterIndexY: 0
+        Positions: []
+        TimesScale: []
+        Resolution: 0
+        WeightTable:
+          Data: []
+        TimeScaleTable:
+          Data: []
+        ChildCount: 0
+        IndexOfFirstChild: 1
+      StateAsset:
+        Id:
+          Value: 0
+      StateBehaviours: []
+    - Name: Any State
+      Id: -467182431
+      IsAny: 1
+      IsDefault: 0
+      CycleOffset:
+        RawValue: 0
+      Speed:
+        RawValue: 65536
+      Transitions: []
+      SerialisedMotions: []
+      StateAsset:
+        Id:
+          Value: 0
+      StateBehaviours: []
+  Variables: []
+  AllowFadeToTransitions: 1
+  ClampTime: 1
+  AllowTransitionInterruption: 0
+  MuteGraphTransitionsOnExport: 0
+  RootMotion: 0
+  ReferenceModel: {fileID: 0}
+  RootMotionAppliesPhysics: 0
+  LegacyRootMotionExtractor: 0
+  ProcessEventsAfterRootMotion: 0
+  AutoBake: 1
+  DebugMode: 1
+  references:
+    version: 2
+    RefIds: []

@@ -14,13 +14,19 @@ namespace Quantum
 
         public override void Update(Frame frame, ref Filter filter)
         {
-            //if (filter.Status->IsDead == true)
-            //{
-            //    return;
-            //}
+            QuantumDemoInputPlatformer2D input = *frame.GetPlayerInput(filter.PlayerLink->Player);
 
             var config = frame.FindAsset(filter.KCC->Config);
+            if (frame.TryGet<PlayerLink>(filter.Entity, out var link))
+            {
+                //input.Direction
+                // Instread of passing input to KCC, we pass it to the Systems
+            }
 
+            // DEBUG 4: Verify movement is being processed
+            var beforePos = filter.Transform->Position;
+
+            // This calls the KCC's Move method which should use the input direction
             config.Move(frame, filter.Entity, filter.Transform, filter.KCC);
         }
 

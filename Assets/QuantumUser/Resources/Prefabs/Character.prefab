@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6786079873980338907}
   - component: {fileID: 467071463350001048}
-  - component: {fileID: 5249646171463139051}
   m_Layer: 0
   m_Name: Red Guard
   m_TagString: Untagged
@@ -27,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 3160394734532910334}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.39, y: 0.41, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -82,7 +81,7 @@ SpriteRenderer:
   m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 20f95ab482978b446a0751a3809768e5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2931abcd799c63a4eaf1ccb381c1072d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -92,28 +91,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!95 &5249646171463139051
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3160394734532910334}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 84b057f1111fcf949b7e07796f622b0e, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7261769895644465944
 GameObject:
   m_ObjectHideFlags: 0
@@ -127,6 +104,11 @@ GameObject:
   - component: {fileID: 2302133835735103944}
   - component: {fileID: 5135381513327640798}
   - component: {fileID: -1925230149187139508}
+  - component: {fileID: 6379608300521214680}
+  - component: {fileID: 7198253366239204245}
+  - component: {fileID: 355638738540704991}
+  - component: {fileID: 8200161884257969186}
+  - component: {fileID: 8305259543435571889}
   m_Layer: 0
   m_Name: Character
   m_TagString: Untagged
@@ -170,7 +152,7 @@ MonoBehaviour:
     PositionOffset:
       RawValue: 0
   PhysicsCollider:
-    IsEnabled: 1
+    IsEnabled: 0
     IsTrigger: 1
     Material:
       Id:
@@ -181,7 +163,7 @@ MonoBehaviour:
       CapsuleDirection2D: 0
       CapsuleDirection3D: 0
     Shape2D:
-      ShapeType: 4
+      ShapeType: 32
       PolygonCollider:
         Id:
           Value: 0
@@ -189,9 +171,9 @@ MonoBehaviour:
         RawValue: 32768
       CapsuleSize:
         X:
-          RawValue: 65536
+          RawValue: 49152
         Y:
-          RawValue: 211026
+          RawValue: 216269
       EdgeExtent:
         RawValue: 32768
       BoxExtents:
@@ -201,9 +183,9 @@ MonoBehaviour:
           RawValue: 32768
       PositionOffset:
         X:
-          RawValue: 15729
+          RawValue: 0
         Y:
-          RawValue: -29491
+          RawValue: 0
       RotationOffset:
         RawValue: 0
       UserTag: 0
@@ -450,3 +432,102 @@ MonoBehaviour:
       Frames: 0
       Seconds:
         RawValue: 0
+--- !u!114 &6379608300521214680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7261769895644465944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a491fe9141531254a8ecd6fbefc4683d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Quantum.Unity::Quantum.Addons.Animator.AnimatorMecanim
+  UtilizeFrameRate: 0
+  FrameRate: 60
+  AnimateWhenCulled: 0
+--- !u!95 &7198253366239204245
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7261769895644465944}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 84b057f1111fcf949b7e07796f622b0e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &355638738540704991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7261769895644465944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d30eb61f7a253804babb4495cad65792, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Quantum.Unity::Quantum.QPrototypeAnimatorComponent
+  Prototype:
+    Self: {fileID: 0}
+    AnimatorGraph:
+      Id:
+        Value: 461406378352413068
+    Layers: []
+    AnimatorVariables: []
+--- !u!114 &8200161884257969186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7261769895644465944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2685f8fbf5048314ba24de5b1fbc1220, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Quantum.Unity::Quantum.QPrototypeMovementStateMachine
+  Prototype:
+    _empty_prototype_dummy_field_: 0
+--- !u!114 &8305259543435571889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7261769895644465944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea297f028ebbdfc44aa31d9576f23837, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Quantum.Unity::Quantum.QPrototypeCharacterMaster
+  Prototype:
+    CurrentState:
+      Value: 0
+    CurrentStateConfig:
+      Id:
+        Value: 0
+    IdleConfig:
+      Id:
+        Value: 347741523579716877
+    RunConfig:
+      Id:
+        Value: 465632050545495527
+    MovementRequest:
+      RequestedState:
+        Value: 0
+      Priority: 0
+      Requester: {fileID: 0}

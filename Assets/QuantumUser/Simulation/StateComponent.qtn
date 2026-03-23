@@ -1,0 +1,10 @@
+component StateComponent
+{
+    // Core runtime data for ANY state
+    int CurrentStateId;                // Which state we're in (Idle, Run, Jump, etc.)
+    AssetRef<StateConfig> Config;       // Reference to the static config for this state
+
+    // Optional: For debugging/visualization
+    [HideInInspector]
+    bool IsActive;
+}

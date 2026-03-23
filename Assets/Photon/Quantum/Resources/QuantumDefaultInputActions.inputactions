@@ -1,4 +1,5 @@
 {
+    "version": 1,
     "name": "QuantumDefaultInputActions",
     "maps": [
         {
@@ -79,17 +80,6 @@
                 }
             ],
             "bindings": [
-                {
-                    "name": "2D Vector",
-                    "id": "1f32ce72-83d3-46dc-ae02-555a381f043f",
-                    "path": "2DVector",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Move",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
                 {
                     "name": "2D Vector",
                     "id": "fe9525d2-2a93-4191-b336-fcd0a30c9418",

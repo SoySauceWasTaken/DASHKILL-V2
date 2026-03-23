@@ -1,0 +1,15 @@
+component CharacterMaster
+{
+    // Current state tracking
+    StateType CurrentState;
+    AssetRef<StateConfig> CurrentStateConfig;
+
+    // All StateConfigs Direct Refs
+    AssetRef<StateConfig> IdleConfig;
+    AssetRef<StateConfig> RunConfig;
+
+    // REQUEST STORAGE (one per state machine)
+    [ExcludeFromPrototype]
+    StateRequest MovementRequest;
+    //StateRequest AttackRequest;
+}

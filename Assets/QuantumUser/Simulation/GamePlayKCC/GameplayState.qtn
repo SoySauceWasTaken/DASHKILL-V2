@@ -1,0 +1,23 @@
+component GameplayState
+{
+    MovementState MoveState;    // Idle, Walk, Run, Crouch
+    ActionState ActionState;     // None, Attacking, Deflecting, HitStun
+    FP StateTimer;               // How long in current action state
+}
+
+enum MovementState
+{
+    IDLE,
+    WALKING,
+    RUNNING,
+    CROUCHING
+}
+
+enum ActionState
+{
+    NONE,
+    ATTACKING,
+    DEFLECTING,
+    HITSTUN,
+    DODGING
+}

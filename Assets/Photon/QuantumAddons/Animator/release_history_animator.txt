@@ -1,0 +1,159 @@
+Mar 06, 2026
+Quantum Animator 3.0.11
+
+What’s New:
+ - [BREAKING CHANGE] Made obsolete the methods FadeTo, TryFadeTo, and GetStateByName, which use the state name to search the AnimatorState.
+
+Fixed:
+ - Issue on CalculateWeights that prevents AnimatorBlendTree to assume correct blend values.
+ - Issue that occurs when multiple TimeWindowEvents are present within the same clip.
+ - Issue that freezes all animations when running the game from a recycled QuantumEntityViewUpdater
+
+Dec 18, 2025
+Quantum Animator 3.0.10 Alpha
+
+What’s New:
+ - Added ProcessEventsAfterRootMotion option to the AnimatorGraph asset. This allows animation events to be processed after the Root Motion processor, providing more accurate timing for motion-related events.
+ - [BREAKING CHANGE] Updated the ParseState method signature to: ParseState(AnimatorGraph graph, AnimatorState qtnAnimatorState, UA.AnimatorState unityAnimatorState).
+
+Fixed:
+ - Fixed an issue where the Layer.DefaultWeight baker always set the first layer’s weight to zero.
+ - Fixed missing Rotation baker during RootMotionExtract.
+ - Fixed an error in the subtraction operation of AnimatorFrame.
+ - Fixed an issue that prevented allocation of the animatorComponent->AnimatorVariables list when no variables were present.
+ - Fixed an issue that prevented events from triggering when they occurred on ToState and FromState.
+
+Nov 04, 2025
+Quantum Animator 3.0.9 Alpha
+
+What's New:
+ - Root Motion default extraction method now uses SampleAnimation instead of AnimationCurve.
+ - Support for changing Layer Weights at runtime.
+ - Auto bake AnimatorGraph assets option triggered by QuantumMap OnBake callback.
+ - AnimatorGraphBaker callback renamed to BakeGraph.
+
+
+Fixed:
+ - AnimatorComponent LayerData Time now is updated using the last LayerData Time instead of LayerData NormalizedTime.
+ - AnimatorMecanim now uses Round instead of Floor to calculate current frame when UtilizeFrameRate is on.
+
+
+Set 29, 2025
+Quantum Animator 3.0.8 Alpha
+
+What's New:
+ - Support for Prediction Culling.
+ - Support for View Culling.
+
+Fixed:
+ - issue in AnimatorMecanim.UpdateAnimator when negative delta occurred during animation loop.
+ - Assert check to prevent multiple IAnimatorEntityViewComponent per entity.
+ - Issue on AnimatorEvent baker when a regular Unity event exists in the same clip.
+
+Aug 11, 2025
+Quantum Animator 3.0.7 Alpha
+
+Fixed:
+ - OverrideController transitions baker.
+ - AnimatorMecanim: fixed same-state transition and negative delta issues.
+ - AnimatorGraphBaker: fixed to prevent NullReferenceException when baking animations without root position and/or rotation curves.
+
+Jul 04, 2025
+Quantum Animator 3.0.6 Alpha
+
+What's New:
+ - Support for Override Controller.
+
+Fixed:
+ - Issue with single frame animation.
+ - BlendTree using Speed table instead of Positions table.
+ - When a transition has occurred successfully, the rest of the transitions are not checked.
+ - Movement Data section on Animator Graph Editor. 
+ 
+
+Apr 04, 2025
+Quantum Animator 3.0.5 Alpha
+
+What's New:
+ - Reverted the version number from 3.1.0 to 3.0.5. This was necessary to meet the version pattern from Quantum Addons.
+ - Added an API for creating custom bakers by inheriting from AnimatorGraphBaker.
+ - Included FP time and LayerData parameters in the signals: OnAnimatorStateEnter and OnStateExit.
+ - Included more FadeTo API options.
+ - Added the TryFadeTo API.
+ - Added a behavior to disable root motion for specific clip (AnimatorDisableRootMotionBehaviour).
+
+Fixed:
+ - Fixed AnimatorMecanim UpdateAnimator method. 
+ - Completely reworked the root motion system.
+
+
+Feb 04, 2025
+Quantum Animator 3.1.0 Alpha
+
+What's New:
+ - Created AnimatorMecanim updater as an option to AnimatorPlayables.
+ - Support for LayerMenu when using AnimatorMecanim.
+ - Added transitions ClampTime option.
+ - Added Transitions interruption option.
+ - Added signal OnAnimatorStateEnter.
+ - Added signal OnAnimatorStateUpdate.
+ - Added signal OnAnimatorStateExit.
+ - Added AnimatorStateBehaviour.
+ - Added AnimatorStateBehaviour custom inspector.
+ - Added AnimatorStateBehaviourDebug example.
+ - Created Quantum Animator menu with bake all AnimatorGraph option.
+ - Renamed Looped variable name with LoopTime on AnimationMotion.
+
+Fixed:
+ - Fixed NormalizedTime in last AnimatorState clip frame. 
+ - Fixed division by zero on AnimatorMotion BlendTree bake. 
+ 
+
+Jan 23, 2025
+Quantum Animator 3.0.4 Alpha
+
+Fixed:
+ - Fixed AnimatorMotion GenerateBlendList.
+
+Jan 20, 2025
+Quantum Animator 3.0.3 Alpha
+
+What's New:
+ - Added events assets examples.
+ - Improvements of Graph Inspector states.
+ -Added mute events option.
+
+Fixed:
+ - Fixed RootMotion data bake.
+ - Removed parameter currentTime from event evaluate method.
+ - Fixed events evaluate calls.
+
+
+Nov 13, 2024
+Quantum Animator 3.0.2 Alpha
+
+What's New:
+ - New TimeWindowEvent API.
+ - Improvements of Graph Inspector states.
+ - Improvements if FadeTo API.
+
+Fixed:
+ - Duplicated events call.
+ - Fixed issue when running graph with no variables.
+
+
+Sep 20, 2024
+Quantum Animator 3.0.1 Alpha
+
+What's New:
+ - OnEnter and OnExit on time-window events.
+ - Improvements on AnimatorGraph UX.
+
+Fixed:
+ - Empty motion bug on baking blend tree.
+ - Bug when baking graph with no controller attached.
+
+Aug 26, 2024
+Quantum Animator 3.0.0 Alpha
+
+- Initial release

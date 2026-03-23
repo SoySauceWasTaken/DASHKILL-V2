@@ -1,0 +1,6 @@
+component StateRequest
+{
+    StateType RequestedState;     // IDLE, RUN, ATTACK, etc.
+    int Priority;                 // Higher = more important
+    EntityRef Requester;          // Which system requested (debug)
+}

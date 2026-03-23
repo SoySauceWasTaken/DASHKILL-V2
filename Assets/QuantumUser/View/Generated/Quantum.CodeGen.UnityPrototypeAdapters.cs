@@ -11,6 +11,7 @@
 
 
 namespace Quantum.Prototypes.Unity {
+  using Addons.Animator;
   using Photon.Deterministic;
   using Quantum;
   using Quantum.Core;
@@ -49,6 +50,60 @@ namespace Quantum.Prototypes.Unity {
   using RuntimeInitializeOnLoadMethodAttribute = UnityEngine.RuntimeInitializeOnLoadMethodAttribute;
   #endif //;
   
+  [System.SerializableAttribute()]
+  public unsafe partial class AnimatorComponentPrototype : Quantum.QuantumUnityPrototypeAdapter<Quantum.Prototypes.AnimatorComponentPrototype> {
+    [HideInInspector()]
+    public Quantum.QuantumEntityPrototype Self;
+    public AssetRef<AnimatorGraph> AnimatorGraph;
+    [HideInInspector()]
+    [DynamicCollectionAttribute()]
+    public Quantum.Prototypes.LayerDataPrototype[] Layers = {};
+    [HideInInspector()]
+    [DynamicCollectionAttribute()]
+    public Quantum.Prototypes.AnimatorRuntimeVariablePrototype[] AnimatorVariables = {};
+    partial void ConvertUser(Quantum.QuantumEntityPrototypeConverter converter, ref Quantum.Prototypes.AnimatorComponentPrototype prototype);
+    public override Quantum.Prototypes.AnimatorComponentPrototype Convert(Quantum.QuantumEntityPrototypeConverter converter) {
+      var result = new Quantum.Prototypes.AnimatorComponentPrototype();
+      converter.Convert(this.Self, out result.Self);
+      converter.Convert(this.AnimatorGraph, out result.AnimatorGraph);
+      converter.Convert(this.Layers, out result.Layers);
+      converter.Convert(this.AnimatorVariables, out result.AnimatorVariables);
+      ConvertUser(converter, ref result);
+      return result;
+    }
+  }
+  [System.SerializableAttribute()]
+  public unsafe partial class CharacterMasterPrototype : Quantum.QuantumUnityPrototypeAdapter<Quantum.Prototypes.CharacterMasterPrototype> {
+    public Quantum.QEnum32<StateType> CurrentState;
+    public AssetRef<StateConfig> CurrentStateConfig;
+    public AssetRef<StateConfig> IdleConfig;
+    public AssetRef<StateConfig> RunConfig;
+    partial void ConvertUser(Quantum.QuantumEntityPrototypeConverter converter, ref Quantum.Prototypes.CharacterMasterPrototype prototype);
+    public override Quantum.Prototypes.CharacterMasterPrototype Convert(Quantum.QuantumEntityPrototypeConverter converter) {
+      var result = new Quantum.Prototypes.CharacterMasterPrototype();
+      converter.Convert(this.CurrentState, out result.CurrentState);
+      converter.Convert(this.CurrentStateConfig, out result.CurrentStateConfig);
+      converter.Convert(this.IdleConfig, out result.IdleConfig);
+      converter.Convert(this.RunConfig, out result.RunConfig);
+      ConvertUser(converter, ref result);
+      return result;
+    }
+  }
+  [System.SerializableAttribute()]
+  public unsafe partial class StateRequestPrototype : Quantum.QuantumUnityPrototypeAdapter<Quantum.Prototypes.StateRequestPrototype> {
+    public Quantum.QEnum32<StateType> RequestedState;
+    public Int32 Priority;
+    public Quantum.QuantumEntityPrototype Requester;
+    partial void ConvertUser(Quantum.QuantumEntityPrototypeConverter converter, ref Quantum.Prototypes.StateRequestPrototype prototype);
+    public override Quantum.Prototypes.StateRequestPrototype Convert(Quantum.QuantumEntityPrototypeConverter converter) {
+      var result = new Quantum.Prototypes.StateRequestPrototype();
+      converter.Convert(this.RequestedState, out result.RequestedState);
+      converter.Convert(this.Priority, out result.Priority);
+      converter.Convert(this.Requester, out result.Requester);
+      ConvertUser(converter, ref result);
+      return result;
+    }
+  }
 }
 #pragma warning restore 0109
 #pragma warning restore 1591

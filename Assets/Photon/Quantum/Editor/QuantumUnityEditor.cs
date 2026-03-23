@@ -20750,7 +20750,7 @@ namespace Quantum.Editor {
 
     void DrawFooter() {
       GUILayout.BeginHorizontal(HubSkin.window);
-      GUILayout.Label("\u00A9 2024, Exit Games GmbH. All rights reserved.");
+      GUILayout.Label("\u00A9 2024, ExitState Games GmbH. All rights reserved.");
       GUILayout.EndHorizontal();
     }
 

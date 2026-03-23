@@ -17,9 +17,9 @@ MonoBehaviour:
     Guid:
       Value: 301022223722737656
   CapsuleRadius:
-    RawValue: 58982
+    RawValue: 49152
   CapsuleHeight:
-    RawValue: 137626
+    RawValue: 209715
   Mask:
     BitMask: 128
   SolverIterations: 4
@@ -81,9 +81,9 @@ MonoBehaviour:
       RawValue: 393216
   WallMaxSpeed:
     RawValue: 65536
-  Debug: 0
+  Debug: 1
   ColorFinal:
-    R: 0
-    G: 0
-    B: 255
+    R: 255
+    G: 7
+    B: 0
     A: 255

@@ -140,20 +140,20 @@ namespace Quantum.Prototypes {
   [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.CharacterMaster))]
   public unsafe class CharacterMasterPrototype : ComponentPrototype<Quantum.CharacterMaster> {
-    public Quantum.QEnum32<StateType> CurrentState;
-    public AssetRef<StateConfig> CurrentStateConfig;
     public AssetRef<StateConfig> IdleConfig;
     public AssetRef<StateConfig> RunConfig;
+    public AssetRef<StateConfig> JumpConfig;
+    public AssetRef<StateConfig> MidAirConfig;
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
         Quantum.CharacterMaster component = default;
         Materialize((Frame)f, ref component, in context);
         return f.Set(entity, component) == SetResult.ComponentAdded;
     }
     public void Materialize(Frame frame, ref Quantum.CharacterMaster result, in PrototypeMaterializationContext context = default) {
-        result.CurrentState = this.CurrentState;
-        result.CurrentStateConfig = this.CurrentStateConfig;
         result.IdleConfig = this.IdleConfig;
         result.RunConfig = this.RunConfig;
+        result.JumpConfig = this.JumpConfig;
+        result.MidAirConfig = this.MidAirConfig;
     }
   }
   [System.SerializableAttribute()]
@@ -339,6 +339,21 @@ namespace Quantum.Prototypes {
             PrototypeValidator.AddToDictionary(dict, tmpKey, tmpValue, in context);
           }
         }
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.MovementData))]
+  public unsafe partial class MovementDataPrototype : ComponentPrototype<Quantum.MovementData> {
+    public Int32 FacingDirection;
+    partial void MaterializeUser(Frame frame, ref Quantum.MovementData result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.MovementData component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.MovementData result, in PrototypeMaterializationContext context = default) {
+        result.FacingDirection = this.FacingDirection;
         MaterializeUser(frame, ref result, in context);
     }
   }

@@ -27,15 +27,15 @@ namespace Quantum
             var beforePos = filter.Transform->Position;
 
             // This calls the KCC's Move method which should use the input direction
-            config.Move(frame, filter.Entity, filter.Transform, filter.KCC);
+            //config.Move(frame, filter.Entity, filter.Transform, filter.KCC);
         }
 
         public void OnPlayerAdded(Frame f, PlayerRef player, bool firstTime)
         {
-            var playerData = f.GetPlayerData(player);
-            var playerEntity = f.Create(playerData.PlayerAvatar);
-            PlayerLink* playerLink = f.Unsafe.GetPointer<PlayerLink>(playerEntity);
-            playerLink->Player = player;
+            //var playerData = f.GetPlayerData(player);
+            //var playerEntity = f.Create(playerData.PlayerAvatar);
+            //PlayerLink* playerLink = f.Unsafe.GetPointer<PlayerLink>(playerEntity);
+            //playerLink->Player = player;
         }
     }
 }

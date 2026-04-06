@@ -29,13 +29,13 @@ MonoBehaviour:
     RawValue: 655
   CCD: 1
   Acceleration:
-    RawValue: 2949120
+    RawValue: 0
   FlipDirectionMultiplier:
     RawValue: 655360
   Deceleration:
-    RawValue: 1921384
+    RawValue: 524288
   MaxBaseSpeed:
-    RawValue: 655360
+    RawValue: 0
   DirectionType: 1
   DashSuspendsGravity: 1
   DashDuration:

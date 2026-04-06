@@ -22,14 +22,6 @@ namespace Quantum
             input._c = pInput.LightAttack;
             input._d = pInput.HeavyAttack;
             input._r1 = pInput.Throw;
-            //input._r2 = pInput.PickUp;
-            //input._l1 = pInput.Taunt1;
-            //input._l2 = pInput.Taunt2;
-            //input._l3 = pInput.Taunt3;
-            //input._r3 = pInput.Taunt4;
-
-            // For keyboard movement, you could use thumbsticks or just ignore
-            // and handle movement directly in your systems using pInput.Direction
 
             return input;
         }
@@ -43,7 +35,13 @@ namespace Quantum
             if (encoded != default)
             {
                 int angle = ((int)encoded - 1) * 2;
-                pInput.Direction = FPVector2.Rotate(FPVector2.Up, angle * FP.Deg2Rad);
+                var analogDir = FPVector2.Rotate(FPVector2.Up, angle * FP.Deg2Rad);
+
+                // Convert back to digital
+                pInput.Direction = new FPVector2(
+                    analogDir.X > FP._0_05 ? 1 : (analogDir.X < -FP._0_05 ? -1 : 0),
+                    analogDir.Y > FP._0_05 ? 1 : (analogDir.Y < -FP._0_05 ? -1 : 0)
+                );
             }
 
             pInput.Jump = input._a;
@@ -51,11 +49,6 @@ namespace Quantum
             pInput.LightAttack = input._c;
             pInput.HeavyAttack = input._d;
             pInput.Throw = input._r1;
-            //pInput.PickUp = input._r2;
-            //pInput.Taunt1 = input._l1;
-            //pInput.Taunt2 = input._l2;
-            //pInput.Taunt3 = input._l3;
-            //pInput.Taunt4 = input._r3;
 
             return pInput;
         }

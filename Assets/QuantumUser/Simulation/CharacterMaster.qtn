@@ -1,12 +1,28 @@
 component CharacterMaster
 {
+    // Input
+    [ExcludeFromPrototype]
+    QuantumDemoInputPlatformer2D Input;
+
+    // Extra Important Info
+    [ExcludeFromPrototype]
+    MovementData MovementData;
+
     // Current state tracking
+    [ExcludeFromPrototype]
     StateType CurrentState;
+
+    [ExcludeFromPrototype]
     AssetRef<StateConfig> CurrentStateConfig;
+
+    [ExcludeFromPrototype]
+    FP StateTimer;
 
     // All StateConfigs Direct Refs
     AssetRef<StateConfig> IdleConfig;
     AssetRef<StateConfig> RunConfig;
+    AssetRef<StateConfig> JumpConfig;
+    AssetRef<StateConfig> MidAirConfig;
 
     // REQUEST STORAGE (one per state machine)
     [ExcludeFromPrototype]

@@ -81,7 +81,7 @@ SpriteRenderer:
   m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 2931abcd799c63a4eaf1ccb381c1072d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1259969773ea8894f83a2a7b527e538a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -109,6 +109,7 @@ GameObject:
   - component: {fileID: 355638738540704991}
   - component: {fileID: 8200161884257969186}
   - component: {fileID: 8305259543435571889}
+  - component: {fileID: 1664800074202774194}
   m_Layer: 0
   m_Name: Character
   m_TagString: Untagged
@@ -515,19 +516,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Quantum.Unity::Quantum.QPrototypeCharacterMaster
   Prototype:
-    CurrentState:
-      Value: 0
-    CurrentStateConfig:
-      Id:
-        Value: 0
     IdleConfig:
       Id:
         Value: 347741523579716877
     RunConfig:
       Id:
         Value: 465632050545495527
-    MovementRequest:
-      RequestedState:
-        Value: 0
-      Priority: 0
-      Requester: {fileID: 0}
+    JumpConfig:
+      Id:
+        Value: 386737451752529310
+    MidAirConfig:
+      Id:
+        Value: 403953988488252899
+--- !u!114 &1664800074202774194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7261769895644465944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6729af888cfc4884fbff4e47d97da4c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterView
+  modelTransform: {fileID: 6786079873980338907}

@@ -13,7 +13,7 @@ namespace Quantum
 
         private void OnEnable()
         {
-            Debug.Log($"[{gameObject.name}] QuantumDemoInputPlatformer2DPolling enabled, subscribing to CallbackPollInput");
+            //Debug.Log($"[{gameObject.name}] QuantumDemoInputPlatformer2DPolling enabled, subscribing to CallbackPollInput");
             QuantumCallback.Subscribe(this, (CallbackPollInput callback) => PollInput(callback));
 
             // Try to find input handler if not assigned
@@ -35,8 +35,8 @@ namespace Quantum
             QuantumDemoInputPlatformer2D qInput = default;
 
             // Log raw input values before conversion
-            Debug.Log($"[{gameObject.name}] Raw MoveInput: ({inputHandler.MoveInput.x:F2}, {inputHandler.MoveInput.y:F2})");
-            Debug.Log($"[{gameObject.name}] Button states - Jump:{inputHandler.JumpInput} Dodge:{inputHandler.DodgeInput} Light:{inputHandler.LightAttackInput} Heavy:{inputHandler.HeavyAttackInput}");
+            //Debug.Log($"[{gameObject.name}] Raw MoveInput: ({inputHandler.MoveInput.x:F2}, {inputHandler.MoveInput.y:F2})");
+            //Debug.Log($"[{gameObject.name}] Button states - Jump:{inputHandler.JumpInput} Dodge:{inputHandler.DodgeInput} Light:{inputHandler.LightAttackInput} Heavy:{inputHandler.HeavyAttackInput}");
 
             // Movement direction (combined vector)
             qInput.Direction = new FPVector2(
@@ -59,7 +59,7 @@ namespace Quantum
             qInput.Taunt4 = inputHandler.Taunt4Input;
 
             // Log converted Quantum values
-            Debug.Log($"[{gameObject.name}] Quantum Direction: ({qInput.Direction.X.AsFloat:F2}, {qInput.Direction.Y.AsFloat:F2})");
+            //Debug.Log($"[{gameObject.name}] Quantum Direction: ({qInput.Direction.X.AsFloat:F2}, {qInput.Direction.Y.AsFloat:F2})");
 
             // Send the input to Quantum
             callback.SetInput(qInput, DeterministicInputFlags.Repeatable);

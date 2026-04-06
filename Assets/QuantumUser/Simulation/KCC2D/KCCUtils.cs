@@ -87,9 +87,10 @@ namespace Quantum
     }
 
 
-    public void Jump(Frame f, EntityRef entity, FPVector2 impulse)
+    public void Jump(Frame f, FPVector2 impulse)
     {
       _kinematicVelocity = impulse;
+      Log.Debug($"Jump() callback, kinematic vel: {_kinematicVelocity.X}, {_kinematicVelocity.Y}");
     }
   }
 }

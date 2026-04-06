@@ -6,6 +6,8 @@ enum StateType
     // Movement
     IDLE = 1,
     RUN = 2,
+    JUMP = 3,
+    MID_AIR = 4,
 
     // Attacks
 }

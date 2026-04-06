@@ -1,7 +1,8 @@
-﻿using Quantum;
+﻿using Photon.Deterministic;
+using Quantum;
 using System.Collections.Generic;
 
-public unsafe class CharacterMasterSystem : SystemMainThreadFilter<CharacterMasterSystem.Filter>
+public unsafe class CharacterMasterSystem : SystemMainThreadFilter<CharacterMasterSystem.Filter>, ISignalOnPlayerAdded
 {
     public struct Filter
     {
@@ -16,6 +17,14 @@ public unsafe class CharacterMasterSystem : SystemMainThreadFilter<CharacterMast
 
     public override void Update(Frame frame, ref Filter filter)
     {
+        // 0. SET INPUT
+        QuantumDemoInputPlatformer2D input = *frame.GetPlayerInput(filter.PlayerLink->Player);
+        var config = frame.FindAsset(filter.KCC->Config);
+        if (frame.TryGet<PlayerLink>(filter.Entity, out var link))
+        {
+            filter.Master->Input = input;
+        }
+
         // 1. COLLECT all non-empty requests
         var activeRequests = new List<(StateType state, int priority, EntityRef requester)>();
 
@@ -55,6 +64,7 @@ public unsafe class CharacterMasterSystem : SystemMainThreadFilter<CharacterMast
             var currentConfig = GetConfigForState(frame, filter.Master->CurrentState, filter.Master);
             if (currentConfig != null)
             {
+                filter.Master->StateTimer += frame.DeltaTime;
                 currentConfig.UpdateState(frame, filter.Master, filter.KCC, filter.Animator);
             }
         }
@@ -82,6 +92,8 @@ public unsafe class CharacterMasterSystem : SystemMainThreadFilter<CharacterMast
         {
             case StateType.IDLE: return master->IdleConfig;
             case StateType.RUN: return master->RunConfig;
+            case StateType.JUMP: return master->JumpConfig;
+            case StateType.MID_AIR: return master->MidAirConfig;
             default: return master->IdleConfig;
         }
     }
@@ -97,6 +109,7 @@ public unsafe class CharacterMasterSystem : SystemMainThreadFilter<CharacterMast
 
         // Update master
         filter.Master->CurrentState = newState;
+        filter.Master->StateTimer = FP._0;
 
         // Update config reference
         var newConfigRef = GetConfigRefForState(newState, filter.Master);
@@ -107,7 +120,7 @@ public unsafe class CharacterMasterSystem : SystemMainThreadFilter<CharacterMast
         newConfig?.EnterState(frame, filter.Master, filter.KCC, filter.Animator);
 
         // Debug log
-        Log.Debug($"[CharacterMaster] Switched to {newState}");
+        //Log.Debug($"[CharacterMaster] Switched to {newState}");
     }
 
     private void ClearRequests(ref Filter filter)
@@ -121,5 +134,13 @@ public unsafe class CharacterMasterSystem : SystemMainThreadFilter<CharacterMast
         //filter.Master->AttackRequest.RequestedState = StateType.NONE;
         //filter.Master->AttackRequest.Priority = 0;
         //filter.Master->AttackRequest.Requester = default;
+    }
+
+    public void OnPlayerAdded(Frame f, PlayerRef player, bool firstTime)
+    {
+        var playerData = f.GetPlayerData(player);
+        var playerEntity = f.Create(playerData.PlayerAvatar);
+        PlayerLink* playerLink = f.Unsafe.GetPointer<PlayerLink>(playerEntity);
+        playerLink->Player = player;
     }
 }

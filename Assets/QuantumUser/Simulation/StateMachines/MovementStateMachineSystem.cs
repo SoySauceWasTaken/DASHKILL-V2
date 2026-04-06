@@ -17,7 +17,7 @@ namespace Quantum
         public override void Update(Frame frame, ref Filter filter)
         {
             // 1. Get input
-            var input = *frame.GetPlayerInput(filter.PlayerLink->Player);
+            var input = filter.Master->Input;
 
             // 2. Determine what state we WANT based on physics state + input
             StateType desiredState = DetermineDesiredState(frame, ref filter, input);
@@ -30,18 +30,26 @@ namespace Quantum
 
         private StateType DetermineDesiredState(Frame frame, ref Filter filter, QuantumDemoInputPlatformer2D input)
         {
-            // Debug: Log input direction
-            Log.Debug($"[MovementStateMachine] DetermineDesiredState - Input Direction.X: {input.Direction.X}");
+            // JUMP takes priority over ground movement
+            //Log.Debug($"Jump requested - WasPressed: {input.Jump.WasPressed}, IsGrounded: {filter.KCC->State == KCCState.GROUNDED}");
+            if (input.Jump.WasPressed && filter.KCC->State == KCCState.GROUNDED)
+            {
+                return StateType.JUMP;
+            }
+
+            // In air? Stay in MID_AIR
+            if (filter.KCC->State != KCCState.GROUNDED)
+            {
+                return StateType.MID_AIR;
+            }
 
             // On ground: RUN if moving, otherwise IDLE
             if (input.Direction.X != 0)
             {
-                Log.Debug($"[MovementStateMachine] DetermineDesiredState - Returning RUN");
                 return StateType.RUN;
             }
             else
             {
-                Log.Debug($"[MovementStateMachine] DetermineDesiredState - Returning IDLE");
                 return StateType.IDLE;
             }
         }

@@ -17,9 +17,12 @@ MonoBehaviour:
     Guid:
       Value: 465632050545495527
   StateName: RunState
-  MoveSpeed:
-    RawValue: 327680
+  AnimationId: 1748754976
+  AnimationDelay:
+    RawValue: 0
   Acceleration:
-    RawValue: 655360
-  TurnSpeed:
-    RawValue: 983040
+    RawValue: 2293760
+  MaxBaseSpeed:
+    RawValue: 1245184
+  FlipDirectionMultiplier:
+    RawValue: 524288

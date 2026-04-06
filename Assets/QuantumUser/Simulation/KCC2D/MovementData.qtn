@@ -1,0 +1,4 @@
+component MovementData
+{
+    int FacingDirection;  // -1 = left, 1 = right, 0 = none/initial
+}

@@ -90,6 +90,8 @@ namespace Quantum {
     NONE = 0,
     IDLE = 1,
     RUN = 2,
+    JUMP = 3,
+    MID_AIR = 4,
   }
   [System.FlagsAttribute()]
   public enum InputButtons : int {
@@ -1260,37 +1262,62 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct CharacterMaster : Quantum.IComponent {
-    public const Int32 SIZE = 48;
+    public const Int32 SIZE = 208;
     public const Int32 ALIGNMENT = 8;
+    [FieldOffset(72)]
+    [ExcludeFromPrototype()]
+    public QuantumDemoInputPlatformer2D Input;
     [FieldOffset(0)]
+    [ExcludeFromPrototype()]
+    public MovementData MovementData;
+    [FieldOffset(4)]
+    [ExcludeFromPrototype()]
     public StateType CurrentState;
     [FieldOffset(8)]
+    [ExcludeFromPrototype()]
     public AssetRef<StateConfig> CurrentStateConfig;
+    [FieldOffset(48)]
+    [ExcludeFromPrototype()]
+    public FP StateTimer;
     [FieldOffset(16)]
     public AssetRef<StateConfig> IdleConfig;
-    [FieldOffset(24)]
+    [FieldOffset(40)]
     public AssetRef<StateConfig> RunConfig;
+    [FieldOffset(24)]
+    public AssetRef<StateConfig> JumpConfig;
     [FieldOffset(32)]
+    public AssetRef<StateConfig> MidAirConfig;
+    [FieldOffset(56)]
     [ExcludeFromPrototype()]
     public StateRequest MovementRequest;
     public override readonly Int32 GetHashCode() {
       unchecked { 
         var hash = 859;
+        hash = hash * 31 + Input.GetHashCode();
+        hash = hash * 31 + MovementData.GetHashCode();
         hash = hash * 31 + (Int32)CurrentState;
         hash = hash * 31 + CurrentStateConfig.GetHashCode();
+        hash = hash * 31 + StateTimer.GetHashCode();
         hash = hash * 31 + IdleConfig.GetHashCode();
         hash = hash * 31 + RunConfig.GetHashCode();
+        hash = hash * 31 + JumpConfig.GetHashCode();
+        hash = hash * 31 + MidAirConfig.GetHashCode();
         hash = hash * 31 + MovementRequest.GetHashCode();
         return hash;
       }
     }
     public static void Serialize(void* ptr, FrameSerializer serializer) {
         var p = (CharacterMaster*)ptr;
+        Quantum.MovementData.Serialize(&p->MovementData, serializer);
         serializer.Stream.Serialize((Int32*)&p->CurrentState);
         AssetRef.Serialize(&p->CurrentStateConfig, serializer);
         AssetRef.Serialize(&p->IdleConfig, serializer);
+        AssetRef.Serialize(&p->JumpConfig, serializer);
+        AssetRef.Serialize(&p->MidAirConfig, serializer);
         AssetRef.Serialize(&p->RunConfig, serializer);
+        FP.Serialize(&p->StateTimer, serializer);
         Quantum.StateRequest.Serialize(&p->MovementRequest, serializer);
+        Quantum.QuantumDemoInputPlatformer2D.Serialize(&p->Input, serializer);
     }
   }
   [StructLayout(LayoutKind.Explicit)]
@@ -1379,6 +1406,24 @@ namespace Quantum {
         FPVector2.Serialize(&p->_dynamicVelocity, serializer);
         FPVector2.Serialize(&p->_kinematicVelocity, serializer);
         Quantum.KCCQueryResult.Serialize(&p->Closest, serializer);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct MovementData : Quantum.IComponent {
+    public const Int32 SIZE = 4;
+    public const Int32 ALIGNMENT = 4;
+    [FieldOffset(0)]
+    public Int32 FacingDirection;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 19213;
+        hash = hash * 31 + FacingDirection.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (MovementData*)ptr;
+        serializer.Stream.Serialize(&p->FacingDirection);
     }
   }
   [StructLayout(LayoutKind.Explicit)]
@@ -1538,6 +1583,8 @@ namespace Quantum {
       BuildSignalsArrayOnComponentRemoved<Quantum.KCC2D>();
       BuildSignalsArrayOnComponentAdded<MapEntityLink>();
       BuildSignalsArrayOnComponentRemoved<MapEntityLink>();
+      BuildSignalsArrayOnComponentAdded<Quantum.MovementData>();
+      BuildSignalsArrayOnComponentRemoved<Quantum.MovementData>();
       BuildSignalsArrayOnComponentAdded<Quantum.MovementStateMachine>();
       BuildSignalsArrayOnComponentRemoved<Quantum.MovementStateMachine>();
       BuildSignalsArrayOnComponentAdded<NavMeshAvoidanceAgent>();
@@ -1759,6 +1806,7 @@ namespace Quantum {
       typeRegistry.Register(typeof(LayerMask), LayerMask.SIZE);
       typeRegistry.Register(typeof(MapEntityId), MapEntityId.SIZE);
       typeRegistry.Register(typeof(MapEntityLink), MapEntityLink.SIZE);
+      typeRegistry.Register(typeof(Quantum.MovementData), Quantum.MovementData.SIZE);
       typeRegistry.Register(typeof(Quantum.MovementState), 4);
       typeRegistry.Register(typeof(Quantum.MovementStateMachine), Quantum.MovementStateMachine.SIZE);
       typeRegistry.Register(typeof(NavMeshAvoidanceAgent), NavMeshAvoidanceAgent.SIZE);
@@ -1806,12 +1854,13 @@ namespace Quantum {
       typeRegistry.Register(typeof(Quantum._globals_), Quantum._globals_.SIZE);
     }
     static partial void InitComponentTypeIdGen() {
-      ComponentTypeId.Reset(ComponentTypeId.BuiltInComponentCount + 8)
+      ComponentTypeId.Reset(ComponentTypeId.BuiltInComponentCount + 9)
         .AddBuiltInComponents()
         .Add<Quantum.AnimatorComponent>(Quantum.AnimatorComponent.Serialize, null, Quantum.AnimatorComponent.OnRemoved, ComponentFlags.None)
         .Add<Quantum.CharacterMaster>(Quantum.CharacterMaster.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.GameplayState>(Quantum.GameplayState.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.KCC2D>(Quantum.KCC2D.Serialize, null, null, ComponentFlags.None)
+        .Add<Quantum.MovementData>(Quantum.MovementData.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.MovementStateMachine>(Quantum.MovementStateMachine.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.PlayerLink>(Quantum.PlayerLink.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.StateComponent>(Quantum.StateComponent.Serialize, null, null, ComponentFlags.None)

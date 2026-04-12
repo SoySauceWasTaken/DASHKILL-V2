@@ -74,17 +74,23 @@ namespace Quantum.Prototypes.Unity {
   }
   [System.SerializableAttribute()]
   public unsafe partial class CharacterMasterPrototype : Quantum.QuantumUnityPrototypeAdapter<Quantum.Prototypes.CharacterMasterPrototype> {
+    public Int32 CurrentStatePriority;
     public AssetRef<StateConfig> IdleConfig;
     public AssetRef<StateConfig> RunConfig;
     public AssetRef<StateConfig> JumpConfig;
     public AssetRef<StateConfig> MidAirConfig;
+    public AssetRef<StateConfig> AttackConfig;
+    public AssetRef<StateConfig> DashConfig;
     partial void ConvertUser(Quantum.QuantumEntityPrototypeConverter converter, ref Quantum.Prototypes.CharacterMasterPrototype prototype);
     public override Quantum.Prototypes.CharacterMasterPrototype Convert(Quantum.QuantumEntityPrototypeConverter converter) {
       var result = new Quantum.Prototypes.CharacterMasterPrototype();
+      converter.Convert(this.CurrentStatePriority, out result.CurrentStatePriority);
       converter.Convert(this.IdleConfig, out result.IdleConfig);
       converter.Convert(this.RunConfig, out result.RunConfig);
       converter.Convert(this.JumpConfig, out result.JumpConfig);
       converter.Convert(this.MidAirConfig, out result.MidAirConfig);
+      converter.Convert(this.AttackConfig, out result.AttackConfig);
+      converter.Convert(this.DashConfig, out result.DashConfig);
       ConvertUser(converter, ref result);
       return result;
     }

@@ -226,7 +226,7 @@ namespace Quantum
         //  break;
         //case KCCState.JUMPED:
         //  // keep the state hanging if pressed
-        //  if (kcc->Input.Jump.IsDown) kcc->SetStateTimer(f, FP._1);
+        //  if (kcc->Input.AddForce.IsDown) kcc->SetStateTimer(f, FP._1);
         //  break;
         //case KCCState.DOUBLE_JUMPED:
         //  // keep the state hanging until bumping
@@ -373,55 +373,13 @@ namespace Quantum
 
     private void IntegrateForces(Frame f, EntityRef entity, Transform2D* transform, KCC2D* KCC)
     {
-      ApplyGravity(f, KCC);
+      ApplyGravity(f, KCC, KCC->_gravityModifier);
     }
 
-    private void ClampVelocity(Frame f, KCC2D* kcc)
+    private void ApplyGravity(Frame f, KCC2D* KCC, FP gravityModifier)
     {
-      //FP maxYSpeed = FreeFallMaxSpeed;
-      //FP maxXSpeed = MaxBaseSpeed;
-      //switch (kcc->State)
-      //{
-      //  case KCCState.WALLED:
-      //    if (WallJumpEnabled && kcc->StateTimer.IsExpiredOrNotValid(f) == false) maxYSpeed = WallMaxSpeed;
-      //    break;
-      //  case KCCState.SLOPED:
-      //    maxYSpeed = SlopeMaxSpeed;
-      //    break;
-      //  case KCCState.DASHING:
-      //    maxXSpeed = MaxDashSpeed;
-      //    break;
-      //}
-
-      //if (kcc->State == KCCState.GROUNDED)
-      //{
-      //  if (kcc->_kinematicVelocity.Magnitude > maxXSpeed)
-      //  {
-      //    kcc->_kinematicVelocity = kcc->_kinematicVelocity.Normalized * maxXSpeed;
-      //  }
-      //}
-      //else if (FPMath.Abs(kcc->KinematicHorizontalSpeed) > maxXSpeed)
-      //{
-      //  kcc->KinematicHorizontalSpeed = FPMath.Sign(kcc->KinematicHorizontalSpeed) * maxXSpeed;
-      //}
-
-      //if (kcc->KinematicVerticalSpeed < 0)
-      //{
-      //  kcc->KinematicVerticalSpeed = FPMath.Clamp(kcc->KinematicVerticalSpeed, -maxYSpeed, FP._0);
-      //}
-    }
-
-    private void ApplyGravity(Frame f, KCC2D* KCC)
-    {
-      bool dashing = KCC->State == KCCState.DASHING;
-
-      if (KCC->State != KCCState.GROUNDED && (DashSuspendsGravity == false || dashing == false))
+      if (KCC->State != KCCState.GROUNDED)
       {
-        FP gravityModifier = 1;
-        //var buttonPressed = KCC->Input.Jump.IsDown || DownGravityOnRelease == false;
-        //if (KCC->KinematicVerticalSpeed <= 0 /*|| buttonPressed == false*/ || KCC->State == KCCState.FREE_FALLING)
-        //            gravityModifier = DownGravityMultiplier; // Fast fall (I think?)
-
         KCC->KinematicVerticalSpeed += BaseGravity * gravityModifier * f.DeltaTime;
       }
     }

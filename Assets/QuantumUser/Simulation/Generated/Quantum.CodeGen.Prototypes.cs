@@ -140,20 +140,26 @@ namespace Quantum.Prototypes {
   [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.CharacterMaster))]
   public unsafe class CharacterMasterPrototype : ComponentPrototype<Quantum.CharacterMaster> {
+    public Int32 CurrentStatePriority;
     public AssetRef<StateConfig> IdleConfig;
     public AssetRef<StateConfig> RunConfig;
     public AssetRef<StateConfig> JumpConfig;
     public AssetRef<StateConfig> MidAirConfig;
+    public AssetRef<StateConfig> AttackConfig;
+    public AssetRef<StateConfig> DashConfig;
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
         Quantum.CharacterMaster component = default;
         Materialize((Frame)f, ref component, in context);
         return f.Set(entity, component) == SetResult.ComponentAdded;
     }
     public void Materialize(Frame frame, ref Quantum.CharacterMaster result, in PrototypeMaterializationContext context = default) {
+        result.CurrentStatePriority = this.CurrentStatePriority;
         result.IdleConfig = this.IdleConfig;
         result.RunConfig = this.RunConfig;
         result.JumpConfig = this.JumpConfig;
         result.MidAirConfig = this.MidAirConfig;
+        result.AttackConfig = this.AttackConfig;
+        result.DashConfig = this.DashConfig;
     }
   }
   [System.SerializableAttribute()]

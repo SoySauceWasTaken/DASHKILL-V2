@@ -86,11 +86,14 @@ namespace Quantum
       }
     }
 
-
-    public void Jump(Frame f, FPVector2 impulse)
+        /// <summary>
+        /// Sets the velocity (NOT ACCELARATION +=)
+        /// </summary>
+        /// <param name="f"></param>
+        /// <param name="impulse"></param>
+    public void AddForce(Frame f, FPVector2 impulse)
     {
       _kinematicVelocity = impulse;
-      Log.Debug($"Jump() callback, kinematic vel: {_kinematicVelocity.X}, {_kinematicVelocity.Y}");
     }
   }
 }

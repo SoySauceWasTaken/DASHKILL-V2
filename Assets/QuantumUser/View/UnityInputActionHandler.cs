@@ -270,7 +270,7 @@ namespace Quantum
 
         public void OnDodge(InputAction.CallbackContext context)
         {
-            if (context.started) { if (CanReceiveInput) DodgeInput = true; }
+            if (context.started) { if (CanReceiveInput) DodgeInput = true; Debug.Log("Unity Reading input: Dashinput"); }
             else if (context.canceled) DodgeInput = false;
             if (context.started) OnAnyInputPressed?.Invoke();
         }

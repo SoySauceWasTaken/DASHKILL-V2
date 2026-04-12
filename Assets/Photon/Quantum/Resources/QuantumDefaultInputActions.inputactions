@@ -25,55 +25,37 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Fire1",
-                    "type": "Button",
-                    "id": "9f677dce-ade9-41f0-9936-acfca61d17ee",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Fire2",
-                    "type": "Button",
-                    "id": "43bd0150-b907-48a5-8b90-3335df2913b2",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Fire3",
-                    "type": "Button",
-                    "id": "3e120442-f5a3-4848-93f3-d076dcd236cc",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Jump",
                     "type": "Button",
                     "id": "3cc5e1ef-d24b-48a0-8be6-009e71c7adab",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Point",
-                    "type": "Value",
-                    "id": "a30eb4ab-c4d9-4ec5-aea1-0566dfb0472e",
-                    "expectedControlType": "Vector2",
+                    "name": "Dodge",
+                    "type": "Button",
+                    "id": "2ac5a9c0-22a8-4c32-8540-3cbd860aff47",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": true
+                    "initialStateCheck": false
                 },
                 {
-                    "name": "Shift",
+                    "name": "LightAttack",
                     "type": "Button",
-                    "id": "58159b2b-cd49-492b-a624-7c2bb88693a6",
-                    "expectedControlType": "Button",
+                    "id": "dcc1c855-e028-48de-bbea-bd17f8ce531a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "HeavyAttack",
+                    "type": "Button",
+                    "id": "121a076d-22f9-4a4b-bdaf-2a72a8a3ac46",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -203,50 +185,6 @@
                 },
                 {
                     "name": "",
-                    "id": "f7736390-2063-4ef1-904e-e81bb9c5f0d1",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Fire1",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "ff400c0b-e792-42e0-b9ae-5ebdde56cdde",
-                    "path": "<Keyboard>/leftCtrl",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Fire1",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "abf8c3e9-f7a4-487c-8b14-ff08b0e2e825",
-                    "path": "<Gamepad>/buttonEast",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Fire1",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "6e9fcdaf-ba1f-4f53-98bf-09fb35922035",
-                    "path": "<Mouse>/position",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Point",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "ec362ca4-4d2e-401d-8248-9c39f53a2551",
                     "path": "<Keyboard>/space",
                     "interactions": "",
@@ -269,78 +207,56 @@
                 },
                 {
                     "name": "",
-                    "id": "c9ff1f5d-d5fd-4b0f-a9d7-be615a788d98",
-                    "path": "<Mouse>/rightButton",
+                    "id": "535040c8-7c36-4799-a1a7-500cd809ad74",
+                    "path": "<Keyboard>/upArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Fire2",
+                    "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "7c0da9dd-179b-44fe-bef9-e37719c4ae4a",
-                    "path": "<Keyboard>/leftAlt",
+                    "id": "af021e6e-2292-4c6f-b964-ca9e95a7d29f",
+                    "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Fire2",
+                    "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "e0b5c586-75ea-4594-9109-2dfece96ecc9",
-                    "path": "<Gamepad>/buttonWest",
+                    "id": "535b6f7a-9253-47f2-b6de-740633388aea",
+                    "path": "<Keyboard>/z",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Fire2",
+                    "action": "Dodge",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "54b1b336-c328-4691-9175-b8cb6b38e53e",
-                    "path": "<Mouse>/middleButton",
+                    "id": "16e4d4f8-7aab-4edc-b0cc-dd140021a26b",
+                    "path": "<Keyboard>/c",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Fire3",
+                    "action": "LightAttack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "36ea581c-b447-4951-81e7-569773d2a65b",
-                    "path": "<Keyboard>/leftShift",
+                    "id": "c702285a-00b9-4954-af60-869186e32b4b",
+                    "path": "<Keyboard>/x",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Fire3",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "b9ac03da-059b-4228-92a6-90bf15d74a11",
-                    "path": "<Gamepad>/buttonNorth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Fire3",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "a6648425-7e60-49a0-9d6f-1ab51bba00d6",
-                    "path": "<Keyboard>/shift",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Shift",
+                    "action": "HeavyAttack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -36,7 +36,7 @@ namespace Quantum
 
             // Log raw input values before conversion
             //Debug.Log($"[{gameObject.name}] Raw MoveInput: ({inputHandler.MoveInput.x:F2}, {inputHandler.MoveInput.y:F2})");
-            //Debug.Log($"[{gameObject.name}] Button states - Jump:{inputHandler.JumpInput} Dodge:{inputHandler.DodgeInput} Light:{inputHandler.LightAttackInput} Heavy:{inputHandler.HeavyAttackInput}");
+            //Debug.Log($"[{gameObject.name}] Button states - AddForce:{inputHandler.JumpInput} Dodge:{inputHandler.DodgeInput} Light:{inputHandler.LightAttackInput} Heavy:{inputHandler.HeavyAttackInput}");
 
             // Movement direction (combined vector)
             qInput.Direction = new FPVector2(

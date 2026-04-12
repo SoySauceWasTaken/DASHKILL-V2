@@ -9,7 +9,6 @@ public unsafe class CharacterMasterSystem : SystemMainThreadFilter<CharacterMast
         public EntityRef Entity;
         public CharacterMaster* Master;
         public AnimatorComponent* Animator;
-        public MovementStateMachine* MovementSM;
         public Transform2D* Transform;
         public KCC2D* KCC;
         public PlayerLink* PlayerLink;
@@ -47,25 +46,32 @@ public unsafe class CharacterMasterSystem : SystemMainThreadFilter<CharacterMast
             winningState = activeRequests[0].state;
         }
 
-        // 3. SWITCH state if changed
-        if (winningState != StateType.NONE && winningState != filter.Master->CurrentState)
+        // 3. SWITCH state if changed AND if we're higher priority than currentState
+        if (winningState != StateType.NONE && winningState != filter.Master->CurrentState && activeRequests[0].priority >= filter.Master->CurrentStatePriority)
         {
+            filter.Master->CurrentStatePriority = activeRequests[0].priority;
             SwitchState(frame, ref filter, winningState);
         }
         // If no requests, default to IDLE
         else if (winningState == StateType.NONE && filter.Master->CurrentState != StateType.IDLE)
         {
-            SwitchState(frame, ref filter, StateType.IDLE);
+            Log.DebugWarn("CHARACTER'S CURRENT STATE IS NULL! (Should only happen once on startup)");
         }
 
         // 4. UPDATE current state
         if (filter.Master->CurrentState != StateType.NONE)
         {
-            var currentConfig = GetConfigForState(frame, filter.Master->CurrentState, filter.Master);
+            var currentConfig = StateMachineUtils.GetConfigForState(frame, filter.Master->CurrentState, filter.Master);
             if (currentConfig != null)
             {
                 filter.Master->StateTimer += frame.DeltaTime;
                 currentConfig.UpdateState(frame, filter.Master, filter.KCC, filter.Animator);
+
+                // CHECK IF WE SHOULD EXIT the current State
+                if (currentConfig.CanExit(frame, filter.Entity, filter.Master, filter.KCC))
+                {
+                    filter.Master->CurrentStatePriority = 0;
+                }
             }
         }
 
@@ -80,30 +86,12 @@ public unsafe class CharacterMasterSystem : SystemMainThreadFilter<CharacterMast
         ClearRequests(ref filter);
     }
 
-    private StateConfig GetConfigForState(Frame frame, StateType state, CharacterMaster* master)
-    {
-        var configRef = GetConfigRefForState(state, master);
-        return frame.FindAsset<StateConfig>(configRef.Id);
-    }
-
-    private AssetRef<StateConfig> GetConfigRefForState(StateType state, CharacterMaster* master)
-    {
-        switch (state)
-        {
-            case StateType.IDLE: return master->IdleConfig;
-            case StateType.RUN: return master->RunConfig;
-            case StateType.JUMP: return master->JumpConfig;
-            case StateType.MID_AIR: return master->MidAirConfig;
-            default: return master->IdleConfig;
-        }
-    }
-
     private void SwitchState(Frame frame, ref Filter filter, StateType newState)
     {
         // ExitState current
         if (filter.Master->CurrentState != StateType.NONE)
         {
-            var oldConfig = GetConfigForState(frame, filter.Master->CurrentState, filter.Master);
+            var oldConfig = StateMachineUtils.GetConfigForState(frame, filter.Master->CurrentState, filter.Master);
             oldConfig?.ExitState(frame, filter.Master, filter.KCC, filter.Animator);
         }
 
@@ -112,7 +100,7 @@ public unsafe class CharacterMasterSystem : SystemMainThreadFilter<CharacterMast
         filter.Master->StateTimer = FP._0;
 
         // Update config reference
-        var newConfigRef = GetConfigRefForState(newState, filter.Master);
+        var newConfigRef = StateMachineUtils.GetConfigRefForState(newState, filter.Master);
         filter.Master->CurrentStateConfig = newConfigRef;
 
         // EnterState new
@@ -142,5 +130,17 @@ public unsafe class CharacterMasterSystem : SystemMainThreadFilter<CharacterMast
         var playerEntity = f.Create(playerData.PlayerAvatar);
         PlayerLink* playerLink = f.Unsafe.GetPointer<PlayerLink>(playerEntity);
         playerLink->Player = player;
+
+        if (f.Unsafe.TryGetPointer<CharacterMaster>(playerEntity, out var master))
+        {
+            master->Self = playerEntity;
+            master->MovementData.FacingDirection = 1; // Set FacingDirection by default (again, is there a better place to put this?)
+        }
+
+        // Set Gravity to default (There's gotta be somewhere better to put this... right?)
+        if (f.Unsafe.TryGetPointer<KCC2D>(playerEntity, out var kcc))
+        {
+            kcc->_gravityModifier = FP._1;
+        }
     }
 }

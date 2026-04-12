@@ -59,7 +59,7 @@ namespace Quantum
 
                 case KCCState.JUMPED:
                 case KCCState.DOUBLE_JUMPED:
-                    return "Jump";
+                    return "AddForce";
 
                 case KCCState.FREE_FALLING:
                     return "Fall";

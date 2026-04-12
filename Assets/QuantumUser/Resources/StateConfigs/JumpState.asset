@@ -19,4 +19,4 @@ MonoBehaviour:
   StateName: JumpState
   AnimationId: 125937960
   JumpImpulse:
-    RawValue: 1409024
+    RawValue: 1245184

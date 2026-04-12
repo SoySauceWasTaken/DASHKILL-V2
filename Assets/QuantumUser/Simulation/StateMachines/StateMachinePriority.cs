@@ -3,7 +3,7 @@ namespace Quantum
     public enum StateMachinePriority : int
     {
         Movement = 10,
-        Attack = 80,
+        Action = 20,
         // Add more as needed
     }
 }

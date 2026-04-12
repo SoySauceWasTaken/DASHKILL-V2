@@ -20,7 +20,7 @@
         [Header("Falling")]
         public float MaxFallSpeed = 1;
 
-        public override bool CanTransitionTo(Frame frame, StateComponent* currentState)
+        public override bool CanTransitionTo(Frame frame, CharacterMaster* master, StateType currentState)
         {
             return true;
         }

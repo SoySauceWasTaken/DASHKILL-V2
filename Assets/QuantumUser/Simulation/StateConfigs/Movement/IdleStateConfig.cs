@@ -6,7 +6,7 @@
     {
         public int AnimationId = -1967403633;
 
-        public override bool CanTransitionTo(Frame frame, StateComponent* currentState)
+        public override bool CanTransitionTo(Frame frame, CharacterMaster* master, StateType currentState)
         {
             return true;
         }

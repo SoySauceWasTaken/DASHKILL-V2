@@ -1,0 +1,2 @@
+signal OnAnimatorSetVelocity(entity_ref entity, FPVector2 velocity);
+signal OnAnimatorVelocityLerp(entity_ref entity, FPVector2 startVelocity, FPVector2 endVelocity, FP StartTime, FP EndTime, FP CurrentTime);

@@ -9,5 +9,9 @@ enum StateType
     JUMP = 3,
     MID_AIR = 4,
 
+    // Action
+    DASH = 5,
+    
     // Attacks
+    ATTACK = 6,
 }

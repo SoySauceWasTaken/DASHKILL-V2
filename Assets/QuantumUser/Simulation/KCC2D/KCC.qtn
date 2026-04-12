@@ -9,6 +9,9 @@ component KCC2D {
     FPVector2 _dynamicVelocity;
 
     [ExcludeFromPrototype]
+    FP _gravityModifier;
+
+    [ExcludeFromPrototype]
     int LastInputDirection;
     [ExcludeFromPrototype]
     KCCQueryResult Closest;
@@ -17,9 +20,7 @@ component KCC2D {
     [ExcludeFromPrototype]
     FrameTimer _stateTimer;
     FrameTimer GroundedJumpTimer;
-    
-    //[ExcludeFromPrototype]
-    //QuantumDemoInputPlatformer2D Input;
+
     [ExcludeFromPrototype]
     FPVector2 InitialPosition;
     

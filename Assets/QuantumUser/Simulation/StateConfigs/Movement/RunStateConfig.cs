@@ -17,7 +17,7 @@
         public FP MaxBaseSpeed = 4;
         public FP FlipDirectionMultiplier = 1;
 
-        public override bool CanTransitionTo(Frame frame, StateComponent* currentState)
+        public override bool CanTransitionTo(Frame frame, CharacterMaster* master, StateType currentState)
         {
             return true;
         }

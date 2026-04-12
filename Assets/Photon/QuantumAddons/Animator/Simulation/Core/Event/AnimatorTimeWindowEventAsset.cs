@@ -32,6 +32,10 @@ namespace Quantum.Addons.Animator
       quantumTimeWindowAnimatorEvent.Time = FP.FromFloat_UNSAFE(unityAnimationEvent.time);
 
       quantumTimeWindowAnimatorEvent.EndTime = -1;
+      EndTime = quantumTimeWindowAnimatorEvent.EndTime;
+      StartTime = quantumTimeWindowAnimatorEvent.Time;
+
+      // Search if the Time-Windowed AnimEvent has a "twin" that marks the end of the time window.
       bool hasPair = false;
       foreach (var unityEvent in unityAnimationClip.events)
       {
@@ -53,6 +57,7 @@ namespace Quantum.Addons.Animator
         }
 
         quantumTimeWindowAnimatorEvent.EndTime = FP.FromFloat_UNSAFE(unityEvent.time);
+        EndTime = quantumTimeWindowAnimatorEvent.EndTime;
         return quantumTimeWindowAnimatorEvent;
       }
 
@@ -77,5 +82,10 @@ namespace Quantum.Addons.Animator
     /// <param name="f">The Quantum Frame.</param>
     /// <param name="animator">The AnimatorComponent being executed.</param>
     public abstract void OnExit(Frame f, AnimatorComponent* animatorComponent, LayerData* layerData);
+
+    [HideInInspector]
+    public FP EndTime;
+    [HideInInspector]
+    public FP StartTime;
   }
 }

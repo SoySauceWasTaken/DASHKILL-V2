@@ -1,8 +1,6 @@
 // MovementStateMachineSystem.cs
 namespace Quantum
 {
-    using Photon.Deterministic;
-
     public unsafe class MovementStateMachineSystem : SystemMainThreadFilter<MovementStateMachineSystem.Filter>
     {
         public struct Filter
@@ -31,9 +29,10 @@ namespace Quantum
         private StateType DetermineDesiredState(Frame frame, ref Filter filter, QuantumDemoInputPlatformer2D input)
         {
             // JUMP takes priority over ground movement
-            //Log.Debug($"Jump requested - WasPressed: {input.Jump.WasPressed}, IsGrounded: {filter.KCC->State == KCCState.GROUNDED}");
+            //Log.Debug($"AddForce requested - WasPressed: {input.AddForce.WasPressed}, IsGrounded: {filter.KCC->State == KCCState.GROUNDED}");
             if (input.Jump.WasPressed && filter.KCC->State == KCCState.GROUNDED)
             {
+                //Log.Debug("[MovementSM] GOING TO JUMP");
                 return StateType.JUMP;
             }
 

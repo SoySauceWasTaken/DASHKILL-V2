@@ -1,5 +1,9 @@
 component CharacterMaster
 {
+    // Store reference to self (give Configs access to this entity)
+    [ExcludeFromPrototype]
+    EntityRef Self;
+
     // Input
     [ExcludeFromPrototype]
     QuantumDemoInputPlatformer2D Input;
@@ -14,15 +18,21 @@ component CharacterMaster
 
     [ExcludeFromPrototype]
     AssetRef<StateConfig> CurrentStateConfig;
+    int CurrentStatePriority;
 
     [ExcludeFromPrototype]
     FP StateTimer;
 
     // All StateConfigs Direct Refs
+    // Movement
     AssetRef<StateConfig> IdleConfig;
     AssetRef<StateConfig> RunConfig;
     AssetRef<StateConfig> JumpConfig;
     AssetRef<StateConfig> MidAirConfig;
+    AssetRef<StateConfig> AttackConfig;
+    
+    // Action
+    AssetRef<StateConfig> DashConfig;
 
     // REQUEST STORAGE (one per state machine)
     [ExcludeFromPrototype]

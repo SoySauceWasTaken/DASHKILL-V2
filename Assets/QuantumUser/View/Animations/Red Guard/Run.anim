@@ -58,6 +58,8 @@ AnimationClip:
       value: {fileID: 21300000, guid: ac4679118986e8647aae4edb58f064f6, type: 3}
     - time: 0.51428574
       value: {fileID: 21300000, guid: 480352f7e8617ce4f92aa4c5fd58bda7, type: 3}
+    - time: 0.54285717
+      value: {fileID: 21300000, guid: 2931abcd799c63a4eaf1ccb381c1072d, type: 3}
     attribute: m_Sprite
     path: Red Guard
     classID: 212
@@ -99,12 +101,13 @@ AnimationClip:
     - {fileID: 21300000, guid: 74aa2b0ff2fdcd84fb7e225a8a2677e6, type: 3}
     - {fileID: 21300000, guid: ac4679118986e8647aae4edb58f064f6, type: 3}
     - {fileID: 21300000, guid: 480352f7e8617ce4f92aa4c5fd58bda7, type: 3}
+    - {fileID: 21300000, guid: 2931abcd799c63a4eaf1ccb381c1072d, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.54285717
+    m_StopTime: 0.5714286
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0

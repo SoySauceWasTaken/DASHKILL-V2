@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 514b17b682c0e2a438bb5c519653c53b, type: 3}
+  m_Name: ExampleAttack_1
+  m_EditorClassIdentifier: Quantum.Simulation::VelocityWindowEvent
+  Identifier:
+    Path: QuantumUser/Resources/AnimatorGraphs/AnimationEvents/EXAMPLE_ATTACK/ExampleAttack_1
+    Guid:
+      Value: 431423648737428299
+  IsMuted: 0
+  EndTime:
+    RawValue: 20597
+  StartTime:
+    RawValue: 0
+  Mode: 1
+  StartVelocity:
+    X:
+      RawValue: 0
+    Y:
+      RawValue: 0
+  EndVelocity:
+    X:
+      RawValue: 2621440
+    Y:
+      RawValue: 0
+  UseEndVelocity: 0
+  ZeroVelocityOnEnd: 0

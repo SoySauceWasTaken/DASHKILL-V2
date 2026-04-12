@@ -6,13 +6,19 @@ namespace Quantum
     /// </summary>
     public abstract unsafe class StateConfig : AssetObject
     {
-        // Every state has a name (for debugging/ID)
-        public string StateName;
 
-        public virtual bool CanTransitionTo(Frame frame, StateComponent* currentState)
+        /// IMPORTANT!!! This Method's name means "Can transition to state X that's handled by the *SAME* StateMachine's DetermineDesiredState()"
+        public virtual bool CanTransitionTo(Frame frame, CharacterMaster* master, StateType currentState)
         {
             // By default, always allow transition
             return true;
+        }
+
+        /// IMPORTANT!!!! This method is CanExit to ANY OTHER STATE (NO MATTER the priority or StateMachine.)
+        public virtual bool CanExit(Frame frame, EntityRef entity, CharacterMaster* master, KCC2D* kcc)
+        {
+            // By default, states never auto-exit
+            return false;
         }
 
         public virtual void EnterState(Frame frame, CharacterMaster* master, KCC2D* kcc, AnimatorComponent* animator)

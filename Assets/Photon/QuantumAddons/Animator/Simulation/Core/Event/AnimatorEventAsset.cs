@@ -22,7 +22,7 @@ namespace Quantum.Addons.Animator
   [Serializable]
   public abstract unsafe class AnimatorEventAsset : AssetObject, IAnimatorEventAsset
   {
-
+    [HideInInspector]
     public bool IsMuted = false;
     
     /// <inheritdoc cref="IAnimatorEventAsset.OnBake"/>

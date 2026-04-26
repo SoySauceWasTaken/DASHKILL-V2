@@ -110,7 +110,11 @@ GameObject:
   - component: {fileID: 355638738540704991}
   - component: {fileID: 8200161884257969186}
   - component: {fileID: 8305259543435571889}
-  - component: {fileID: 1664800074202774194}
+  - component: {fileID: 7943171763281592198}
+  - component: {fileID: 3893878505089299026}
+  - component: {fileID: 5903955182564077676}
+  - component: {fileID: 2058856387391935617}
+  - component: {fileID: 3124352652640954118}
   m_Layer: 0
   m_Name: Character
   m_TagString: Untagged
@@ -548,7 +552,28 @@ MonoBehaviour:
     DashConfig:
       Id:
         Value: 487578359967154083
---- !u!114 &1664800074202774194
+--- !u!114 &7943171763281592198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7261769895644465944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 721a4880bcfb32240bb5e92eadbc6233, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Quantum.Unity::Quantum.QPrototypeHitBox
+  Prototype:
+    CurrentHitBox:
+      Id:
+        Value: 0
+    IsActive:
+      Value: 0
+    Owner: {fileID: 6608702024583174239}
+    ActiveTime:
+      RawValue: 0
+--- !u!114 &3893878505089299026
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -560,4 +585,59 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6729af888cfc4884fbff4e47d97da4c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterView
-  modelTransform: {fileID: 6786079873980338907}
+  modelTransform: {fileID: 8344786096630722624}
+--- !u!114 &5903955182564077676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7261769895644465944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7429aeacf74860b40a04be646c6c23a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HitBoxEditorGizmo
+  hitBoxConfig: {fileID: 0}
+  hurtBoxConfig: {fileID: 11400000, guid: 87f7bac22de7d574b9a0f99ce3c96b8a, type: 2}
+  FacingDirection: 1
+--- !u!114 &2058856387391935617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7261769895644465944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0b7d46e8b76c0e48b4d0ac0721e4bd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Quantum.Unity::Quantum.QPrototypeHealth
+  Prototype:
+    Current:
+      RawValue: 327680
+    Max:
+      RawValue: 327680
+    IsAlive:
+      Value: 1
+--- !u!114 &3124352652640954118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7261769895644465944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aba58f6cf79917947b46d1dc2482a327, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Quantum.Unity::Quantum.QPrototypeHurtBox
+  Prototype:
+    CurrentHurtBox:
+      Id:
+        Value: 303662585725477115
+    IsActive:
+      Value: 1
+    Owner: {fileID: 6608702024583174239}
+    ActiveTime:
+      RawValue: 0

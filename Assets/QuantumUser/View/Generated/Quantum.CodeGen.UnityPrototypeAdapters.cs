@@ -96,6 +96,40 @@ namespace Quantum.Prototypes.Unity {
     }
   }
   [System.SerializableAttribute()]
+  public unsafe partial class HitBoxPrototype : Quantum.QuantumUnityPrototypeAdapter<Quantum.Prototypes.HitBoxPrototype> {
+    public AssetRef<HitBoxConfig> CurrentHitBox;
+    public QBoolean IsActive;
+    public Quantum.QuantumEntityPrototype Owner;
+    public FP ActiveTime;
+    partial void ConvertUser(Quantum.QuantumEntityPrototypeConverter converter, ref Quantum.Prototypes.HitBoxPrototype prototype);
+    public override Quantum.Prototypes.HitBoxPrototype Convert(Quantum.QuantumEntityPrototypeConverter converter) {
+      var result = new Quantum.Prototypes.HitBoxPrototype();
+      converter.Convert(this.CurrentHitBox, out result.CurrentHitBox);
+      converter.Convert(this.IsActive, out result.IsActive);
+      converter.Convert(this.Owner, out result.Owner);
+      converter.Convert(this.ActiveTime, out result.ActiveTime);
+      ConvertUser(converter, ref result);
+      return result;
+    }
+  }
+  [System.SerializableAttribute()]
+  public unsafe partial class HurtBoxPrototype : Quantum.QuantumUnityPrototypeAdapter<Quantum.Prototypes.HurtBoxPrototype> {
+    public AssetRef<HurtBoxConfig> CurrentHurtBox;
+    public QBoolean IsActive;
+    public Quantum.QuantumEntityPrototype Owner;
+    public FP ActiveTime;
+    partial void ConvertUser(Quantum.QuantumEntityPrototypeConverter converter, ref Quantum.Prototypes.HurtBoxPrototype prototype);
+    public override Quantum.Prototypes.HurtBoxPrototype Convert(Quantum.QuantumEntityPrototypeConverter converter) {
+      var result = new Quantum.Prototypes.HurtBoxPrototype();
+      converter.Convert(this.CurrentHurtBox, out result.CurrentHurtBox);
+      converter.Convert(this.IsActive, out result.IsActive);
+      converter.Convert(this.Owner, out result.Owner);
+      converter.Convert(this.ActiveTime, out result.ActiveTime);
+      ConvertUser(converter, ref result);
+      return result;
+    }
+  }
+  [System.SerializableAttribute()]
   public unsafe partial class StateRequestPrototype : Quantum.QuantumUnityPrototypeAdapter<Quantum.Prototypes.StateRequestPrototype> {
     public Quantum.QEnum32<StateType> RequestedState;
     public Int32 Priority;

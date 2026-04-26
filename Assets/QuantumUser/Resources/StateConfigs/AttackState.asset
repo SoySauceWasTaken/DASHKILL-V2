@@ -16,7 +16,7 @@ MonoBehaviour:
     Path: QuantumUser/Resources/StateConfigs/AttackState
     Guid:
       Value: 482786500151101312
-  AnimationId: 1080829965
+  AnimationId: -296690035
   DashSpeed:
     RawValue: 983040
   DashDuration:

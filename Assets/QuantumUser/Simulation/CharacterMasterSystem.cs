@@ -55,7 +55,7 @@ public unsafe class CharacterMasterSystem : SystemMainThreadFilter<CharacterMast
         // If no requests, default to IDLE
         else if (winningState == StateType.NONE && filter.Master->CurrentState != StateType.IDLE)
         {
-            Log.DebugWarn("CHARACTER'S CURRENT STATE IS NULL! (Should only happen once on startup)");
+            //Log.DebugWarn("CHARACTER'S CURRENT STATE IS NULL! (Should only happen once on startup)");
         }
 
         // 4. UPDATE current state

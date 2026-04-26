@@ -182,6 +182,63 @@ namespace Quantum.Prototypes {
     }
   }
   [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.Health))]
+  public unsafe partial class HealthPrototype : ComponentPrototype<Quantum.Health> {
+    public FP Current;
+    public FP Max;
+    public QBoolean IsAlive;
+    partial void MaterializeUser(Frame frame, ref Quantum.Health result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.Health component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.Health result, in PrototypeMaterializationContext context = default) {
+        result.Current = this.Current;
+        result.Max = this.Max;
+        result.IsAlive = this.IsAlive;
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.HitBox))]
+  public unsafe class HitBoxPrototype : ComponentPrototype<Quantum.HitBox> {
+    public AssetRef<HitBoxConfig> CurrentHitBox;
+    public QBoolean IsActive;
+    public MapEntityId Owner;
+    public FP ActiveTime;
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.HitBox component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.HitBox result, in PrototypeMaterializationContext context = default) {
+        result.CurrentHitBox = this.CurrentHitBox;
+        result.IsActive = this.IsActive;
+        PrototypeValidator.FindMapEntity(this.Owner, in context, out result.Owner);
+        result.ActiveTime = this.ActiveTime;
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.HurtBox))]
+  public unsafe class HurtBoxPrototype : ComponentPrototype<Quantum.HurtBox> {
+    public AssetRef<HurtBoxConfig> CurrentHurtBox;
+    public QBoolean IsActive;
+    public MapEntityId Owner;
+    public FP ActiveTime;
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.HurtBox component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.HurtBox result, in PrototypeMaterializationContext context = default) {
+        result.CurrentHurtBox = this.CurrentHurtBox;
+        result.IsActive = this.IsActive;
+        PrototypeValidator.FindMapEntity(this.Owner, in context, out result.Owner);
+        result.ActiveTime = this.ActiveTime;
+    }
+  }
+  [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.Input))]
   public unsafe partial class InputPrototype : StructPrototype {
     public Button _left;

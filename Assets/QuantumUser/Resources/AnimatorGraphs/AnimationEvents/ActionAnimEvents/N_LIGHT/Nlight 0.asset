@@ -10,27 +10,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 514b17b682c0e2a438bb5c519653c53b, type: 3}
-  m_Name: ExampleAttack_2
+  m_Name: Nlight 0
   m_EditorClassIdentifier: Quantum.Simulation::VelocityWindowEvent
   Identifier:
-    Path: QuantumUser/Resources/AnimatorGraphs/AnimationEvents/EXAMPLE_ATTACK/ExampleAttack_2
+    Path: QuantumUser/Resources/AnimatorGraphs/AnimationEvents/ActionAnimEvents/N_LIGHT/Nlight
+      0
     Guid:
-      Value: 285016573685221853
+      Value: 518245831285303240
   IsMuted: 0
   EndTime:
-    RawValue: 20597
+    RawValue: 9362
   StartTime:
     RawValue: 0
   Mode: 1
   StartVelocity:
     X:
-      RawValue: 0
+      RawValue: 1966080
     Y:
       RawValue: 0
   EndVelocity:
     X:
-      RawValue: 2621440
+      RawValue: 655360
     Y:
       RawValue: 0
-  UseEndVelocity: 0
+  UseEndVelocity: 1
   ZeroVelocityOnEnd: 0

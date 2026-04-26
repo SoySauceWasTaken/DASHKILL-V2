@@ -43,7 +43,7 @@ public class VelocityWindowEvent : AnimatorTimeWindowEventAsset
     /// </summary>
     public override unsafe void OnEnter(Frame frame, AnimatorComponent* animatorComponent, LayerData* layerData)
     {
-        Log.Debug($"[VelocityWindowEvent] StartTime: {layerData->Time}, EndTime: {EndTime}");
+        //Log.Debug($"[VelocityWindowEvent] StartTime: {layerData->Time}, EndTime: {EndTime}");
         ProcessVelocity(frame, animatorComponent, layerData);
     }
 

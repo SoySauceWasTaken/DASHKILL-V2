@@ -1366,6 +1366,92 @@ namespace Quantum {
     }
   }
   [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct Health : Quantum.IComponent {
+    public const Int32 SIZE = 24;
+    public const Int32 ALIGNMENT = 8;
+    [FieldOffset(8)]
+    public FP Current;
+    [FieldOffset(16)]
+    public FP Max;
+    [FieldOffset(0)]
+    public QBoolean IsAlive;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 2111;
+        hash = hash * 31 + Current.GetHashCode();
+        hash = hash * 31 + Max.GetHashCode();
+        hash = hash * 31 + IsAlive.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (Health*)ptr;
+        QBoolean.Serialize(&p->IsAlive, serializer);
+        FP.Serialize(&p->Current, serializer);
+        FP.Serialize(&p->Max, serializer);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct HitBox : Quantum.IComponent {
+    public const Int32 SIZE = 32;
+    public const Int32 ALIGNMENT = 8;
+    [FieldOffset(8)]
+    public AssetRef<HitBoxConfig> CurrentHitBox;
+    [FieldOffset(0)]
+    public QBoolean IsActive;
+    [FieldOffset(16)]
+    public EntityRef Owner;
+    [FieldOffset(24)]
+    public FP ActiveTime;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 461;
+        hash = hash * 31 + CurrentHitBox.GetHashCode();
+        hash = hash * 31 + IsActive.GetHashCode();
+        hash = hash * 31 + Owner.GetHashCode();
+        hash = hash * 31 + ActiveTime.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (HitBox*)ptr;
+        QBoolean.Serialize(&p->IsActive, serializer);
+        AssetRef.Serialize(&p->CurrentHitBox, serializer);
+        EntityRef.Serialize(&p->Owner, serializer);
+        FP.Serialize(&p->ActiveTime, serializer);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct HurtBox : Quantum.IComponent {
+    public const Int32 SIZE = 32;
+    public const Int32 ALIGNMENT = 8;
+    [FieldOffset(8)]
+    public AssetRef<HurtBoxConfig> CurrentHurtBox;
+    [FieldOffset(0)]
+    public QBoolean IsActive;
+    [FieldOffset(16)]
+    public EntityRef Owner;
+    [FieldOffset(24)]
+    public FP ActiveTime;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 5737;
+        hash = hash * 31 + CurrentHurtBox.GetHashCode();
+        hash = hash * 31 + IsActive.GetHashCode();
+        hash = hash * 31 + Owner.GetHashCode();
+        hash = hash * 31 + ActiveTime.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (HurtBox*)ptr;
+        QBoolean.Serialize(&p->IsActive, serializer);
+        AssetRef.Serialize(&p->CurrentHurtBox, serializer);
+        EntityRef.Serialize(&p->Owner, serializer);
+        FP.Serialize(&p->ActiveTime, serializer);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct KCC2D : Quantum.IComponent {
     public const Int32 SIZE = 208;
     public const Int32 ALIGNMENT = 8;
@@ -1558,6 +1644,15 @@ namespace Quantum {
   public unsafe partial interface ISignalOnAnimatorVelocityLerp : ISignal {
     void OnAnimatorVelocityLerp(Frame f, EntityRef entity, FPVector2 startVelocity, FPVector2 endVelocity, FP StartTime, FP EndTime, FP CurrentTime);
   }
+  public unsafe partial interface ISignalOnHitboxSetActive : ISignal {
+    void OnHitboxSetActive(Frame f, EntityRef entity, QBoolean isActive, AssetRef<HitBoxConfig> HitBoxConfig);
+  }
+  public unsafe partial interface ISignalOnDamageDealt : ISignal {
+    void OnDamageDealt(Frame f, EntityRef target, FP amount, EntityRef source);
+  }
+  public unsafe partial interface ISignalOnEntityDied : ISignal {
+    void OnEntityDied(Frame f, EntityRef entity, EntityRef killer);
+  }
   public unsafe partial interface ISignalOnKCC2DPreCollision : ISignal {
     void OnKCC2DPreCollision(Frame f, EntityRef entity, KCC2D* kcc, KCCQueryResult* collision);
   }
@@ -1577,6 +1672,9 @@ namespace Quantum {
     private ISignalOnAnimatorRootMotion2D[] _ISignalOnAnimatorRootMotion2DSystems;
     private ISignalOnAnimatorSetVelocity[] _ISignalOnAnimatorSetVelocitySystems;
     private ISignalOnAnimatorVelocityLerp[] _ISignalOnAnimatorVelocityLerpSystems;
+    private ISignalOnHitboxSetActive[] _ISignalOnHitboxSetActiveSystems;
+    private ISignalOnDamageDealt[] _ISignalOnDamageDealtSystems;
+    private ISignalOnEntityDied[] _ISignalOnEntityDiedSystems;
     private ISignalOnKCC2DPreCollision[] _ISignalOnKCC2DPreCollisionSystems;
     private ISignalOnKCC2DTrigger[] _ISignalOnKCC2DTriggerSystems;
     private ISignalOnKCC2DSolverCollision[] _ISignalOnKCC2DSolverCollisionSystems;
@@ -1598,6 +1696,9 @@ namespace Quantum {
       _ISignalOnAnimatorRootMotion2DSystems = BuildSignalsArray<ISignalOnAnimatorRootMotion2D>();
       _ISignalOnAnimatorSetVelocitySystems = BuildSignalsArray<ISignalOnAnimatorSetVelocity>();
       _ISignalOnAnimatorVelocityLerpSystems = BuildSignalsArray<ISignalOnAnimatorVelocityLerp>();
+      _ISignalOnHitboxSetActiveSystems = BuildSignalsArray<ISignalOnHitboxSetActive>();
+      _ISignalOnDamageDealtSystems = BuildSignalsArray<ISignalOnDamageDealt>();
+      _ISignalOnEntityDiedSystems = BuildSignalsArray<ISignalOnEntityDied>();
       _ISignalOnKCC2DPreCollisionSystems = BuildSignalsArray<ISignalOnKCC2DPreCollision>();
       _ISignalOnKCC2DTriggerSystems = BuildSignalsArray<ISignalOnKCC2DTrigger>();
       _ISignalOnKCC2DSolverCollisionSystems = BuildSignalsArray<ISignalOnKCC2DSolverCollision>();
@@ -1613,6 +1714,12 @@ namespace Quantum {
       BuildSignalsArrayOnComponentRemoved<Quantum.CharacterMaster>();
       BuildSignalsArrayOnComponentAdded<Quantum.GameplayState>();
       BuildSignalsArrayOnComponentRemoved<Quantum.GameplayState>();
+      BuildSignalsArrayOnComponentAdded<Quantum.Health>();
+      BuildSignalsArrayOnComponentRemoved<Quantum.Health>();
+      BuildSignalsArrayOnComponentAdded<Quantum.HitBox>();
+      BuildSignalsArrayOnComponentRemoved<Quantum.HitBox>();
+      BuildSignalsArrayOnComponentAdded<Quantum.HurtBox>();
+      BuildSignalsArrayOnComponentRemoved<Quantum.HurtBox>();
       BuildSignalsArrayOnComponentAdded<Quantum.KCC2D>();
       BuildSignalsArrayOnComponentRemoved<Quantum.KCC2D>();
       BuildSignalsArrayOnComponentAdded<MapEntityLink>();
@@ -1754,6 +1861,33 @@ namespace Quantum {
           }
         }
       }
+      public void OnHitboxSetActive(EntityRef entity, QBoolean isActive, AssetRef<HitBoxConfig> HitBoxConfig) {
+        var array = _f._ISignalOnHitboxSetActiveSystems;
+        for (Int32 i = 0; i < array.Length; ++i) {
+          var s = array[i];
+          if (_f.SystemIsEnabledInHierarchy((SystemBase)s)) {
+            s.OnHitboxSetActive(_f, entity, isActive, HitBoxConfig);
+          }
+        }
+      }
+      public void OnDamageDealt(EntityRef target, FP amount, EntityRef source) {
+        var array = _f._ISignalOnDamageDealtSystems;
+        for (Int32 i = 0; i < array.Length; ++i) {
+          var s = array[i];
+          if (_f.SystemIsEnabledInHierarchy((SystemBase)s)) {
+            s.OnDamageDealt(_f, target, amount, source);
+          }
+        }
+      }
+      public void OnEntityDied(EntityRef entity, EntityRef killer) {
+        var array = _f._ISignalOnEntityDiedSystems;
+        for (Int32 i = 0; i < array.Length; ++i) {
+          var s = array[i];
+          if (_f.SystemIsEnabledInHierarchy((SystemBase)s)) {
+            s.OnEntityDied(_f, entity, killer);
+          }
+        }
+      }
       public void OnKCC2DPreCollision(EntityRef entity, KCC2D* kcc, KCCQueryResult* collision) {
         var array = _f._ISignalOnKCC2DPreCollisionSystems;
         for (Int32 i = 0; i < array.Length; ++i) {
@@ -1837,10 +1971,13 @@ namespace Quantum {
       typeRegistry.Register(typeof(FrameMetaData), FrameMetaData.SIZE);
       typeRegistry.Register(typeof(FrameTimer), FrameTimer.SIZE);
       typeRegistry.Register(typeof(Quantum.GameplayState), Quantum.GameplayState.SIZE);
+      typeRegistry.Register(typeof(Quantum.Health), Quantum.Health.SIZE);
       typeRegistry.Register(typeof(HingeJoint), HingeJoint.SIZE);
       typeRegistry.Register(typeof(HingeJoint3D), HingeJoint3D.SIZE);
       typeRegistry.Register(typeof(Hit), Hit.SIZE);
       typeRegistry.Register(typeof(Hit3D), Hit3D.SIZE);
+      typeRegistry.Register(typeof(Quantum.HitBox), Quantum.HitBox.SIZE);
+      typeRegistry.Register(typeof(Quantum.HurtBox), Quantum.HurtBox.SIZE);
       typeRegistry.Register(typeof(Quantum.Input), Quantum.Input.SIZE);
       typeRegistry.Register(typeof(Quantum.InputButtons), 4);
       typeRegistry.Register(typeof(InputDirection), InputDirection.SIZE);
@@ -1906,11 +2043,14 @@ namespace Quantum {
       typeRegistry.Register(typeof(Quantum._globals_), Quantum._globals_.SIZE);
     }
     static partial void InitComponentTypeIdGen() {
-      ComponentTypeId.Reset(ComponentTypeId.BuiltInComponentCount + 9)
+      ComponentTypeId.Reset(ComponentTypeId.BuiltInComponentCount + 12)
         .AddBuiltInComponents()
         .Add<Quantum.AnimatorComponent>(Quantum.AnimatorComponent.Serialize, null, Quantum.AnimatorComponent.OnRemoved, ComponentFlags.None)
         .Add<Quantum.CharacterMaster>(Quantum.CharacterMaster.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.GameplayState>(Quantum.GameplayState.Serialize, null, null, ComponentFlags.None)
+        .Add<Quantum.Health>(Quantum.Health.Serialize, null, null, ComponentFlags.None)
+        .Add<Quantum.HitBox>(Quantum.HitBox.Serialize, null, null, ComponentFlags.None)
+        .Add<Quantum.HurtBox>(Quantum.HurtBox.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.KCC2D>(Quantum.KCC2D.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.MovementData>(Quantum.MovementData.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.MovementStateMachine>(Quantum.MovementStateMachine.Serialize, null, null, ComponentFlags.None)

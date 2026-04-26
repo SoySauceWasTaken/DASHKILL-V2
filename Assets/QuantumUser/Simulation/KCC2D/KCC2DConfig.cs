@@ -198,48 +198,48 @@ namespace Quantum
       }
 
       // apply stuff based on state
-      switch (kcc->State)
-      {
-        //case KCCState.WALLED:
-        //  // keep the state hanging if still in contact
-        //  if (kcc->Closest.ContactType == KCCContactType.WALL)
-        //  {
-        //    var inputDirection = kcc->Input.Direction.X;
-        //    var oppositeInput = kcc->Closest.Contact.Normal.X * inputDirection < 0;
+      //switch (kcc->State)
+      //{
+      //  //case KCCState.WALLED:
+      //  //  // keep the state hanging if still in contact
+      //  //  if (kcc->Closest.ContactType == KCCContactType.WALL)
+      //  //  {
+      //  //    var inputDirection = kcc->Input.Direction.X;
+      //  //    var oppositeInput = kcc->Closest.Contact.Normal.X * inputDirection < 0;
 
-        //    if (previousState != KCCState.WALLED)
-        //    {
-        //      kcc->SetStateTimer(f, oppositeInput ? WalledStateExtention : 0);
-        //    }
-        //    if (RequiresOppositeInput == false || oppositeInput)
-        //    {
-        //      kcc->SetStateTimer(f, WalledStateExtention);
-        //    }
-        //  }
+      //  //    if (previousState != KCCState.WALLED)
+      //  //    {
+      //  //      kcc->SetStateTimer(f, oppositeInput ? WalledStateExtention : 0);
+      //  //    }
+      //  //    if (RequiresOppositeInput == false || oppositeInput)
+      //  //    {
+      //  //      kcc->SetStateTimer(f, WalledStateExtention);
+      //  //    }
+      //  //  }
 
-        //  if (previousState != KCCState.WALLED)
-        //  {
-        //    f.Events.Landed(entity, kcc->KinematicHorizontalSpeed, KCCState.WALLED);
-        //    kcc->KinematicHorizontalSpeed = 0;
-        //  }
+      //  //  if (previousState != KCCState.WALLED)
+      //  //  {
+      //  //    f.Events.Landed(entity, kcc->KinematicHorizontalSpeed, KCCState.WALLED);
+      //  //    kcc->KinematicHorizontalSpeed = 0;
+      //  //  }
 
-        //  break;
-        //case KCCState.JUMPED:
-        //  // keep the state hanging if pressed
-        //  if (kcc->Input.AddForce.IsDown) kcc->SetStateTimer(f, FP._1);
-        //  break;
-        //case KCCState.DOUBLE_JUMPED:
-        //  // keep the state hanging until bumping
-        //  kcc->SetStateTimer(f, FP._1);
-        //  break;
-        //case KCCState.GROUNDED:
-        //  if (previousState != KCCState.GROUNDED)
-        //  {
-        //    f.Events.Landed(entity, kcc->KinematicVerticalSpeed, KCCState.GROUNDED);
-        //    kcc->KinematicVerticalSpeed = 0;
-        //  }
-        //  break;
-      }
+      //  //  break;
+      //  //case KCCState.JUMPED:
+      //  //  // keep the state hanging if pressed
+      //  //  if (kcc->Input.AddForce.IsDown) kcc->SetStateTimer(f, FP._1);
+      //  //  break;
+      //  //case KCCState.DOUBLE_JUMPED:
+      //  //  // keep the state hanging until bumping
+      //  //  kcc->SetStateTimer(f, FP._1);
+      //  //  break;
+      //  //case KCCState.GROUNDED:
+      //  //  if (previousState != KCCState.GROUNDED)
+      //  //  {
+      //  //    f.Events.Landed(entity, kcc->KinematicVerticalSpeed, KCCState.GROUNDED);
+      //  //    kcc->KinematicVerticalSpeed = 0;
+      //  //  }
+      //  //  break;
+      //}
 
       if (kcc->Closest.ContactType == KCCContactType.CEIL && kcc->KinematicVerticalSpeed > 0)
         kcc->KinematicVerticalSpeed = 0;

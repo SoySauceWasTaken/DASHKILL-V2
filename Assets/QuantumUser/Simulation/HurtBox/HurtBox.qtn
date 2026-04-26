@@ -1,0 +1,7 @@
+component HurtBox
+{
+    AssetRef<HurtBoxConfig> CurrentHurtBox;
+    bool IsActive;
+    EntityRef Owner;  // Who created this hitbox (for damage attribution)
+    FP ActiveTime;   // When this hitbox became active (for duration tracking)
+}

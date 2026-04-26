@@ -1,0 +1,6 @@
+component Health
+{
+    FP Current;
+    FP Max;
+    bool IsAlive;
+}

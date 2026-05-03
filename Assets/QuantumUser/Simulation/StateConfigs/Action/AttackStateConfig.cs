@@ -17,7 +17,7 @@ namespace Quantum
             return master->StateTimer >= DashDuration;
         }
 
-        public override bool CanExit(Frame frame, EntityRef entity, CharacterMaster* master, KCC2D* kcc)
+        public override bool CanExit(Frame frame, EntityRef entity, StateFilter* filter)
         {
             // Get the AnimatorComponent from the entity
             if (frame.TryGet(entity, out AnimatorComponent animator))
@@ -39,42 +39,42 @@ namespace Quantum
                     //Log.Debug($"Animation State: Name: {currentState.Name}, Length {animationLength}");
 
                     // Exit when animation completes
-                    return master->StateTimer >= animationLength;
+                    return filter->master->StateTimer >= animationLength;
                 }
             }
 
             return false;
         }
 
-        public override unsafe void EnterState(Frame frame, CharacterMaster* master, KCC2D* kcc, AnimatorComponent* animator)
+        public override unsafe void EnterState(Frame frame, EntityRef entity, StateFilter* filter)
         {
-            base.EnterState(frame, master, kcc, animator);
+            base.EnterState(frame, entity, filter);
 
             // Optionally suspend gravity during dash
             if (SuspendsGravity)
             {
-                kcc->_gravityModifier = 0;
-                kcc->KinematicVerticalSpeed = 0; // Must null out the existing gravity
+                filter->kcc->_gravityModifier = 0;
+                filter->kcc->KinematicVerticalSpeed = 0; // Must null out the existing gravity
             }
 
             // Play dash animation
-            animator->FadeTo(frame, AnimationId, FP._0, FP._0, FP._0, true, false);
+            filter->animator->FadeTo(frame, AnimationId, FP._0, FP._0, FP._0, true, false);
         }
 
-        public override unsafe void UpdateState(Frame frame, CharacterMaster* master, KCC2D* kcc, AnimatorComponent* animator)
+        public override unsafe void UpdateState(Frame frame, EntityRef entity, StateFilter* filter)
         {
-            base.UpdateState(frame, master, kcc, animator);
+            base.UpdateState(frame, entity, filter);
 
             //ProcessDash(frame, master, kcc);
         }
 
-        public override unsafe void ExitState(Frame frame, CharacterMaster* master, KCC2D* kcc, AnimatorComponent* animator)
+        public override unsafe void ExitState(Frame frame, EntityRef entity, StateFilter* filter)
         {
-            base.ExitState(frame, master, kcc, animator);
+            base.ExitState(frame, entity, filter);
 
             if (SuspendsGravity)
             {
-                kcc->_gravityModifier = 1; // Reactiviate gravity
+                filter->kcc->_gravityModifier = 1; // Reactiviate gravity
             }
         }
 

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6786079873980338907}
   - component: {fileID: 467071463350001048}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Red Guard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -115,7 +115,9 @@ GameObject:
   - component: {fileID: 5903955182564077676}
   - component: {fileID: 2058856387391935617}
   - component: {fileID: 3124352652640954118}
-  m_Layer: 0
+  - component: {fileID: 9056869138067271205}
+  - component: {fileID: 3199639961467947015}
+  m_Layer: 8
   m_Name: Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -158,7 +160,7 @@ MonoBehaviour:
     PositionOffset:
       RawValue: 0
   PhysicsCollider:
-    IsEnabled: 0
+    IsEnabled: 1
     IsTrigger: 1
     Material:
       Id:
@@ -169,7 +171,7 @@ MonoBehaviour:
       CapsuleDirection2D: 0
       CapsuleDirection3D: 0
     Shape2D:
-      ShapeType: 32
+      ShapeType: 16
       PolygonCollider:
         Id:
           Value: 0
@@ -177,9 +179,9 @@ MonoBehaviour:
         RawValue: 32768
       CapsuleSize:
         X:
-          RawValue: 49152
+          RawValue: 120586
         Y:
-          RawValue: 216269
+          RawValue: 155976
       EdgeExtent:
         RawValue: 32768
       BoxExtents:
@@ -189,9 +191,9 @@ MonoBehaviour:
           RawValue: 32768
       PositionOffset:
         X:
-          RawValue: 0
+          RawValue: -13763
         Y:
-          RawValue: 0
+          RawValue: -31457
       RotationOffset:
         RawValue: 0
       UserTag: 0
@@ -230,7 +232,7 @@ MonoBehaviour:
       IsPersistent: 1
       CompoundShapes: []
     LayerSource: 0
-    Layer: 0
+    Layer: 8
     CallbackFlags:
       Value: 0
   PhysicsBody:
@@ -433,6 +435,8 @@ MonoBehaviour:
     Config:
       Id:
         Value: 301022223722737656
+    _gravityModifier:
+      RawValue: 65536
     GroundedJumpTimer:
       Mode: 0
       Frames: 0
@@ -549,6 +553,9 @@ MonoBehaviour:
     AttackConfig:
       Id:
         Value: 482786500151101312
+    StunConfig:
+      Id:
+        Value: 380477044319824572
     DashConfig:
       Id:
         Value: 487578359967154083
@@ -573,6 +580,7 @@ MonoBehaviour:
     Owner: {fileID: 6608702024583174239}
     ActiveTime:
       RawValue: 0
+    HitEntities: []
 --- !u!114 &3893878505089299026
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -641,3 +649,31 @@ MonoBehaviour:
     Owner: {fileID: 6608702024583174239}
     ActiveTime:
       RawValue: 0
+--- !u!114 &9056869138067271205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7261769895644465944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e55596e9ee50ffc4ca8f761b4168f97e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Quantum.Unity::Quantum.QPrototypeMovementData
+  Prototype:
+    FacingDirection: 1
+--- !u!114 &3199639961467947015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7261769895644465944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99f90d1be20009d45b50e5ddb980680f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Quantum.Unity::Quantum.QPrototypeStatusStateMachine
+  Prototype:
+    _empty_prototype_dummy_field_: 0

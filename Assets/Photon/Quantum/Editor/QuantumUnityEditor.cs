@@ -5279,12 +5279,17 @@ namespace Quantum.Editor {
 
       Type assetType;
       
-      var fieldType = fieldInfo.FieldType.GetUnityLeafType();
-      if (!fieldType.IsGenericType) {
+      if (fieldInfo == null) {
+        SetWarning($"Drawer used without a valid {nameof(fieldInfo)}. Make sure the type being serialized is marked with [Serializable].");
         assetType = typeof(AssetObject);
       } else {
-        assetType = fieldType.GetGenericArguments()[0];
-      }
+        var fieldType = fieldInfo.FieldType.GetUnityLeafType();
+        if (fieldType.IsGenericType) {
+          assetType = fieldType.GetGenericArguments()[0];
+        } else {
+          assetType = typeof(AssetObject);
+        }
+      } 
 
       DrawAssetRefSelector(position, property, label, assetType);
     }
@@ -8215,14 +8220,14 @@ namespace Quantum.Editor {
 namespace Quantum.Editor {
   using UnityEditor;
   using UnityEngine;
-  
+
 #if !UNITY_6000_3_OR_NEWER
   using HierarchyIterator = UnityEditor.HierarchyProperty;
 #endif
-  
+
   static class HierarchyIteratorExtensions {
 #if UNITY_6000_3_OR_NEWER
-    public static EntityId GetObjectId(this HierarchyIterator iterator) {
+    public static UnityEngine.EntityId GetObjectId(this HierarchyIterator iterator) {
       return iterator.entityId;
     }
 #else
@@ -8230,11 +8235,11 @@ namespace Quantum.Editor {
       return iterator.instanceID;
     }
 #endif
-    
+
 #if UNITY_6000_2_OR_NEWER
     public static GUID GetAssetGuid(this HierarchyIterator iterator) {
       return iterator.assetGUID;
-    }    
+    }
 #else
     public static GUID GetAssetGuid(this HierarchyIterator iterator) {
       var guidStr = iterator.guid;
@@ -8250,9 +8255,8 @@ namespace Quantum.Editor {
 #region LazyLoadReferenceExtensions.cs
 
 namespace Quantum.Editor {
-  using UnityEditor;
   using UnityEngine;
-  
+
   static class LazyLoadReferenceExtensions {
 #if UNITY_6000_3_OR_NEWER
     public static EntityId GetObjectId<T>(this LazyLoadReference<T> obj) where T : Object {
@@ -8272,12 +8276,9 @@ namespace Quantum.Editor {
 #region Object.cs
 
 namespace Quantum.Editor {
-  using UnityEditor;
-  using UnityEngine;
-  
   static class ObjectExtensions {
 #if UNITY_6000_3_OR_NEWER
-    public static EntityId GetObjectId(this UnityEngine.Object obj) {
+    public static UnityEngine.EntityId GetObjectId(this UnityEngine.Object obj) {
       return obj.GetEntityId();
     }
 #else
@@ -8286,6 +8287,12 @@ namespace Quantum.Editor {
     }
 #endif
   }
+  
+#if !UNITY_6000_3_OR_NEWER
+  static class EntityId {
+    public static int None => 0;
+  }
+#endif
 }
 
 #endregion
@@ -8386,12 +8393,12 @@ namespace Quantum.Editor {
       if (!obj) {
         throw new System.ArgumentNullException(nameof(obj));
       }
-      
+
       (AssetGuid, _) = AssetDatabaseUtils.GetGUIDAndLocalFileIdentifierOrThrow(obj);
-      InstanceID = obj.GetInstanceID();
+      InstanceID = obj.GetObjectId();
       AssetName = obj.name;
       IsMainAsset = AssetDatabase.IsMainAsset(obj);
-    } 
+    }
   }
 }
 
@@ -13744,8 +13751,28 @@ namespace Quantum.Editor {
     public static bool ShouldIncludeChildren(this SerializedProperty sp) {
       return sp.isExpanded || sp.propertyType == SerializedPropertyType.Generic || sp.IsArrayProperty();
     }
-    
-    
+
+#if UNITY_6000_4_OR_NEWER
+    public static UnityEngine.EntityId GetObjectReferenceValue(this SerializedProperty sp) {
+      return sp.objectReferenceEntityIdValue;
+    }
+#else
+    public static int GetObjectReferenceValue(this SerializedProperty sp) {
+      return sp.objectReferenceInstanceIDValue;
+    }
+#endif
+
+#if UNITY_6000_4_OR_NEWER
+    public static long GetObjectReferenceValueAsLong(this SerializedProperty sp) {
+      return unchecked((long)UnityEngine.EntityId.ToULong(sp.objectReferenceEntityIdValue));
+    }
+#else
+    public static long GetObjectReferenceValueAsLong(this SerializedProperty sp) {
+      return sp.objectReferenceInstanceIDValue;
+    }
+#endif
+
+
     // public static int GetHashCodeForPropertyPath(this SerializedProperty sp) {
     //   return UnityInternal.SerializedProperty.hashCodeForPropertyPath.GetValue(sp);
     // }
@@ -13792,7 +13819,7 @@ namespace Quantum.Editor {
               hashCode = HashCodeUtilities.CombineHashCodes(hashCode, p.colorValue.GetHashCode());
               break;
             case SerializedPropertyType.ObjectReference:
-              hashCode = HashCodeUtilities.CombineHashCodes(hashCode, p.objectReferenceInstanceIDValue);
+              hashCode = HashCodeUtilities.CombineHashCodes(hashCode, p.GetObjectReferenceValue().GetHashCode());
               break;
             case SerializedPropertyType.LayerMask:
               hashCode = HashCodeUtilities.CombineHashCodes(hashCode, p.intValue);
@@ -16197,7 +16224,7 @@ namespace Quantum.Editor {
           return CheckCondition(doIf, compareProperty.longValue);
 
         case SerializedPropertyType.ObjectReference:
-          return CheckCondition(doIf, compareProperty.objectReferenceInstanceIDValue);
+          return CheckCondition(doIf, compareProperty.GetObjectReferenceValueAsLong());
 
         case SerializedPropertyType.Float:
           return CheckCondition(doIf, compareProperty.doubleValue);
@@ -20750,7 +20777,7 @@ namespace Quantum.Editor {
 
     void DrawFooter() {
       GUILayout.BeginHorizontal(HubSkin.window);
-      GUILayout.Label("\u00A9 2024, ExitState Games GmbH. All rights reserved.");
+      GUILayout.Label("\u00A9 2024, Exit Games GmbH. All rights reserved.");
       GUILayout.EndHorizontal();
     }
 
@@ -21049,7 +21076,11 @@ namespace Quantum.Editor {
       // TODO: find better folder when used from the menu instead of the contect menu
       //string clickedAssetGuid = Selection.assetGUIDs[0];
       //string clickedPath = AssetDatabase.GUIDToAssetPath(clickedAssetGuid)
+#if UNITY_6000_4_OR_NEWER
+      ProjectWindowUtil.CreateAssetWithTextContent("QuantumDefinition.qtn", string.Empty);
+#else
       ProjectWindowUtil.CreateAssetWithContent("QuantumDefinition.qtn", string.Empty);
+#endif
     }
 
     [MenuItem("Assets/Create/Quantum/System", false, priority: EditorDefines.AssetMenuPriorityScripts + 1)]
@@ -21289,7 +21320,7 @@ namespace Quantum.Editor {
       var mapAsset = QuantumUnityDB.GetGlobalAsset<Map>(map);
       if (mapAsset != null && File.Exists(mapAsset.ScenePath)) {
         EditorSceneManager.OpenScene(mapAsset.ScenePath);
-        var quantumRunnerLocalDebug = FindFirstObjectByType<QuantumRunnerLocalDebug>();
+        var quantumRunnerLocalDebug = FindAnyObjectByType<QuantumRunnerLocalDebug>();
         if (quantumRunnerLocalDebug != null) {
           runtimeConfig = quantumRunnerLocalDebug.RuntimeConfig;
         }
@@ -22128,7 +22159,97 @@ namespace Quantum.Editor {
 #region Assets/Photon/Quantum/Editor/QuantumEditorToolbarUtilities.cs
 
 namespace Quantum.Editor {
-#if !UNITY_6000_3_OR_NEWER // Unity Toolbar not usable any more
+#if UNITY_6000_3_OR_NEWER
+  using System.IO;
+  using System.Linq;
+  using UnityEditor;
+  using UnityEditor.SceneManagement;
+  using UnityEditor.Toolbars;
+  using UnityEngine;
+  using UnityEngine.SceneManagement;
+
+  /// <summary>
+  /// Docking Quantum toolbar scene open dropdown into Unity 6.3 toolbar.
+  /// Slightly changed scene menu code from https://docs.unity3d.com/6000.3/Documentation/ScriptReference/Toolbars.MainToolbarDropdown.html
+  /// </summary>
+  public class QuantumEditorToolbarUtilities {
+    const string ToolbarPathScenes = "Tools/Quantum/Open Scene Bar";
+    const int ToolbarPrioScenes = 1000;
+    static string[] _scenePaths;
+
+    [MainToolbarElement(ToolbarPathScenes, defaultDockPosition = MainToolbarDockPosition.Middle, menuPriority = ToolbarPrioScenes)]
+    public static MainToolbarElement CreateSceneSelectorDropdown() {
+      string activeSceneName;
+      if (Application.isPlaying)
+        activeSceneName = SceneManager.GetActiveScene().name;
+      else
+        activeSceneName = EditorSceneManager.GetActiveScene().name;
+      if (activeSceneName.Length == 0)
+        activeSceneName = "Untitled";
+
+      var icon = EditorGUIUtility.IconContent(EditorGUIUtility.isProSkin ? "SceneAsset Icon" : "d_SceneAsset Icon").image as Texture2D;
+      var content = new MainToolbarContent(activeSceneName, icon, "Select active scene");
+      return new MainToolbarDropdown(content, ShowDropdownMenuScenes);
+    }
+
+    static void ShowDropdownMenuScenes(Rect dropDownRect) {
+      var menu = new GenericMenu();
+      if (_scenePaths.Length == 0) {
+        menu.AddDisabledItem(new GUIContent("No Scenes in Project"));
+      }
+      foreach (string scenePath in _scenePaths) {
+        string sceneName = Path.GetFileNameWithoutExtension(scenePath);
+        menu.AddItem(new GUIContent(sceneName), false, () => {
+          SwitchScene(scenePath);
+        });
+      }
+      menu.DropDown(dropDownRect);
+    }
+
+    static void SwitchScene(string scenePath) {
+      if (Application.isPlaying) {
+        string sceneName = Path.GetFileNameWithoutExtension(scenePath);
+        if (Application.CanStreamedLevelBeLoaded(sceneName)) {
+          // Expecting a single player scene switch, so shutdown all Quantum runners.
+          QuantumRunner.ShutdownAll();
+          SceneManager.LoadScene(sceneName);
+        } else {
+          Debug.LogError($"Scene '{sceneName}' is not in the Build Settings.");
+        }
+      } else {
+        if (File.Exists(scenePath)) {
+          if (EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) {
+            EditorSceneManager.OpenScene(scenePath);
+          }
+        } else {
+          Debug.LogError($"Scene at path '{scenePath}' does not exist.");
+        }
+      }
+    }
+
+    static void RefreshSceneList() {
+      _scenePaths = EditorBuildSettings.scenes
+        .Where(scene => scene.path == null || scene.path.StartsWith("Assets"))
+        .Select(scene => Application.dataPath + scene.path.Substring(6)).ToArray();
+
+      // If no scenes have been added to the build settings yet, display all of them.
+      if (_scenePaths.Length == 0) {
+        _scenePaths = Directory.GetFiles("Assets", "*.unity", SearchOption.AllDirectories);
+      }
+    }
+
+    static void SceneSwitched(Scene oldScene, Scene newScene) {
+      MainToolbar.Refresh(ToolbarPathScenes);
+    }
+
+    static QuantumEditorToolbarUtilities() {
+      RefreshSceneList();
+      EditorApplication.projectChanged += RefreshSceneList;
+      SceneManager.activeSceneChanged += SceneSwitched;
+      EditorSceneManager.activeSceneChangedInEditMode += SceneSwitched;
+    }
+  }
+#else
   using System;
   using System.Collections.Generic;
   using System.IO;
@@ -22271,7 +22392,7 @@ namespace Quantum.Editor {
     }
   }
 #endif
-}
+  }
 
 #endregion
 
@@ -22897,7 +23018,7 @@ namespace Quantum.Editor {
     /// <param name="target">The scene info object to populate</param>
     /// <param name="runtimeConfig">Set an optional <see cref="RuntimeConfig"/></param>
     public static void SetToCurrentScene(QuantumMenuSceneInfo target, RuntimeConfig runtimeConfig) {
-      var mapData = FindFirstObjectByType<QuantumMapData>();
+      var mapData = FindAnyObjectByType<QuantumMapData>();
       if (mapData == null) {
         QuantumEditorLog.Error($"Map asset not found in current scene");
         return;

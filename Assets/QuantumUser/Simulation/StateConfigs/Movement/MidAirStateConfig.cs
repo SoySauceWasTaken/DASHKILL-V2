@@ -25,28 +25,28 @@
             return true;
         }
 
-        public override unsafe void EnterState(Frame frame, CharacterMaster* master, KCC2D* kcc, AnimatorComponent* animator)
+        public override unsafe void EnterState(Frame frame, EntityRef entity, StateFilter* filter)
         {
-            base.EnterState(frame, master, kcc, animator);
+            base.EnterState(frame, entity, filter);
 
             // Play run animation
             //animator->FadeTo(frame, AnimationId, FP._0, FP._0, FP._0, true, false);
         }
 
-        public override unsafe void UpdateState(Frame frame, CharacterMaster* master, KCC2D* kcc, AnimatorComponent* animator)
+        public override unsafe void UpdateState(Frame frame, EntityRef entity, StateFilter* filter)
         {
-            base.UpdateState(frame, master, kcc, animator);
+            base.UpdateState(frame, entity, filter);
 
-            var kccConfig = frame.FindAsset(kcc->Config);
+            var kccConfig = frame.FindAsset(filter->kcc->Config);
 
-            IntegrateForces(frame, master, kcc, kccConfig);
+            IntegrateForces(frame, filter->master, filter->kcc, kccConfig);
 
-            QuantumDemoInputPlatformer2D input = master->Input;
+            QuantumDemoInputPlatformer2D input = filter->master->Input;
 
             if (input.Direction.X > 0)
-                master->MovementData.FacingDirection = 1;
+                filter->movementData->FacingDirection = 1;
             else if (input.Direction.X < 0)
-                master->MovementData.FacingDirection = -1;
+                filter->movementData->FacingDirection = -1;
         }
 
         private void IntegrateForces(Frame f, CharacterMaster* master, KCC2D* KCC, KCC2DConfig kccConfig)

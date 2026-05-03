@@ -1,8 +1,48 @@
+# 3.0.11
+
+## Stable
+
+### Build 2034 (Apr 09, 2026)
+
+**Changes**
+
+- Updated Photon Realtime SDK to version  `5.1.12`
+
+**Bug Fixes**
+
+- Fixed: Deprecated warnings in Unity `6000.4`
+- Fixed: An issue where `frame.DestroyPending(entity)` was giving incorrect results (again). When `frame.Destroy(entity)` is called, `frame.DestroyPending(entity)` is expected return `true` during `Destroy` (remove callbacks) and afterward until the destroy is committed. Before 3.0.10 build 1991, `DestroyPending` did return `true` during `Destroy` but `false` afterward. In 3.0.10 build 1991, it returned `true` after `Destroy` but `false` during. With this fix, `DestroyPending` returns the correct result in both scenarios
+- Fixed: FIxed: An issue that caused an Unity TMP error to be logged when using the StartUI
+- Fixed: A possible `NullReferenceException` in `AssetRefDrawer` when used with Odin drawers
+
+# 3.0.10
+
+## Stable
+
+### Build 1991 (Feb 17, 2026)
+
+**What's New**
+
+- Added back the Quantum open scene toolbar for Unity 6.3 embedded into the Unity official toolbar controls `Tools > Quantum > Open Scene Bar`
+- Added the `InvokeSpeculativeCallbacks` setting in `SimulationConfig` (disabled by default) that allows CCD callbacks to be called even after the first non-trigger collision; and the `IsSpeculativeCcdCollision` property in callback info structs can be used to check this condition if the setting is enabled
+- Added an experimental feature to use a customized `SessionRunner.Arguments.SnapshotProvider` for creating buddy snapshots that can run on a background thread (see `QuantumSnapshotProviderDemo`), only recommended for use without modifications to `FrameContext`
+
+**Bug Fixes**
+
+- Fixed: An issue in 2D and 3D Physics Callbacks that caused OnEnter callbacks to not be invoked when a collider got disabled and re-enabled after a few frames
+- Fixed: An issue exporting Quantum DotNet project with dotnet version `10.0.2`
+- Fixed: An issue in the legacy property `CallbackPollInput.Player` that wrongly changed the `Frame` when setting it
+- Fixed: An issue in the 2D Linecast query that detected hits at the cast origin even when `detectOverlapsAtCastOrigin` is disabled
+- Fixed: An issue with the physics config layer matrix not being drawn correctly
+- Fixed: An issue with `PropertyAttributes` not being applied on collections
+- Fixed: An issue during `frame.DestroyPending(entity)` giving incorrect results
+- Fixed: An issue in navmesh baking where the `DelaunayTriangulation` could result in fewer flipped edges
+
 # 3.0.9
 
 ## Stable
 
-### Build 1932 (Dec 10, 2025)
+### Build 1927 (Dec 09, 2025)
 
 **What's New**
 

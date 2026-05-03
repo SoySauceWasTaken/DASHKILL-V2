@@ -1,4 +1,4 @@
-component StateRequest
+struct StateRequest
 {
     StateType RequestedState;     // IDLE, RUN, ATTACK, etc.
     int Priority;                 // Higher = more important

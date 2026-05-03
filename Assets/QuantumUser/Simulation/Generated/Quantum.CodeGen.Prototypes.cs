@@ -146,6 +146,7 @@ namespace Quantum.Prototypes {
     public AssetRef<StateConfig> JumpConfig;
     public AssetRef<StateConfig> MidAirConfig;
     public AssetRef<StateConfig> AttackConfig;
+    public AssetRef<StateConfig> StunConfig;
     public AssetRef<StateConfig> DashConfig;
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
         Quantum.CharacterMaster component = default;
@@ -159,6 +160,7 @@ namespace Quantum.Prototypes {
         result.JumpConfig = this.JumpConfig;
         result.MidAirConfig = this.MidAirConfig;
         result.AttackConfig = this.AttackConfig;
+        result.StunConfig = this.StunConfig;
         result.DashConfig = this.DashConfig;
     }
   }
@@ -207,6 +209,8 @@ namespace Quantum.Prototypes {
     public QBoolean IsActive;
     public MapEntityId Owner;
     public FP ActiveTime;
+    [DynamicCollectionAttribute()]
+    public MapEntityId[] HitEntities = {};
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
         Quantum.HitBox component = default;
         Materialize((Frame)f, ref component, in context);
@@ -217,6 +221,16 @@ namespace Quantum.Prototypes {
         result.IsActive = this.IsActive;
         PrototypeValidator.FindMapEntity(this.Owner, in context, out result.Owner);
         result.ActiveTime = this.ActiveTime;
+        if (this.HitEntities.Length == 0) {
+          result.HitEntities = default;
+        } else {
+          var list = frame.AllocateList(out result.HitEntities, this.HitEntities.Length);
+          for (int i = 0; i < this.HitEntities.Length; ++i) {
+            EntityRef tmp = default;
+            PrototypeValidator.FindMapEntity(this.HitEntities[i], in context, out tmp);
+            list.Add(tmp);
+          }
+        }
     }
   }
   [System.SerializableAttribute()]
@@ -280,6 +294,7 @@ namespace Quantum.Prototypes {
   [Quantum.Prototypes.Prototype(typeof(Quantum.KCC2D))]
   public unsafe partial class KCC2DPrototype : ComponentPrototype<Quantum.KCC2D> {
     public AssetRef<KCC2DConfig> Config;
+    public FP _gravityModifier;
     public Quantum.Prototypes.FrameTimerPrototype GroundedJumpTimer;
     partial void MaterializeUser(Frame frame, ref Quantum.KCC2D result, in PrototypeMaterializationContext context);
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
@@ -289,6 +304,7 @@ namespace Quantum.Prototypes {
     }
     public void Materialize(Frame frame, ref Quantum.KCC2D result, in PrototypeMaterializationContext context = default) {
         result.Config = this.Config;
+        result._gravityModifier = this._gravityModifier;
         this.GroundedJumpTimer.Materialize(frame, ref result.GroundedJumpTimer, in context);
         MaterializeUser(frame, ref result, in context);
     }
@@ -555,19 +571,29 @@ namespace Quantum.Prototypes {
   }
   [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.StateRequest))]
-  public unsafe class StateRequestPrototype : ComponentPrototype<Quantum.StateRequest> {
+  public unsafe class StateRequestPrototype : StructPrototype {
     public Quantum.QEnum32<StateType> RequestedState;
     public Int32 Priority;
     public MapEntityId Requester;
-    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
-        Quantum.StateRequest component = default;
-        Materialize((Frame)f, ref component, in context);
-        return f.Set(entity, component) == SetResult.ComponentAdded;
-    }
     public void Materialize(Frame frame, ref Quantum.StateRequest result, in PrototypeMaterializationContext context = default) {
         result.RequestedState = this.RequestedState;
         result.Priority = this.Priority;
         PrototypeValidator.FindMapEntity(this.Requester, in context, out result.Requester);
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.StatusStateMachine))]
+  public unsafe partial class StatusStateMachinePrototype : ComponentPrototype<Quantum.StatusStateMachine> {
+    [HideInInspector()]
+    public Int32 _empty_prototype_dummy_field_;
+    partial void MaterializeUser(Frame frame, ref Quantum.StatusStateMachine result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.StatusStateMachine component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.StatusStateMachine result, in PrototypeMaterializationContext context = default) {
+        MaterializeUser(frame, ref result, in context);
     }
   }
 }

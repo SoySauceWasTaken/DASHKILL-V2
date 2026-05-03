@@ -1,16 +1,12 @@
 component CharacterMaster
 {
     // Store reference to self (give Configs access to this entity)
-    [ExcludeFromPrototype]
-    EntityRef Self;
+    //[ExcludeFromPrototype]
+    //EntityRef Self;
 
     // Input
     [ExcludeFromPrototype]
     QuantumDemoInputPlatformer2D Input;
-
-    // Extra Important Info
-    [ExcludeFromPrototype]
-    MovementData MovementData;
 
     // Current state tracking
     [ExcludeFromPrototype]
@@ -30,12 +26,12 @@ component CharacterMaster
     AssetRef<StateConfig> JumpConfig;
     AssetRef<StateConfig> MidAirConfig;
     AssetRef<StateConfig> AttackConfig;
+    AssetRef<StateConfig> StunConfig;
     
     // Action
     AssetRef<StateConfig> DashConfig;
 
     // REQUEST STORAGE (one per state machine)
     [ExcludeFromPrototype]
-    StateRequest MovementRequest;
-    //StateRequest AttackRequest;
+    list<StateRequest> StateRequests;
 }

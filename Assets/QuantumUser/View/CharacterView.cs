@@ -12,13 +12,13 @@ public class CharacterView : QuantumEntityViewComponent
         if (frame == null) return;
 
         // Try to get MovementData component from the entity
-        if (frame.TryGet(EntityRef, out CharacterMaster master))
+        if (frame.TryGet(EntityRef, out MovementData movementData))
         {
             // Flip based on facing direction
-            if (master.MovementData.FacingDirection != 0)
+            if (movementData.FacingDirection != 0)
             {
                 Vector3 scale = modelTransform.localScale;
-                scale.x = Mathf.Abs(scale.x) * Mathf.Sign(master.MovementData.FacingDirection);
+                scale.x = Mathf.Abs(scale.x) * Mathf.Sign(movementData.FacingDirection);
                 modelTransform.localScale = scale;
             }
         }

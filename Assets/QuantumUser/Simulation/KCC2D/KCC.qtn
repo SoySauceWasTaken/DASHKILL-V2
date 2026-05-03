@@ -8,7 +8,6 @@ component KCC2D {
     [ExcludeFromPrototype]
     FPVector2 _dynamicVelocity;
 
-    [ExcludeFromPrototype]
     FP _gravityModifier;
 
     [ExcludeFromPrototype]

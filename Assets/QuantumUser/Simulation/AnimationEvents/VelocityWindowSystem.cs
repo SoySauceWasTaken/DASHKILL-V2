@@ -13,16 +13,16 @@ namespace Quantum
         public void OnAnimatorSetVelocity(Frame f, EntityRef entity, FPVector2 velocity)
         {
             KCC2D* kcc = f.Unsafe.GetPointer<KCC2D>(entity);
-            CharacterMaster* master = f.Unsafe.GetPointer<CharacterMaster>(entity);
+            MovementData* movementData = f.Unsafe.GetPointer<MovementData>(entity);
 
-            int direction = master->MovementData.FacingDirection;
+            int direction = movementData->FacingDirection;
             kcc->AddForce(f, new FPVector2(velocity.X * direction, velocity.Y));
         }
 
         public void OnAnimatorVelocityLerp(Frame f, EntityRef entity, FPVector2 startVelocity, FPVector2 endVelocity, FP StartTime, FP EndTime, FP CurrentTime)
         {
             KCC2D* kcc = f.Unsafe.GetPointer<KCC2D>(entity);
-            CharacterMaster* master = f.Unsafe.GetPointer<CharacterMaster>(entity);
+            MovementData* movementData = f.Unsafe.GetPointer<MovementData>(entity);
 
             // Calculate interpolation factor T (0 to 1 within window)
             FP duration = EndTime - StartTime;
@@ -35,7 +35,7 @@ namespace Quantum
             }
 
             // Apply facing direction to velocities (convert from local to world space)
-            int facing = master->MovementData.FacingDirection;
+            int facing = movementData->FacingDirection;
             FPVector2 adjustedStart = new FPVector2(startVelocity.X * facing, startVelocity.Y);
             FPVector2 adjustedEnd = new FPVector2(endVelocity.X * facing, endVelocity.Y);
 

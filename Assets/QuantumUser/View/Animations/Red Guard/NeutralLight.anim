@@ -160,14 +160,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.34285715
-    functionName: QuantumAnimatorEvent
-    data: 
-    objectReferenceParameter: {fileID: 11400000, guid: 676f62f66b7082e4a93f5d87fece4116, type: 2}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 0.42857143
+  - time: 0.25714287
     functionName: QuantumAnimatorEvent
     data: 
     objectReferenceParameter: {fileID: 11400000, guid: 676f62f66b7082e4a93f5d87fece4116, type: 2}
@@ -185,6 +178,13 @@ AnimationClip:
     functionName: QuantumAnimatorEvent
     data: 
     objectReferenceParameter: {fileID: 11400000, guid: af998a9ca58aa1c479d86fee2b7f7753, type: 2}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.54285717
+    functionName: QuantumAnimatorEvent
+    data: 
+    objectReferenceParameter: {fileID: 11400000, guid: 810b5f0ad425c894dbe69fd239b39449, type: 2}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0

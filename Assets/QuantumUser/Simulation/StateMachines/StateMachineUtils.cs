@@ -25,6 +25,8 @@ namespace Quantum
                     return master->JumpConfig;
                 case StateType.ATTACK:
                     return master->AttackConfig;
+                case StateType.STUN:
+                    return master->StunConfig;
 
                 default:
                     return master->IdleConfig;

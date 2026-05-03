@@ -2,7 +2,7 @@
 using Quantum;
 using System.Collections.Generic;
 
-public unsafe class CharacterMasterSystem : SystemMainThreadFilter<CharacterMasterSystem.Filter>, ISignalOnPlayerAdded
+public unsafe class CharacterMasterSystem : SystemMainThreadFilter<CharacterMasterSystem.Filter>, ISignalOnComponentAdded<CharacterMaster>, ISignalOnComponentRemoved<CharacterMaster>
 {
     public struct Filter
     {
@@ -11,88 +11,92 @@ public unsafe class CharacterMasterSystem : SystemMainThreadFilter<CharacterMast
         public AnimatorComponent* Animator;
         public Transform2D* Transform;
         public KCC2D* KCC;
-        public PlayerLink* PlayerLink;
+        public MovementData* MovementData;
     }
 
     public override void Update(Frame frame, ref Filter filter)
     {
         // 0. SET INPUT
-        QuantumDemoInputPlatformer2D input = *frame.GetPlayerInput(filter.PlayerLink->Player);
-        var config = frame.FindAsset(filter.KCC->Config);
         if (frame.TryGet<PlayerLink>(filter.Entity, out var link))
         {
+            QuantumDemoInputPlatformer2D input = *frame.GetPlayerInput(link.Player);
             filter.Master->Input = input;
         }
 
-        // 1. COLLECT all non-empty requests
-        var activeRequests = new List<(StateType state, int priority, EntityRef requester)>();
+        // 1. GET the list of StateRequests
+        var requests = frame.ResolveList(filter.Master->StateRequests);
 
-        // Check Movement request
-        if (filter.Master->MovementRequest.RequestedState != StateType.NONE)
-        {
-            activeRequests.Add((
-                filter.Master->MovementRequest.RequestedState,
-                filter.Master->MovementRequest.Priority,
-                filter.Master->MovementRequest.Requester
-            ));
-        }
-
-        // 2. FIND highest priority winner
+        // 2. FIND highest priority request
         StateType winningState = StateType.NONE;
-        if (activeRequests.Count > 0)
+        int winningPriority = 0;
+        EntityRef winningRequester = EntityRef.None;
+
+        for (int i = 0; i < requests.Count; i++)
         {
-            // Sort by priority descending, take first
-            activeRequests.Sort((a, b) => b.priority.CompareTo(a.priority));
-            winningState = activeRequests[0].state;
+            var request = requests[i];
+            if (request.RequestedState != StateType.NONE && request.Priority > winningPriority)
+            {
+                winningPriority = request.Priority;
+                winningState = request.RequestedState;
+                winningRequester = request.Requester;
+            }
         }
 
-        // 3. SWITCH state if changed AND if we're higher priority than currentState
-        if (winningState != StateType.NONE && winningState != filter.Master->CurrentState && activeRequests[0].priority >= filter.Master->CurrentStatePriority)
+        // 3. LOG active requests for debugging
+        if (requests.Count > 0)
         {
-            filter.Master->CurrentStatePriority = activeRequests[0].priority;
-            SwitchState(frame, ref filter, winningState);
-        }
-        // If no requests, default to IDLE
-        else if (winningState == StateType.NONE && filter.Master->CurrentState != StateType.IDLE)
-        {
-            //Log.DebugWarn("CHARACTER'S CURRENT STATE IS NULL! (Should only happen once on startup)");
+            //Log.Debug($"{filter.Entity} - [CharacterMaster] Processing {requests.Count} requests. Winner: {winningState} (priority {winningPriority})");
         }
 
-        // 4. UPDATE current state
+        // 4. Create a StateFilter real quick (Is there a better place to put this?)
+        StateFilter stateFilter = StateFilterUtils.CreateStateFilter(frame, filter.Entity);
+
+
+        // 5. SWITCH state if needed AND winning priority >= current state priority
+        if (winningState != StateType.NONE &&
+            winningState != filter.Master->CurrentState &&
+            winningPriority >= filter.Master->CurrentStatePriority)
+        {
+            filter.Master->CurrentStatePriority = winningPriority;
+            SwitchState(frame, ref filter, winningState, &stateFilter);
+        }
+
+        // 6. UPDATE current state
         if (filter.Master->CurrentState != StateType.NONE)
         {
             var currentConfig = StateMachineUtils.GetConfigForState(frame, filter.Master->CurrentState, filter.Master);
             if (currentConfig != null)
             {
                 filter.Master->StateTimer += frame.DeltaTime;
-                currentConfig.UpdateState(frame, filter.Master, filter.KCC, filter.Animator);
+                currentConfig.UpdateState(frame, filter.Entity, &stateFilter);
 
-                // CHECK IF WE SHOULD EXIT the current State
-                if (currentConfig.CanExit(frame, filter.Entity, filter.Master, filter.KCC))
+                // Check if we should exit the current state
+                if (currentConfig.CanExit(frame, filter.Entity, &stateFilter))
                 {
                     filter.Master->CurrentStatePriority = 0;
+                    //Log.Debug($"[CharacterMaster] State {filter.Master->CurrentState} requested exit");
                 }
             }
         }
 
-        // 5. KCC APPLIES physics
+        // 7. KCC APPLIES physics
         var kccConfig = frame.FindAsset<KCC2DConfig>(filter.KCC->Config.Id);
         if (kccConfig != null)
         {
             kccConfig.Move(frame, filter.Entity, filter.Transform, filter.KCC);
         }
 
-        // 6. CLEAR all requests for next frame
-        ClearRequests(ref filter);
+        // 8. CLEAR all requests for next frame
+        requests.Clear();
     }
 
-    private void SwitchState(Frame frame, ref Filter filter, StateType newState)
+    private void SwitchState(Frame frame, ref Filter filter, StateType newState, StateFilter* stateFilter)
     {
         // ExitState current
         if (filter.Master->CurrentState != StateType.NONE)
         {
             var oldConfig = StateMachineUtils.GetConfigForState(frame, filter.Master->CurrentState, filter.Master);
-            oldConfig?.ExitState(frame, filter.Master, filter.KCC, filter.Animator);
+            oldConfig?.ExitState(frame, filter.Entity, stateFilter);
         }
 
         // Update master
@@ -105,42 +109,22 @@ public unsafe class CharacterMasterSystem : SystemMainThreadFilter<CharacterMast
 
         // EnterState new
         var newConfig = frame.FindAsset<StateConfig>(newConfigRef.Id);
-        newConfig?.EnterState(frame, filter.Master, filter.KCC, filter.Animator);
+        newConfig?.EnterState(frame, filter.Entity, stateFilter);
 
         // Debug log
         //Log.Debug($"[CharacterMaster] Switched to {newState}");
     }
 
-    private void ClearRequests(ref Filter filter)
+    public void OnAdded(Frame frame, EntityRef entity, CharacterMaster* component)
     {
-        // Reset Movement request
-        filter.Master->MovementRequest.RequestedState = StateType.NONE;
-        filter.Master->MovementRequest.Priority = 0;
-        filter.Master->MovementRequest.Requester = default;
-
-        // Reset Attack request (for Part 3)
-        //filter.Master->AttackRequest.RequestedState = StateType.NONE;
-        //filter.Master->AttackRequest.Priority = 0;
-        //filter.Master->AttackRequest.Requester = default;
+        // Allocate the list for StateRequests
+        component->StateRequests = frame.AllocateList<StateRequest>();
     }
 
-    public void OnPlayerAdded(Frame f, PlayerRef player, bool firstTime)
+    public void OnRemoved(Frame frame, EntityRef entity, CharacterMaster* component)
     {
-        var playerData = f.GetPlayerData(player);
-        var playerEntity = f.Create(playerData.PlayerAvatar);
-        PlayerLink* playerLink = f.Unsafe.GetPointer<PlayerLink>(playerEntity);
-        playerLink->Player = player;
-
-        if (f.Unsafe.TryGetPointer<CharacterMaster>(playerEntity, out var master))
-        {
-            master->Self = playerEntity;
-            master->MovementData.FacingDirection = 1; // Set FacingDirection by default (again, is there a better place to put this?)
-        }
-
-        // Set Gravity to default (There's gotta be somewhere better to put this... right?)
-        if (f.Unsafe.TryGetPointer<KCC2D>(playerEntity, out var kcc))
-        {
-            kcc->_gravityModifier = FP._1;
-        }
+        // Free the list to prevent memory leaks
+        frame.FreeList(component->StateRequests);
+        component->StateRequests = default;
     }
 }

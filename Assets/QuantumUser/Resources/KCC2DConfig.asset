@@ -28,14 +28,8 @@ MonoBehaviour:
   AllowedPenetration:
     RawValue: 655
   CCD: 1
-  Acceleration:
-    RawValue: 0
-  FlipDirectionMultiplier:
-    RawValue: 655360
   Deceleration:
     RawValue: 524288
-  MaxBaseSpeed:
-    RawValue: 0
   DirectionType: 1
   DashSuspendsGravity: 1
   DashDuration:

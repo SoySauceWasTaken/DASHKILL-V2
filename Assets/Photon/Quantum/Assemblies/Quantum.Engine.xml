@@ -17583,6 +17583,15 @@
             If the collision should be ignored by the physics engine.
             </summary>
         </member>
+        <member name="P:Quantum.CollisionInfo2D.IsSpeculativeCcdCollision">
+            <summary>
+            True if this is a CCD-enabled collision check AND the time-of-impact happens AFTER the first non-trigger collision of one of the entities involved.
+            This means that this collision is not guaranteed to have happened, since the trajectory of bodies
+            might change after the first non-trigger collision and the remainder movement is not CCD-checked.
+            Enable <see cref="F:Quantum.PhysicsCommon.Config.InvokeSpeculativeCallbacks">InvokeSpeculativeCallbacks</see> in the Simulation Config
+            in order to receive speculative CCD collision callbacks.
+            </summary>
+        </member>
         <member name="F:Quantum.CollisionInfo2D.ContactPoints">
             <summary>
             Data about the contact points of the collision.
@@ -18313,6 +18322,15 @@
         <member name="P:Quantum.TriggerInfo2D.IgnoreTrigger">
             <summary>
             If the collision should be ignored by the physics engine.
+            </summary>
+        </member>
+        <member name="P:Quantum.TriggerInfo2D.IsSpeculativeCcdCollision">
+            <summary>
+            True if this is a CCD-enabled trigger check AND the trigger happens AFTER the first non-trigger collision of one of the entities involved.
+            This means that this overlap is not guaranteed to have happened, since the trajectory of bodies
+            might change after the first non-trigger collision and the remainder movement is not CCD-checked.
+            Enable <see cref="F:Quantum.PhysicsCommon.Config.InvokeSpeculativeCallbacks">InvokeSpeculativeCallbacks</see> in the Simulation Config
+            in order to receive speculative CCD collision callbacks.
             </summary>
         </member>
         <member name="P:Quantum.TriggerInfo2D.IsStatic">
@@ -21483,6 +21501,9 @@
             If this triangle collision should be ignored by the physics engine.
             </summary>
         </member>
+        <member name="P:Quantum.CollisionInfo3D.TriangleCollisionInfo.IsSpeculativeCcdCollision">
+            <inheritdoc cref="P:Quantum.CollisionInfo2D.IsSpeculativeCcdCollision"/>
+        </member>
         <member name="F:Quantum.CollisionInfo3D.TriangleCollisionInfo.ContactPoints">
             <summary>
             Data about the contact points of the triangle collision.
@@ -21508,6 +21529,9 @@
             <summary>
             If the collision should be ignored by the physics engine.
             </summary>
+        </member>
+        <member name="P:Quantum.CollisionInfo3D.IsSpeculativeCcdCollision">
+            <inheritdoc cref="P:Quantum.CollisionInfo2D.IsSpeculativeCcdCollision"/>
         </member>
         <member name="F:Quantum.CollisionInfo3D.ContactPoints">
             <summary>
@@ -22150,6 +22174,9 @@
             If the collision should be ignored by the physics engine.
             </summary>
         </member>
+        <member name="P:Quantum.TriggerInfo3D.IsSpeculativeCcdCollision">
+            <inheritdoc cref="P:Quantum.TriggerInfo2D.IsSpeculativeCcdCollision"/>
+        </member>
         <member name="P:Quantum.TriggerInfo3D.IsStatic">
             <summary>
             If the <see cref="P:Quantum.TriggerInfo3D.Entity"/> is touching a static trigger collider.
@@ -22378,6 +22405,15 @@
         <member name="F:Quantum.PhysicsCommon.Config.AllowCCD">
             <summary>
             Allows CCD to be performed if the Physics Body has CCD enabled on its Config flags. Default is <see langword="false"/>.
+            </summary>
+        </member>
+        <member name="F:Quantum.PhysicsCommon.Config.InvokeSpeculativeCallbacks">
+            <summary>
+            Allows Callbacks involving CCD-enabled entities to be called even if the collision happens after the first non-trigger collision.
+            <see cref="P:Quantum.CollisionInfo3D.IsSpeculativeCcdCollision">IsSpeculativeCcdCollision</see> property in collision
+            info structs can be used to check if the collision is speculative in the callback listener.
+            Speculative collisions are NOT guaranteed to have happened, since the trajectory of the body might change
+            after the first non-trigger collision and the remainder movement is not CCD-checked.
             </summary>
         </member>
         <member name="F:Quantum.PhysicsCommon.Config.CCDLinearVelocityThreshold">

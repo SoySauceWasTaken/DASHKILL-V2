@@ -4,20 +4,21 @@ namespace Quantum
 
     public unsafe class DamageSystem : SystemMainThread, ISignalOnDamageDealt, ISignalOnEntityDied
     {
-        public void OnDamageDealt(Frame frame, EntityRef target, FP amount, EntityRef source)
+        public void OnDamageDealt(Frame f, EntityRef target, AssetRef<HitBoxConfig> HitBoxConfig, EntityRef source)
         {
-            if (!frame.TryGet(target, out Health health)) return;
+            if (!f.Unsafe.TryGetPointer(target, out Health* health)) return;
 
-            health.Current -= amount;
+            HitBoxConfig config = f.FindAsset<HitBoxConfig>(HitBoxConfig.Id);
 
-            if (health.Current <= FP._0)
+            Log.Debug($"[Damage] Entity {target} hit by {source} for {config.Damage} damage! Health: {health->Current} -> {health->Current - config.Damage}");
+
+            health->Current -= config.Damage;
+
+            if (health->Current <= FP._0)
             {
-                health.Current = FP._0;
-                frame.Signals.OnEntityDied(target, source);
+                health->Current = FP._0;
+                f.Signals.OnEntityDied(target, source);
             }
-
-            // Still useful for view feedback
-            //frame.Events.OnDamageTaken(target, amount, health.Current);
         }
 
         public void OnEntityDied(Frame frame, EntityRef entity, EntityRef killer)

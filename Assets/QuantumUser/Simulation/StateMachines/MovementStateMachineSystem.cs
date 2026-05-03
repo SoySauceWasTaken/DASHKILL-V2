@@ -1,4 +1,6 @@
 // MovementStateMachineSystem.cs
+using UnityEditor.PackageManager.Requests;
+
 namespace Quantum
 {
     public unsafe class MovementStateMachineSystem : SystemMainThreadFilter<MovementStateMachineSystem.Filter>
@@ -9,7 +11,6 @@ namespace Quantum
             public MovementStateMachine* MovementSM;
             public CharacterMaster* Master;
             public KCC2D* KCC;
-            public PlayerLink* PlayerLink;
         }
 
         public override void Update(Frame frame, ref Filter filter)
@@ -21,9 +22,22 @@ namespace Quantum
             StateType desiredState = DetermineDesiredState(frame, ref filter, input);
 
             // 3. Submit request to CharacterMaster
-            filter.Master->MovementRequest.RequestedState = desiredState;
-            filter.Master->MovementRequest.Priority = (int)StateMachinePriority.Movement;
-            filter.Master->MovementRequest.Requester = filter.Entity;
+            SubmitRequest(frame, filter.Master, desiredState, (int)StateMachinePriority.Movement, filter.Entity);
+        }
+
+        private void SubmitRequest(Frame frame, CharacterMaster* master, StateType desiredState, int priority, EntityRef requester)
+        {
+            // Resolve the list from the master
+            var requests = frame.ResolveList(master->StateRequests);
+
+            // Create and add the new request
+            StateRequest newRequest = new StateRequest
+            {
+                RequestedState = desiredState,
+                Priority = priority,
+                Requester = requester
+            };
+            requests.Add(newRequest);
         }
 
         private StateType DetermineDesiredState(Frame frame, ref Filter filter, QuantumDemoInputPlatformer2D input)

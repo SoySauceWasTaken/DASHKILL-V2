@@ -3473,6 +3473,11 @@ namespace Quantum {
           heapCount++;
         }
 
+        // additional frames required by snapshot provider tool
+        if (Session.SnapshotProvider != null) {
+          heapCount += Session.SnapshotProvider.ExtraHeapCount;
+        }
+
         heapCount += Math.Max(0, Configurations.Simulation.HeapExtraCount);
         heapCount += Math.Max(0, HeapExtraCount);
         heapCount += SnapshotsCreateBuffers(Session.SessionConfig.UpdateFPS,
@@ -4690,7 +4695,7 @@ namespace Quantum {
     [Obsolete("Renamed to PlayerSlot because it's the local player slot instead of a global player.")]
     public Int32 Player {
       get { return PlayerSlot; }
-      set { Frame = PlayerSlot; }
+      set { PlayerSlot = value; }
     }
 
     /// <summary>
@@ -5845,6 +5850,7 @@ namespace Quantum {
       sessionArgs.SessionConfig = null;
       sessionArgs.RuntimeConfig = null;
       sessionArgs.DisableInterpolatableStates = (startParams.GameFlags & QuantumGameFlags.DisableInterpolatableStates) == QuantumGameFlags.DisableInterpolatableStates;
+      sessionArgs.SnapshotProvider = null;
       Start(startParams, sessionArgs, clientId, logInitForConsole, taskRunner);
     }
 
@@ -5871,6 +5877,7 @@ namespace Quantum {
       sessionArgs.SessionConfig = null;
       sessionArgs.RuntimeConfig = null;
       sessionArgs.DisableInterpolatableStates = (startParams.GameFlags & QuantumGameFlags.DisableInterpolatableStates) == QuantumGameFlags.DisableInterpolatableStates;
+      sessionArgs.SnapshotProvider = null;
       Start(startParams, sessionArgs, clientId, logInitForConsole, taskRunner);
     }
 
@@ -7768,6 +7775,12 @@ namespace Quantum {
       /// </summary>
       public IDeterministicReplayProvider ReplayProvider;
       /// <summary>
+      /// Optional experimental external snapshot serialization (for e.g. async).
+      /// Can be null to use default single threaded implementation.
+      /// See QuantumSnapshotProviderDemo
+      /// </summary>
+      public IDeterministicSnapshotProvider SnapshotProvider;
+      /// <summary>
       /// The game mode (default is Multiplayer). 
       /// Local mode is for testing only, the simulation is not connected online. It does not go into prediction nor does it perform rollbacks.
       /// Replay mode will also run offline and requires the ReplayProvider to be set to process the input.
@@ -8375,6 +8388,7 @@ namespace Quantum {
           PlatformInfo = platformInfo,
           SessionConfig = deterministicConfig,
           Replay = arguments.ReplayProvider,
+          SnapshotProvider = arguments.SnapshotProvider,
           DisableInterpolatableStates = (arguments.GameFlags & QuantumGameFlags.DisableInterpolatableStates) == QuantumGameFlags.DisableInterpolatableStates
         };
         

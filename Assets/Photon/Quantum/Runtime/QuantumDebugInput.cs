@@ -1,7 +1,6 @@
 namespace Quantum {
   using Photon.Deterministic;
   using UnityEngine;
-  using UnityEngine.Windows;
 
   /// <summary>
   /// A Unity script that creates empty input for any Quantum game.
@@ -25,9 +24,8 @@ namespace Quantum {
       }
 #endif
 
-      Quantum.Input input = new Quantum.Input();
-
-      callback.SetInput(input, DeterministicInputFlags.Repeatable);
+      Quantum.Input i = new Quantum.Input();
+      callback.SetInput(i, DeterministicInputFlags.Repeatable);
     }
   }
 }

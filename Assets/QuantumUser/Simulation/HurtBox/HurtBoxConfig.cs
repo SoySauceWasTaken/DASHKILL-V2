@@ -21,7 +21,7 @@ public class HurtBoxConfig : AssetObject
     /// <summary>
     /// Draws all capsules in this config using Quantum's Draw API (Simulation-side)
     /// </summary>
-    public void DrawHitboxes(Frame frame, FPVector2 worldPosition, int facing)
+    public void DrawHurtBoxes(Frame frame, FPVector2 worldPosition, int facing)
     {
         foreach (var capsuleInfo in Capsules)
         {

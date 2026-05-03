@@ -9,12 +9,12 @@ public class HitboxActivationEvent : AnimatorInstantEventAsset
     [Header("Hitbox Config")]
     public AssetRef<HitBoxConfig> HitBoxConfig;
 
-    //[Header("Activation")]
-    //public bool Activate = true;  // True = activate, False = deactivate
+    [Header("Activation")]
+    public bool Activate = true;  // True = activate, False = deactivate
 
     public override unsafe void Execute(Frame frame, AnimatorComponent* animatorComponent, LayerData* layerData)
     {
-        Log.Debug("[HitboxActivationEvent] OnEnter Callback");
-        frame.Signals.OnHitboxSetActive(animatorComponent->Self, true, HitBoxConfig);
+        //Log.Debug("[HitboxActivationEvent] OnEnter Callback");
+        frame.Signals.OnHitboxSetActive(animatorComponent->Self, Activate, HitBoxConfig);
     }
 }

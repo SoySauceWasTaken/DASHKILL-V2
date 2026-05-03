@@ -6,7 +6,7 @@ using UnityEngine.UIElements.Experimental;
 [ExecuteAlways]
 public class HitBoxEditorGizmo : MonoBehaviour
 {
-    [Header("HitBox Configuration")]
+    [Header("HurtBox Configuration")]
     public HitBoxConfig hitBoxConfig;
 
     [Header("HurtBox Configuration")]

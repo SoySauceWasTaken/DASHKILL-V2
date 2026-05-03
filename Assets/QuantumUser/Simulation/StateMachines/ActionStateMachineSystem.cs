@@ -9,7 +9,6 @@ namespace Quantum
             public EntityRef Entity;
             public CharacterMaster* Master;
             public KCC2D* KCC;
-            public PlayerLink* PlayerLink;
         }
 
         public override void Update(Frame frame, ref Filter filter)
@@ -20,13 +19,28 @@ namespace Quantum
             // 2. Determine what state we WANT based on physics state + input
             StateType desiredState = DetermineDesiredState(frame, ref filter, input);
 
-            // 3. Submit request to CharacterMaster
+            // 3. Submit request to CharacterMaster's dynamic list
             if (desiredState != StateType.NONE)
             {
-                filter.Master->MovementRequest.RequestedState = desiredState;
-                filter.Master->MovementRequest.Priority = (int)StateMachinePriority.Action;
-                filter.Master->MovementRequest.Requester = filter.Entity;
+                SubmitRequest(frame, filter.Master, desiredState, (int)StateMachinePriority.Action, filter.Entity);
             }
+        }
+
+        private void SubmitRequest(Frame frame, CharacterMaster* master, StateType desiredState, int priority, EntityRef requester)
+        {
+            // Resolve the list from the master
+            var requests = frame.ResolveList(master->StateRequests);
+
+            // Create and add the new request
+            StateRequest newRequest = new StateRequest
+            {
+                RequestedState = desiredState,
+                Priority = priority,
+                Requester = requester
+            };
+            requests.Add(newRequest);
+
+            Log.Debug($"[ActionSM] Submitted request: {desiredState} with priority {priority} for entity {requester}");
         }
 
         private StateType DetermineDesiredState(Frame frame, ref Filter filter, QuantumDemoInputPlatformer2D input)

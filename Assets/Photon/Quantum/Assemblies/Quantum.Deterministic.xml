@@ -8706,6 +8706,11 @@
             Runner is the wrapper for session/game that can be attached to Unity, a .Net console app, or a Quantum Custom Server Plugin. 
             </summary>
         </member>
+        <member name="P:Photon.Deterministic.DeterministicSession.SnapshotProvider">
+            <summary>
+            Returns the assigned snapshot provider.
+            </summary>
+        </member>
         <member name="P:Photon.Deterministic.DeterministicSession.OnDestroyed">
             <summary>
             Is executed in the end of <see cref="M:Photon.Deterministic.DeterministicSession.Destroy"/>. Is used by the server simulation.
@@ -8864,6 +8869,12 @@
         <member name="F:Photon.Deterministic.DeterministicSessionArgs.Game">
             <summary>
             Gets or sets the deterministic game interface.
+            </summary>
+        </member>
+        <member name="F:Photon.Deterministic.DeterministicSessionArgs.SnapshotProvider">
+            <summary>
+            Optional external snapshot packaging (for e.g. async).
+            Can be null to use default single threaded implementation.
             </summary>
         </member>
         <member name="F:Photon.Deterministic.DeterministicSessionArgs.Communicator">
@@ -9834,6 +9845,36 @@
         <member name="P:Photon.Deterministic.IDeterministicReplayProvider.LocalActorNumber">
             <summary>
             Setting the correct local actor number makes <see cref="M:Photon.Deterministic.DeterministicSession.IsLocalPlayer(Quantum.PlayerRef)"/> work in replays similar to normal Quantum sessions.
+            </summary>
+        </member>
+        <member name="T:Photon.Deterministic.IDeterministicSnapshotProvider">
+            <summary>
+            An interface that can be added to the Quantum session to overwrite the default snapshot sending for late-joiners.
+            </summary>
+        </member>
+        <member name="P:Photon.Deterministic.IDeterministicSnapshotProvider.ExtraHeapCount">
+            <summary>
+            Return the number of additional frame heaps required for this tool to work.
+            </summary>
+        </member>
+        <member name="P:Photon.Deterministic.IDeterministicSnapshotProvider.IsCompleted">
+            <summary>
+            Returns <see langword="true"/> when a snapshot is read to be completed.
+            </summary>
+        </member>
+        <member name="M:Photon.Deterministic.IDeterministicSnapshotProvider.Init(Photon.Deterministic.DeterministicSession,System.IDisposable)">
+            <summary>
+            Initializing the snapshot provider for this Quantum session. Used to create a frame container.
+            </summary>
+        </member>
+        <member name="M:Photon.Deterministic.IDeterministicSnapshotProvider.RequestSnapshot(Photon.Deterministic.DeterministicSession,System.Int32)">
+            <summary>
+            Requesting a snapshot, use to CopyFrom and start async computation. 
+            </summary>
+        </member>
+        <member name="M:Photon.Deterministic.IDeterministicSnapshotProvider.GetSnapshot">
+            <summary>
+            Returns the completed encoded snapshot.
             </summary>
         </member>
         <member name="T:Photon.Deterministic.IDeterministicStreamReplayInputProvider">

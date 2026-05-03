@@ -2453,6 +2453,13 @@
             The replay provider injects recorded inputs and rpcs into the game which is required to run the game as a replay. InputProvider is an implementation of the replay provider. See usages of QuantumGame.RecordedInputs and QuantumRunnerLocalReplay.InputProvider.
             </summary>
         </member>
+        <member name="F:Quantum.SessionRunner.Arguments.SnapshotProvider">
+            <summary>
+            Optional experimental external snapshot serialization (for e.g. async).
+            Can be null to use default single threaded implementation.
+            See QuantumSnapshotProviderDemo
+            </summary>
+        </member>
         <member name="F:Quantum.SessionRunner.Arguments.GameMode">
             <summary>
             The game mode (default is Multiplayer). 

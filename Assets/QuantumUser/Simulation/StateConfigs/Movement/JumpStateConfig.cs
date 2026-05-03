@@ -12,12 +12,12 @@
             return true;
         }
 
-        public override unsafe void EnterState(Frame frame, CharacterMaster* master, KCC2D* kcc, AnimatorComponent* animator)
+        public override unsafe void EnterState(Frame frame, EntityRef entity, StateFilter* filter)
         {
-            base.EnterState(frame, master, kcc, animator);
-            animator->FadeTo(frame, AnimationId, FP._0, FP._0, FP._0, true, false);
+            base.EnterState(frame, entity, filter);
+            filter->animator->FadeTo(frame, AnimationId, FP._0, FP._0, FP._0, true, false);
 
-            ProcessJump(frame, kcc);
+            ProcessJump(frame, filter->kcc);
         }
 
         private void ProcessJump(Frame f, KCC2D* kcc)

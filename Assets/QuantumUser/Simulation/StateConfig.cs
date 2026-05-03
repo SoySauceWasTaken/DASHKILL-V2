@@ -15,24 +15,24 @@ namespace Quantum
         }
 
         /// IMPORTANT!!!! This method is CanExit to ANY OTHER STATE (NO MATTER the priority or StateMachine.)
-        public virtual bool CanExit(Frame frame, EntityRef entity, CharacterMaster* master, KCC2D* kcc)
+        public virtual bool CanExit(Frame frame, EntityRef entity, StateFilter* filter)
         {
             // By default, states never auto-exit
             return false;
         }
 
-        public virtual void EnterState(Frame frame, CharacterMaster* master, KCC2D* kcc, AnimatorComponent* animator)
+        public virtual void EnterState(Frame frame, EntityRef entity, StateFilter* filter)
         {
-            // Store this config's reference in the master
-            master->CurrentStateConfig = this;
+            // Store this config's reference in the master (TODO: Move this line to CharacterMasterSystem.cs)
+            filter->master->CurrentStateConfig = this;
         }
 
-        public virtual void UpdateState(Frame frame, CharacterMaster* master, KCC2D* kcc, AnimatorComponent* animator)
+        public virtual void UpdateState(Frame frame, EntityRef entity, StateFilter* filter)
         {
 
         }
 
-        public virtual void ExitState(Frame frame, CharacterMaster* master, KCC2D* kcc, AnimatorComponent* animator)
+        public virtual void ExitState(Frame frame, EntityRef entity, StateFilter* filter)
         {
 
         }

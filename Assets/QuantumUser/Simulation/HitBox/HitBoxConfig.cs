@@ -12,6 +12,18 @@ public class HitBoxConfig : AssetObject
     [Header("Debug (Runtime Only)")]
     public ColorRGBA ColorFinal = ColorRGBA.Red;
 
+    [Header("Collision")]
+    public Quantum.LayerMask HurtBoxMask;
+
+    [Header("Damage Settings")]
+    public FP Damage = 1;
+
+    [Header("Knockback Settings")]
+    public FPVector2 Knockback = new FPVector2(5, 3);
+
+    [Header("Stun Settings")]
+    public FP StunDuration = FP._0_50;
+
 #if QUANTUM_UNITY
     [Header("Gizmo Settings (Editor Only)")]
     public Color GizmoColor = Color.red;

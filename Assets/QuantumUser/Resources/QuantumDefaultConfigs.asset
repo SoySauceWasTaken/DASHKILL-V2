@@ -145,8 +145,26 @@ MonoBehaviour:
     StartDisabled: 0
     Children: []
   - SystemType:
+      AssemblyQualifiedName: Quantum.HurtBoxSystem, Quantum.Simulation, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    SystemName: 
+    StartDisabled: 0
+    Children: []
+  - SystemType:
       AssemblyQualifiedName: Quantum.DamageSystem, Quantum.Simulation, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+    SystemName: 
+    StartDisabled: 0
+    Children: []
+  - SystemType:
+      AssemblyQualifiedName: Quantum.PlayerSpawnSystem, Quantum.Simulation, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    SystemName: 
+    StartDisabled: 0
+    Children: []
+  - SystemType:
+      AssemblyQualifiedName: Quantum.StatusStateMachineSystem, Quantum.Simulation,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     SystemName: 
     StartDisabled: 0
     Children: []
@@ -262,6 +280,7 @@ MonoBehaviour:
     AngularSleepToleranceInRad:
       RawValue: 2288
     AllowCCD: 0
+    InvokeSpeculativeCallbacks: 0
     CCDLinearVelocityThreshold:
       RawValue: 196608
     CCDAngularVelocityThreshold:
@@ -456,4 +475,4 @@ MonoBehaviour:
   CharacterController3DConfig: {fileID: -8984862230692309101}
   NavMeshAgentConfig: {fileID: -484816879999556457}
   SystemsConfig: {fileID: -7573714154994031614}
-  InputActionAsset: {fileID: -944628639613478452, guid: 8a2679cf1c581ca41a337897e3dc5a06, type: 3}
+  InputActionAsset: {fileID: -944628639613478452, guid: 80fd248534f2ef7439fd2227f2b679e3, type: 3}

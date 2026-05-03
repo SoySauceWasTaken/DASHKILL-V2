@@ -14,4 +14,7 @@ enum StateType
     
     // Attacks
     ATTACK = 6,
+
+    // Status
+    STUN = 7,
 }

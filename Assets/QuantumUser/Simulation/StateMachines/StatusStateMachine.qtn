@@ -1,0 +1,11 @@
+﻿component StatusStateMachine
+{
+    // Core stun state
+    [ExcludeFromPrototype]
+    bool IsStunned; // IMPORTANT!!! This is a very misleading name: The IsStunned property is actually meant to say "Should we transfer to StunState", NOT "are we INSIDE stunstate right now"
+
+    [ExcludeFromPrototype]
+    AssetRef<HitBoxConfig> HitBoxConfig; // Attacker's HitBox 'Instructions'
+    [ExcludeFromPrototype]
+    EntityRef Attacker;
+}

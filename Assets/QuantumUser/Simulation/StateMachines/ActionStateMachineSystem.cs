@@ -40,7 +40,7 @@ namespace Quantum
             };
             requests.Add(newRequest);
 
-            Log.Debug($"[ActionSM] Submitted request: {desiredState} with priority {priority} for entity {requester}");
+            //Log.Debug($"[ActionSM] Submitted request: {desiredState} with priority {priority} for entity {requester}");
         }
 
         private StateType DetermineDesiredState(Frame frame, ref Filter filter, QuantumDemoInputPlatformer2D input)

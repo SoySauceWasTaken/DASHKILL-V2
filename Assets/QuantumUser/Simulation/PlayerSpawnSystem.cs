@@ -16,6 +16,7 @@ namespace Quantum
         public void OnPlayerAdded(Frame f, PlayerRef player, bool firstTime)
         {
             var playerData = f.GetPlayerData(player);
+            Log.Debug($"OnPlayerAdded callback: {playerData.PlayerNickname}, {playerData.PlayerAvatar.Id}");
             var playerEntity = f.Create(playerData.PlayerAvatar);
 
             if (f.Unsafe.TryGetPointer<PlayerLink>(playerEntity, out var playerLink))

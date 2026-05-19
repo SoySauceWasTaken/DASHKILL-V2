@@ -64,6 +64,16 @@ namespace Quantum {
     CurrentState,
     ToState,
   }
+  public enum GameStateType : int {
+    NONE = 0,
+    LOBBY = 1,
+    LOADING = 2,
+    STARTING = 3,
+    ROUND_ACTIVE = 4,
+    ROUND_END = 5,
+    MATCH_END = 6,
+    DEATHBLOW = 7,
+  }
   public enum KCCContactType : int {
     NONE = 0,
     GROUND = 1,
@@ -95,6 +105,7 @@ namespace Quantum {
     DASH = 5,
     ATTACK = 6,
     STUN = 7,
+    SPOTDODGE = 8,
   }
   [System.FlagsAttribute()]
   public enum InputButtons : int {
@@ -1249,6 +1260,24 @@ namespace Quantum {
     }
   }
   [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct ActionStateMachine : Quantum.IComponent {
+    public const Int32 SIZE = 8;
+    public const Int32 ALIGNMENT = 8;
+    [FieldOffset(0)]
+    public FP SpotDodgeCooldown;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 13249;
+        hash = hash * 31 + SpotDodgeCooldown.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (ActionStateMachine*)ptr;
+        FP.Serialize(&p->SpotDodgeCooldown, serializer);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct AnimatorComponent : Quantum.IComponent {
     public const Int32 SIZE = 24;
     public const Int32 ALIGNMENT = 8;
@@ -1291,9 +1320,9 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct CharacterMaster : Quantum.IComponent {
-    public const Int32 SIZE = 224;
+    public const Int32 SIZE = 232;
     public const Int32 ALIGNMENT = 8;
-    [FieldOffset(88)]
+    [FieldOffset(96)]
     [ExcludeFromPrototype()]
     public QuantumDemoInputPlatformer2D Input;
     [FieldOffset(8)]
@@ -1304,7 +1333,7 @@ namespace Quantum {
     public AssetRef<StateConfig> CurrentStateConfig;
     [FieldOffset(0)]
     public Int32 CurrentStatePriority;
-    [FieldOffset(80)]
+    [FieldOffset(88)]
     [ExcludeFromPrototype()]
     public FP StateTimer;
     [FieldOffset(40)]
@@ -1317,8 +1346,10 @@ namespace Quantum {
     public AssetRef<StateConfig> MidAirConfig;
     [FieldOffset(16)]
     public AssetRef<StateConfig> AttackConfig;
-    [FieldOffset(72)]
+    [FieldOffset(80)]
     public AssetRef<StateConfig> StunConfig;
+    [FieldOffset(72)]
+    public AssetRef<StateConfig> SpotDodgeConfig;
     [FieldOffset(32)]
     public AssetRef<StateConfig> DashConfig;
     [FieldOffset(4)]
@@ -1338,6 +1369,7 @@ namespace Quantum {
         hash = hash * 31 + MidAirConfig.GetHashCode();
         hash = hash * 31 + AttackConfig.GetHashCode();
         hash = hash * 31 + StunConfig.GetHashCode();
+        hash = hash * 31 + SpotDodgeConfig.GetHashCode();
         hash = hash * 31 + DashConfig.GetHashCode();
         hash = hash * 31 + StateRequests.GetHashCode();
         return hash;
@@ -1362,9 +1394,64 @@ namespace Quantum {
         AssetRef.Serialize(&p->JumpConfig, serializer);
         AssetRef.Serialize(&p->MidAirConfig, serializer);
         AssetRef.Serialize(&p->RunConfig, serializer);
+        AssetRef.Serialize(&p->SpotDodgeConfig, serializer);
         AssetRef.Serialize(&p->StunConfig, serializer);
         FP.Serialize(&p->StateTimer, serializer);
         Quantum.QuantumDemoInputPlatformer2D.Serialize(&p->Input, serializer);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct GameStateMachine : Quantum.IComponent {
+    public const Int32 SIZE = 72;
+    public const Int32 ALIGNMENT = 8;
+    [FieldOffset(0)]
+    public GameStateType CurrentState;
+    [FieldOffset(8)]
+    public AssetRef<GameStateConfig> CurrentStateConfig;
+    [FieldOffset(64)]
+    public FP StateTimer;
+    [FieldOffset(4)]
+    public QBoolean IsTransitioning;
+    [FieldOffset(32)]
+    public AssetRef<GameStateConfig> LobbyConfig;
+    [FieldOffset(24)]
+    public AssetRef<GameStateConfig> LoadingConfig;
+    [FieldOffset(48)]
+    public AssetRef<GameStateConfig> RoundActiveConfig;
+    [FieldOffset(56)]
+    public AssetRef<GameStateConfig> RoundEndConfig;
+    [FieldOffset(40)]
+    public AssetRef<GameStateConfig> MatchEndConfig;
+    [FieldOffset(16)]
+    public AssetRef<GameStateConfig> CutsceneConfig;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 11353;
+        hash = hash * 31 + (Int32)CurrentState;
+        hash = hash * 31 + CurrentStateConfig.GetHashCode();
+        hash = hash * 31 + StateTimer.GetHashCode();
+        hash = hash * 31 + IsTransitioning.GetHashCode();
+        hash = hash * 31 + LobbyConfig.GetHashCode();
+        hash = hash * 31 + LoadingConfig.GetHashCode();
+        hash = hash * 31 + RoundActiveConfig.GetHashCode();
+        hash = hash * 31 + RoundEndConfig.GetHashCode();
+        hash = hash * 31 + MatchEndConfig.GetHashCode();
+        hash = hash * 31 + CutsceneConfig.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (GameStateMachine*)ptr;
+        serializer.Stream.Serialize((Int32*)&p->CurrentState);
+        QBoolean.Serialize(&p->IsTransitioning, serializer);
+        AssetRef.Serialize(&p->CurrentStateConfig, serializer);
+        AssetRef.Serialize(&p->CutsceneConfig, serializer);
+        AssetRef.Serialize(&p->LoadingConfig, serializer);
+        AssetRef.Serialize(&p->LobbyConfig, serializer);
+        AssetRef.Serialize(&p->MatchEndConfig, serializer);
+        AssetRef.Serialize(&p->RoundActiveConfig, serializer);
+        AssetRef.Serialize(&p->RoundEndConfig, serializer);
+        FP.Serialize(&p->StateTimer, serializer);
     }
   }
   [StructLayout(LayoutKind.Explicit)]
@@ -1403,36 +1490,46 @@ namespace Quantum {
     public FP Max;
     [FieldOffset(0)]
     public QBoolean IsAlive;
+    [FieldOffset(4)]
+    public QBoolean IsInvincible;
     public override readonly Int32 GetHashCode() {
       unchecked { 
         var hash = 2111;
         hash = hash * 31 + Current.GetHashCode();
         hash = hash * 31 + Max.GetHashCode();
         hash = hash * 31 + IsAlive.GetHashCode();
+        hash = hash * 31 + IsInvincible.GetHashCode();
         return hash;
       }
     }
     public static void Serialize(void* ptr, FrameSerializer serializer) {
         var p = (Health*)ptr;
         QBoolean.Serialize(&p->IsAlive, serializer);
+        QBoolean.Serialize(&p->IsInvincible, serializer);
         FP.Serialize(&p->Current, serializer);
         FP.Serialize(&p->Max, serializer);
     }
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct HitBox : Quantum.IComponent {
-    public const Int32 SIZE = 32;
+    public const Int32 SIZE = 96;
     public const Int32 ALIGNMENT = 8;
     [FieldOffset(8)]
     public AssetRef<HitBoxConfig> CurrentHitBox;
     [FieldOffset(0)]
     public QBoolean IsActive;
-    [FieldOffset(16)]
+    [FieldOffset(80)]
     public EntityRef Owner;
-    [FieldOffset(24)]
+    [FieldOffset(88)]
     public FP ActiveTime;
-    [FieldOffset(4)]
-    public QListPtr<EntityRef> HitEntities;
+    [FieldOffset(16)]
+    [FramePrinter.FixedArrayAttribute(typeof(EntityRef), 8)]
+    private fixed Byte _HitEntities_[64];
+    public readonly FixedArray<EntityRef> HitEntities {
+      get {
+        fixed (byte* p = _HitEntities_) { return new FixedArray<EntityRef>(p, 8, 8); }
+      }
+    }
     public override readonly Int32 GetHashCode() {
       unchecked { 
         var hash = 461;
@@ -1440,22 +1537,15 @@ namespace Quantum {
         hash = hash * 31 + IsActive.GetHashCode();
         hash = hash * 31 + Owner.GetHashCode();
         hash = hash * 31 + ActiveTime.GetHashCode();
-        hash = hash * 31 + HitEntities.GetHashCode();
+        hash = hash * 31 + HashCodeUtils.GetArrayHashCode(HitEntities);
         return hash;
       }
-    }
-    public void ClearPointers(FrameBase f, EntityRef entity) {
-      HitEntities = default;
-    }
-    public static void OnRemoved(FrameBase frame, EntityRef entity, void* ptr) {
-      var p = (Quantum.HitBox*)ptr;
-      p->ClearPointers((Frame)frame, entity);
     }
     public static void Serialize(void* ptr, FrameSerializer serializer) {
         var p = (HitBox*)ptr;
         QBoolean.Serialize(&p->IsActive, serializer);
-        QList.Serialize(&p->HitEntities, serializer, Statics.SerializeEntityRef);
         AssetRef.Serialize(&p->CurrentHitBox, serializer);
+        FixedArray.Serialize(p->HitEntities, serializer, Statics.SerializeEntityRef);
         EntityRef.Serialize(&p->Owner, serializer);
         FP.Serialize(&p->ActiveTime, serializer);
     }
@@ -1466,12 +1556,15 @@ namespace Quantum {
     public const Int32 ALIGNMENT = 8;
     [FieldOffset(8)]
     public AssetRef<HurtBoxConfig> CurrentHurtBox;
-    [FieldOffset(0)]
+    [FieldOffset(4)]
     public QBoolean IsActive;
     [FieldOffset(16)]
     public EntityRef Owner;
     [FieldOffset(24)]
     public FP ActiveTime;
+    [FieldOffset(0)]
+    [ExcludeFromPrototype()]
+    public QBoolean Initialized;
     public override readonly Int32 GetHashCode() {
       unchecked { 
         var hash = 5737;
@@ -1479,11 +1572,13 @@ namespace Quantum {
         hash = hash * 31 + IsActive.GetHashCode();
         hash = hash * 31 + Owner.GetHashCode();
         hash = hash * 31 + ActiveTime.GetHashCode();
+        hash = hash * 31 + Initialized.GetHashCode();
         return hash;
       }
     }
     public static void Serialize(void* ptr, FrameSerializer serializer) {
         var p = (HurtBox*)ptr;
+        QBoolean.Serialize(&p->Initialized, serializer);
         QBoolean.Serialize(&p->IsActive, serializer);
         AssetRef.Serialize(&p->CurrentHurtBox, serializer);
         EntityRef.Serialize(&p->Owner, serializer);
@@ -1747,6 +1842,8 @@ namespace Quantum {
       _ComponentSignalsOnRemoved = new ComponentReactiveCallbackInvoker[ComponentTypeId.Type.Length];
       BuildSignalsArrayOnComponentAdded<AIBlackboardComponent>();
       BuildSignalsArrayOnComponentRemoved<AIBlackboardComponent>();
+      BuildSignalsArrayOnComponentAdded<Quantum.ActionStateMachine>();
+      BuildSignalsArrayOnComponentRemoved<Quantum.ActionStateMachine>();
       BuildSignalsArrayOnComponentAdded<Quantum.AnimatorComponent>();
       BuildSignalsArrayOnComponentRemoved<Quantum.AnimatorComponent>();
       BuildSignalsArrayOnComponentAdded<BTAgent>();
@@ -1759,6 +1856,8 @@ namespace Quantum {
       BuildSignalsArrayOnComponentRemoved<CharacterController3D>();
       BuildSignalsArrayOnComponentAdded<Quantum.CharacterMaster>();
       BuildSignalsArrayOnComponentRemoved<Quantum.CharacterMaster>();
+      BuildSignalsArrayOnComponentAdded<Quantum.GameStateMachine>();
+      BuildSignalsArrayOnComponentRemoved<Quantum.GameStateMachine>();
       BuildSignalsArrayOnComponentAdded<Quantum.GameplayState>();
       BuildSignalsArrayOnComponentRemoved<Quantum.GameplayState>();
       BuildSignalsArrayOnComponentAdded<HFSMAgent>();
@@ -1990,6 +2089,7 @@ namespace Quantum {
     static partial void RegisterSimulationTypesGen(TypeRegistry typeRegistry) {
       typeRegistry.Register(typeof(AIBlackboardComponent), AIBlackboardComponent.SIZE);
       typeRegistry.Register(typeof(Quantum.ActionState), 4);
+      typeRegistry.Register(typeof(Quantum.ActionStateMachine), Quantum.ActionStateMachine.SIZE);
       typeRegistry.Register(typeof(Quantum.AnimatorComponent), Quantum.AnimatorComponent.SIZE);
       typeRegistry.Register(typeof(Quantum.AnimatorRuntimeVariable), Quantum.AnimatorRuntimeVariable.SIZE);
       typeRegistry.Register(typeof(Quantum.AnimatorStateType), 1);
@@ -2028,6 +2128,8 @@ namespace Quantum {
       typeRegistry.Register(typeof(FPVector3), FPVector3.SIZE);
       typeRegistry.Register(typeof(FrameMetaData), FrameMetaData.SIZE);
       typeRegistry.Register(typeof(FrameTimer), FrameTimer.SIZE);
+      typeRegistry.Register(typeof(Quantum.GameStateMachine), Quantum.GameStateMachine.SIZE);
+      typeRegistry.Register(typeof(Quantum.GameStateType), 4);
       typeRegistry.Register(typeof(Quantum.GameplayState), Quantum.GameplayState.SIZE);
       typeRegistry.Register(typeof(HFSMAgent), HFSMAgent.SIZE);
       typeRegistry.Register(typeof(HFSMData), HFSMData.SIZE);
@@ -2105,17 +2207,19 @@ namespace Quantum {
       typeRegistry.Register(typeof(Quantum._globals_), Quantum._globals_.SIZE);
     }
     static partial void InitComponentTypeIdGen() {
-      ComponentTypeId.Reset(ComponentTypeId.BuiltInComponentCount + 17)
+      ComponentTypeId.Reset(ComponentTypeId.BuiltInComponentCount + 19)
         .AddBuiltInComponents()
         .Add<AIBlackboardComponent>(AIBlackboardComponent.Serialize, AIBlackboardComponent.OnAdded, AIBlackboardComponent.OnRemoved, ComponentFlags.None)
+        .Add<Quantum.ActionStateMachine>(Quantum.ActionStateMachine.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.AnimatorComponent>(Quantum.AnimatorComponent.Serialize, null, Quantum.AnimatorComponent.OnRemoved, ComponentFlags.None)
         .Add<BTAgent>(BTAgent.Serialize, BTAgent.OnAdded, BTAgent.OnRemoved, ComponentFlags.None)
         .Add<BotSDKGlobals>(BotSDKGlobals.Serialize, BotSDKGlobals.OnAdded, BotSDKGlobals.OnRemoved, ComponentFlags.Singleton)
         .Add<Quantum.CharacterMaster>(Quantum.CharacterMaster.Serialize, null, Quantum.CharacterMaster.OnRemoved, ComponentFlags.None)
+        .Add<Quantum.GameStateMachine>(Quantum.GameStateMachine.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.GameplayState>(Quantum.GameplayState.Serialize, null, null, ComponentFlags.None)
         .Add<HFSMAgent>(HFSMAgent.Serialize, HFSMAgent.OnAdded, HFSMAgent.OnRemoved, ComponentFlags.None)
         .Add<Quantum.Health>(Quantum.Health.Serialize, null, null, ComponentFlags.None)
-        .Add<Quantum.HitBox>(Quantum.HitBox.Serialize, null, Quantum.HitBox.OnRemoved, ComponentFlags.None)
+        .Add<Quantum.HitBox>(Quantum.HitBox.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.HurtBox>(Quantum.HurtBox.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.KCC2D>(Quantum.KCC2D.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.MovementData>(Quantum.MovementData.Serialize, null, null, ComponentFlags.None)
@@ -2132,6 +2236,7 @@ namespace Quantum {
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.ActionState>();
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.AnimatorStateType>();
       FramePrinter.EnsurePrimitiveNotStripped<CallbackFlags>();
+      FramePrinter.EnsurePrimitiveNotStripped<Quantum.GameStateType>();
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.InputButtons>();
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.KCCContactType>();
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.KCCState>();

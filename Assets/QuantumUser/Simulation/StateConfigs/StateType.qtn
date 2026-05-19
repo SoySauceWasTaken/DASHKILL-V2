@@ -17,4 +17,7 @@ enum StateType
 
     // Status
     STUN = 7,
+
+    // Deflection
+    SPOTDODGE = 8,
 }

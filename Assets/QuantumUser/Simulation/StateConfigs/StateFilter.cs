@@ -11,6 +11,8 @@ namespace Quantum
         public MovementData* movementData;
         public AnimatorComponent* animator;
         public Transform2D* transform;
+        public ActionStateMachine* actionSM;
+        public Health* health;
         // Add more as needed
     }
 
@@ -33,6 +35,8 @@ namespace Quantum
             filter.movementData = frame.Unsafe.GetPointer<MovementData>(entity);
             filter.animator = frame.Unsafe.GetPointer<AnimatorComponent>(entity);
             filter.transform = frame.Unsafe.GetPointer<Transform2D>(entity);
+            filter.actionSM = frame.Unsafe.GetPointer<ActionStateMachine>(entity);
+            filter.health = frame.Unsafe.GetPointer<Health>(entity);
 
             return filter;
         }

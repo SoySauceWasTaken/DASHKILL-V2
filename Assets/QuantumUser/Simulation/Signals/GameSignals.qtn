@@ -1,4 +1,4 @@
-// Animation Events
+// Animation Signals
 signal OnAnimatorSetVelocity(entity_ref entity, FPVector2 velocity);
 signal OnAnimatorVelocityLerp(entity_ref entity, FPVector2 startVelocity, FPVector2 endVelocity, FP StartTime, FP EndTime, FP CurrentTime);
 signal OnHitboxSetActive(entity_ref entity, bool isActive, AssetRef<HitBoxConfig> HitBoxConfig);
@@ -6,3 +6,5 @@ signal OnHitboxSetActive(entity_ref entity, bool isActive, AssetRef<HitBoxConfig
 // Combat
 signal OnDamageDealt(EntityRef target, AssetRef<HitBoxConfig> HitBoxConfig, EntityRef source);
 signal OnEntityDied(EntityRef entity, EntityRef killer);
+
+

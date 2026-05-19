@@ -33,8 +33,13 @@ namespace Quantum
             // Draw all capsules in the config
             config.DrawHurtBoxes(frame, filter.Transform->Position, facing);
 
-            // Update the physics collider
-            UpdateHurtboxShapes(frame, ref filter, config, facing);
+            if (!filter.HurtBox->Initialized)
+            {
+                filter.HurtBox->Initialized = true; // little lock mechanism
+
+                // Update the physics collider
+                UpdateHurtboxShapes(frame, ref filter, config, facing);
+            }   
         }
 
         /// <summary>

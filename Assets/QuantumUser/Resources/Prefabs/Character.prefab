@@ -58,7 +58,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: ec74d9f2346ccab4ab4e940130c87b5f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -117,6 +117,7 @@ GameObject:
   - component: {fileID: 3124352652640954118}
   - component: {fileID: 9056869138067271205}
   - component: {fileID: 3199639961467947015}
+  - component: {fileID: 308432618478291336}
   m_Layer: 8
   m_Name: Character
   m_TagString: Untagged
@@ -556,6 +557,9 @@ MonoBehaviour:
     StunConfig:
       Id:
         Value: 380477044319824572
+    SpotDodgeConfig:
+      Id:
+        Value: 463060480082596346
     DashConfig:
       Id:
         Value: 487578359967154083
@@ -580,7 +584,15 @@ MonoBehaviour:
     Owner: {fileID: 6608702024583174239}
     ActiveTime:
       RawValue: 0
-    HitEntities: []
+    HitEntities:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
 --- !u!114 &3893878505089299026
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -623,11 +635,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Quantum.Unity::Quantum.QPrototypeHealth
   Prototype:
     Current:
-      RawValue: 327680
+      RawValue: 655360
     Max:
-      RawValue: 327680
+      RawValue: 655360
     IsAlive:
       Value: 1
+    IsInvincible:
+      Value: 0
 --- !u!114 &3124352652640954118
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -677,3 +691,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Quantum.Unity::Quantum.QPrototypeStatusStateMachine
   Prototype:
     _empty_prototype_dummy_field_: 0
+--- !u!114 &308432618478291336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7261769895644465944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c93ee8c869f4d4245b2f9b4409975662, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Quantum.Unity::Quantum.QPrototypeActionStateMachine
+  Prototype:
+    SpotDodgeCooldown:
+      RawValue: 0

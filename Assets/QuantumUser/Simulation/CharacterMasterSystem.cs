@@ -119,6 +119,7 @@ public unsafe class CharacterMasterSystem : SystemMainThreadFilter<CharacterMast
     {
         // Allocate the list for StateRequests
         component->StateRequests = frame.AllocateList<StateRequest>();
+        Log.Debug($"[CharacterMaster] Allocing List for {entity}");
     }
 
     public void OnRemoved(Frame frame, EntityRef entity, CharacterMaster* component)
@@ -126,5 +127,6 @@ public unsafe class CharacterMasterSystem : SystemMainThreadFilter<CharacterMast
         // Free the list to prevent memory leaks
         frame.FreeList(component->StateRequests);
         component->StateRequests = default;
+        Log.Debug($"[CharacterMaster] Deallocing List for {entity}");
     }
 }

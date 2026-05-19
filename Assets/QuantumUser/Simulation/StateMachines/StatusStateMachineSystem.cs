@@ -66,6 +66,7 @@ namespace Quantum
             {
                 status->HitBoxConfig = HitBoxConfig;
                 status->Attacker = source;
+                Log.Debug("OnDamageDealt CALLBACK..., Setting IsStunned to true");
                 status->IsStunned = true;
             }
         }

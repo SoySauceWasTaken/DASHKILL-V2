@@ -144,7 +144,8 @@ PlayerSettings:
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
   bundleVersion: 1.0
-  preloadedAssets: []
+  preloadedAssets:
+  - {fileID: -944628639613478452, guid: 80fd248534f2ef7439fd2227f2b679e3, type: 3}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -296,7 +297,10 @@ PlayerSettings:
   androidSymbolsSizeThreshold: 800
   m_BuildTargetIcons: []
   m_BuildTargetPlatformIcons: []
-  m_BuildTargetBatching: []
+  m_BuildTargetBatching:
+  - m_BuildTarget: Standalone
+    m_StaticBatching: 1
+    m_DynamicBatching: 0
   m_BuildTargetShaderSettings: []
   m_BuildTargetGraphicsJobs: []
   m_BuildTargetGraphicsJobMode: []
@@ -584,24 +588,24 @@ PlayerSettings:
   webWasm2023: 0
   webEnableSubmoduleStrippingCompatibility: 0
   scriptingDefineSymbols:
-    Android: QUANTUM_XY;QUANTUM_LOGLEVEL_DEBUG
-    EmbeddedLinux: QUANTUM_XY;QUANTUM_LOGLEVEL_DEBUG
-    GameCoreScarlett: QUANTUM_XY;QUANTUM_LOGLEVEL_DEBUG
-    GameCoreXboxOne: QUANTUM_XY;QUANTUM_LOGLEVEL_DEBUG
-    Kepler: QUANTUM_XY;QUANTUM_LOGLEVEL_DEBUG
-    LinuxHeadlessSimulation: QUANTUM_XY;QUANTUM_LOGLEVEL_DEBUG
-    Nintendo Switch: QUANTUM_XY;QUANTUM_LOGLEVEL_DEBUG
-    Nintendo Switch 2: QUANTUM_XY;QUANTUM_LOGLEVEL_DEBUG
-    PS4: QUANTUM_XY;QUANTUM_LOGLEVEL_DEBUG
-    PS5: QUANTUM_XY;QUANTUM_LOGLEVEL_DEBUG
-    QNX: QUANTUM_XY;QUANTUM_LOGLEVEL_DEBUG
-    Standalone: QUANTUM_XY;QUANTUM_LOGLEVEL_DEBUG
-    VisionOS: QUANTUM_XY;QUANTUM_LOGLEVEL_DEBUG
-    WebGL: QUANTUM_XY;QUANTUM_LOGLEVEL_DEBUG
-    Windows Store Apps: QUANTUM_XY;QUANTUM_LOGLEVEL_DEBUG
-    XboxOne: QUANTUM_XY;QUANTUM_LOGLEVEL_DEBUG
-    iPhone: QUANTUM_XY;QUANTUM_LOGLEVEL_DEBUG
-    tvOS: QUANTUM_XY;QUANTUM_LOGLEVEL_DEBUG
+    Android: QUANTUM_LOGLEVEL_DEBUG;QUANTUM_XY
+    EmbeddedLinux: QUANTUM_LOGLEVEL_DEBUG;QUANTUM_XY
+    GameCoreScarlett: QUANTUM_LOGLEVEL_DEBUG;QUANTUM_XY
+    GameCoreXboxOne: QUANTUM_LOGLEVEL_DEBUG;QUANTUM_XY
+    Kepler: QUANTUM_LOGLEVEL_DEBUG;QUANTUM_XY
+    LinuxHeadlessSimulation: QUANTUM_LOGLEVEL_DEBUG;QUANTUM_XY
+    Nintendo Switch: QUANTUM_LOGLEVEL_DEBUG;QUANTUM_XY
+    Nintendo Switch 2: QUANTUM_LOGLEVEL_DEBUG;QUANTUM_XY
+    PS4: QUANTUM_LOGLEVEL_DEBUG;QUANTUM_XY
+    PS5: QUANTUM_LOGLEVEL_DEBUG;QUANTUM_XY
+    QNX: QUANTUM_LOGLEVEL_DEBUG;QUANTUM_XY
+    Standalone: QUANTUM_LOGLEVEL_DEBUG;QUANTUM_XY
+    VisionOS: QUANTUM_LOGLEVEL_DEBUG;QUANTUM_XY
+    WebGL: QUANTUM_LOGLEVEL_DEBUG;QUANTUM_XY
+    Windows Store Apps: QUANTUM_LOGLEVEL_DEBUG;QUANTUM_XY
+    XboxOne: QUANTUM_LOGLEVEL_DEBUG;QUANTUM_XY
+    iPhone: QUANTUM_LOGLEVEL_DEBUG;QUANTUM_XY
+    tvOS: QUANTUM_LOGLEVEL_DEBUG;QUANTUM_XY
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:

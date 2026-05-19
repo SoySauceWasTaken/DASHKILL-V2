@@ -81,6 +81,7 @@ namespace Quantum.Prototypes.Unity {
     public AssetRef<StateConfig> MidAirConfig;
     public AssetRef<StateConfig> AttackConfig;
     public AssetRef<StateConfig> StunConfig;
+    public AssetRef<StateConfig> SpotDodgeConfig;
     public AssetRef<StateConfig> DashConfig;
     partial void ConvertUser(Quantum.QuantumEntityPrototypeConverter converter, ref Quantum.Prototypes.CharacterMasterPrototype prototype);
     public override Quantum.Prototypes.CharacterMasterPrototype Convert(Quantum.QuantumEntityPrototypeConverter converter) {
@@ -92,6 +93,7 @@ namespace Quantum.Prototypes.Unity {
       converter.Convert(this.MidAirConfig, out result.MidAirConfig);
       converter.Convert(this.AttackConfig, out result.AttackConfig);
       converter.Convert(this.StunConfig, out result.StunConfig);
+      converter.Convert(this.SpotDodgeConfig, out result.SpotDodgeConfig);
       converter.Convert(this.DashConfig, out result.DashConfig);
       ConvertUser(converter, ref result);
       return result;
@@ -103,8 +105,8 @@ namespace Quantum.Prototypes.Unity {
     public QBoolean IsActive;
     public Quantum.QuantumEntityPrototype Owner;
     public FP ActiveTime;
-    [DynamicCollectionAttribute()]
-    public Quantum.QuantumEntityPrototype[] HitEntities = {};
+    [ArrayLengthAttribute(8)]
+    public Quantum.QuantumEntityPrototype[] HitEntities = new Quantum.QuantumEntityPrototype[8];
     partial void ConvertUser(Quantum.QuantumEntityPrototypeConverter converter, ref Quantum.Prototypes.HitBoxPrototype prototype);
     public override Quantum.Prototypes.HitBoxPrototype Convert(Quantum.QuantumEntityPrototypeConverter converter) {
       var result = new Quantum.Prototypes.HitBoxPrototype();

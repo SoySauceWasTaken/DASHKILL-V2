@@ -4,5 +4,5 @@ component HitBox
     bool IsActive;
     EntityRef Owner;  // Who created this hitbox (for damage attribution)
     FP ActiveTime;   // When this hitbox became active (for duration tracking)
-    list<entity_ref> HitEntities; // Track entities hit by this hitbox instance
+    array<entity_ref>[8] HitEntities; // Track entities hit by this hitbox instance
 }

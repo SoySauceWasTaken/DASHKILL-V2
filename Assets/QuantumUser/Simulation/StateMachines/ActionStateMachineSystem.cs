@@ -9,10 +9,14 @@ namespace Quantum
             public EntityRef Entity;
             public CharacterMaster* Master;
             public KCC2D* KCC;
+            public ActionStateMachine* ActionSM;
         }
 
         public override void Update(Frame frame, ref Filter filter)
         {
+            // Update cooldowns FIRST
+            UpdateCooldowns(frame, ref filter);
+
             // 1. Get input
             var input = filter.Master->Input;
 
@@ -45,6 +49,12 @@ namespace Quantum
 
         private StateType DetermineDesiredState(Frame frame, ref Filter filter, QuantumDemoInputPlatformer2D input)
         {
+            if (input.Dodge.WasPressed && input.Direction.X == FP._0 && CanSpotDodge(frame, ref filter))
+            {
+                //Log.Debug($"[Action's DetermineDesiredState] CanSpotDodge: {CanSpotDodge(frame, ref filter)}");
+                return StateType.SPOTDODGE;
+            }
+
             if (input.Dodge.WasPressed && input.Direction.X != FP._0 && StateMachineUtils.CanTransitionTo(frame, StateType.DASH, filter.Master))
             {
                 return StateType.DASH;
@@ -58,6 +68,26 @@ namespace Quantum
             }
 
             return StateType.NONE;
+        }
+
+        private void UpdateCooldowns(Frame frame, ref Filter filter)
+        {
+            // Reduce dodge cooldown
+            if (filter.ActionSM->SpotDodgeCooldown > FP._0)
+            {
+                filter.ActionSM->SpotDodgeCooldown -= frame.DeltaTime;
+                if (filter.ActionSM->SpotDodgeCooldown < FP._0)
+                    filter.ActionSM->SpotDodgeCooldown = FP._0;
+            }
+        }
+
+        private bool CanSpotDodge(Frame frame, ref Filter filter)
+        {
+            // Check cooldown
+            //Log.Debug($"[CanSpotDodge]: {filter.ActionSM->SpotDodgeCooldown}");
+            if (filter.ActionSM->SpotDodgeCooldown > FP._0) return false;
+
+            return true;
         }
     }
 }

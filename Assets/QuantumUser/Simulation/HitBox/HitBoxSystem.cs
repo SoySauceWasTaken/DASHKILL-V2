@@ -7,7 +7,7 @@ namespace Quantum
     /// <summary>
     /// Handles hitbox logic including drawing active hitboxes using Quantum's Draw API
     /// </summary>
-    public unsafe class HitBoxSystem : SystemMainThreadFilter<HitBoxSystem.Filter>, ISignalOnHitboxSetActive, ISignalOnComponentAdded<HitBox>, ISignalOnComponentRemoved<HitBox>
+    public unsafe class HitBoxSystem : SystemMainThreadFilter<HitBoxSystem.Filter>, ISignalOnHitboxSetActive/*, ISignalOnComponentAdded<HitBox>, ISignalOnComponentRemoved<HitBox>*/
     {
         public struct Filter
         {
@@ -69,14 +69,28 @@ namespace Quantum
                             // CHECK: Has this entity already been hit by this hitbox instance?
                             if (HasEntityBeenHit(frame, filter.HitBox, contact.Entity))
                             {
-                                //Log.Debug($"[HitBoxSystem] Entity {contact.Entity} already hit by this hitbox, skipping");
                                 continue;
                             }
 
                             // Mark as hit BEFORE applying damage (prevents double hits from same frame)
                             AddHitEntity(frame, filter.HitBox, contact.Entity);
 
+                            var hitList = filter.HitBox->HitEntities;
+
                             // Apply damage
+                            Log.Debug($"[HitBoxSystem] OnDamageDealt CALLBACK, APPLYING DAMAGE. Current HitList count {GetHitListCount(frame, filter.HitBox)}, Contacts List count {contacts.Count}. FRAME: {frame.Number}, predicted: {frame.IsPredicted}");
+
+                            //if (hitList.Count > 0)
+                            //{
+                            //    System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                            //    sb.Append($"[HitBoxSystem] Hit list now contains {hitList.Count} entities: ");
+                            //    for (int j = 0; j < hitList.Count; j++)
+                            //    {
+                            //        sb.Append($"{hitList[j]}");
+                            //        if (j < hitList.Count - 1) sb.Append(", ");
+                            //    }
+                            //    Log.Debug(sb.ToString());
+                            //}
                             frame.Signals.OnDamageDealt(contact.Entity, config, filter.Entity);
                         }
                     }
@@ -86,26 +100,51 @@ namespace Quantum
 
         private bool HasEntityBeenHit(Frame frame, HitBox* hitbox, EntityRef entity)
         {
-            // Resolve the list pointer to access it
-            var hitList = frame.ResolveList(hitbox->HitEntities);
-            for (int i = 0; i < hitList.Count; i++)
+            var hitList = hitbox->HitEntities;            
+
+            for (int i = 0; i < hitList.Length; i++)
             {
-                if (hitList[i] == entity)
+                if (hitList[i].Equals(entity))
+                {
                     return true;
+                }
             }
+
             return false;
         }
 
         private void AddHitEntity(Frame frame, HitBox* hitbox, EntityRef entity)
         {
-            var hitList = frame.ResolveList(hitbox->HitEntities);
-            hitList.Add(entity);
+            for (int i = 0; i < hitbox->HitEntities.Length; i++)
+            {
+                if (hitbox->HitEntities[i].IsValid)
+                    continue;
+
+                hitbox->HitEntities[i] = entity;
+            }
         }
 
         private void ClearHitList(Frame frame, HitBox* hitbox)
         {
-            var hitList = frame.ResolveList(hitbox->HitEntities);
-            hitList.Clear();
+            for (int i = 0; i < hitbox->HitEntities.Length; i++)
+            {
+                hitbox->HitEntities[i] = EntityRef.None; // Nullify the list
+            }
+        }
+
+        private int GetHitListCount(Frame frame, HitBox* hitbox)
+        {
+            int count = 0;
+
+            for (int i = 0; i < hitbox->HitEntities.Length; i++)
+            {
+                if (hitbox->HitEntities[i].IsValid)
+                {
+                    //Log.Debug($"[GetHitListCount] entity {hitbox->HitEntities[i]} is valid (u tell me, IsValid says it is)");
+                    count++;
+                }
+            }
+            return count;
         }
 
         /// <summary>
@@ -139,25 +178,27 @@ namespace Quantum
             HitBox* hitbox = f.Unsafe.GetPointer<HitBox>(entity);
 
             hitbox->CurrentHitBox = config;
-            hitbox->IsActive = !hitbox->IsActive; // auto toggle on and off
+
+            hitbox->IsActive = isActive;
 
             // Clear the list
-            ClearHitList(f, hitbox);
+            if (!isActive)
+                ClearHitList(f, hitbox);
         }
 
-        public void OnAdded(Frame frame, EntityRef entity, HitBox* component)
-        {
-            // Allocate a new list when HitBox component is added to an entity
-            component->HitEntities = frame.AllocateList<EntityRef>();
-            Log.Debug($"[HitBoxSetup] Allocated hit list for entity {entity}");
-        }
+        //public void OnAdded(Frame frame, EntityRef entity, HitBox* component)
+        //{
+        //    // Allocate a new list when HitBox component is added to an entity
+        //    component->HitEntities = frame.AllocateList<EntityRef>();
+        //    Log.Debug($"[HitBoxSetup] Allocated hit list for entity {entity}");
+        //}
 
-        public void OnRemoved(Frame frame, EntityRef entity, HitBox* component)
-        {
-            // IMPORTANT: Deallocate the list to prevent memory leaks
-            frame.FreeList(component->HitEntities);
-            component->HitEntities = default;  // Nullify
-            Log.Debug($"[HitBoxSetup] Freed hit list for entity {entity}");
-        }
+        //public void OnRemoved(Frame frame, EntityRef entity, HitBox* component)
+        //{
+        //    // IMPORTANT: Deallocate the list to prevent memory leaks
+        //    frame.FreeList(component->HitEntities);
+        //    component->HitEntities = default;  // Nullify
+        //    Log.Debug($"[HitBoxSetup] Freed hit list for entity {entity}");
+        //}
     }
 }

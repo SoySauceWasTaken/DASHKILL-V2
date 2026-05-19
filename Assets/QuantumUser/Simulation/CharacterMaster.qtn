@@ -27,6 +27,7 @@ component CharacterMaster
     AssetRef<StateConfig> MidAirConfig;
     AssetRef<StateConfig> AttackConfig;
     AssetRef<StateConfig> StunConfig;
+    AssetRef<StateConfig> SpotDodgeConfig;
     
     // Action
     AssetRef<StateConfig> DashConfig;

@@ -1,0 +1,3 @@
+event OnPlayerDisconnected{
+  entity_ref DisconnectedPlayer;
+}

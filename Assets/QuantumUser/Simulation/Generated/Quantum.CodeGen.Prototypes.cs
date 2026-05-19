@@ -57,6 +57,21 @@ namespace Quantum.Prototypes {
     public Quantum.Prototypes.BlendTreeWeightsPrototype Value;
   }
   [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.ActionStateMachine))]
+  public unsafe partial class ActionStateMachinePrototype : ComponentPrototype<Quantum.ActionStateMachine> {
+    public FP SpotDodgeCooldown;
+    partial void MaterializeUser(Frame frame, ref Quantum.ActionStateMachine result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.ActionStateMachine component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.ActionStateMachine result, in PrototypeMaterializationContext context = default) {
+        result.SpotDodgeCooldown = this.SpotDodgeCooldown;
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.AnimatorComponent))]
   public unsafe class AnimatorComponentPrototype : ComponentPrototype<Quantum.AnimatorComponent> {
     [HideInInspector()]
@@ -147,6 +162,7 @@ namespace Quantum.Prototypes {
     public AssetRef<StateConfig> MidAirConfig;
     public AssetRef<StateConfig> AttackConfig;
     public AssetRef<StateConfig> StunConfig;
+    public AssetRef<StateConfig> SpotDodgeConfig;
     public AssetRef<StateConfig> DashConfig;
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
         Quantum.CharacterMaster component = default;
@@ -161,7 +177,41 @@ namespace Quantum.Prototypes {
         result.MidAirConfig = this.MidAirConfig;
         result.AttackConfig = this.AttackConfig;
         result.StunConfig = this.StunConfig;
+        result.SpotDodgeConfig = this.SpotDodgeConfig;
         result.DashConfig = this.DashConfig;
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.GameStateMachine))]
+  public unsafe partial class GameStateMachinePrototype : ComponentPrototype<Quantum.GameStateMachine> {
+    public Quantum.QEnum32<GameStateType> CurrentState;
+    public AssetRef<GameStateConfig> CurrentStateConfig;
+    public FP StateTimer;
+    public QBoolean IsTransitioning;
+    public AssetRef<GameStateConfig> LobbyConfig;
+    public AssetRef<GameStateConfig> LoadingConfig;
+    public AssetRef<GameStateConfig> RoundActiveConfig;
+    public AssetRef<GameStateConfig> RoundEndConfig;
+    public AssetRef<GameStateConfig> MatchEndConfig;
+    public AssetRef<GameStateConfig> CutsceneConfig;
+    partial void MaterializeUser(Frame frame, ref Quantum.GameStateMachine result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.GameStateMachine component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.GameStateMachine result, in PrototypeMaterializationContext context = default) {
+        result.CurrentState = this.CurrentState;
+        result.CurrentStateConfig = this.CurrentStateConfig;
+        result.StateTimer = this.StateTimer;
+        result.IsTransitioning = this.IsTransitioning;
+        result.LobbyConfig = this.LobbyConfig;
+        result.LoadingConfig = this.LoadingConfig;
+        result.RoundActiveConfig = this.RoundActiveConfig;
+        result.RoundEndConfig = this.RoundEndConfig;
+        result.MatchEndConfig = this.MatchEndConfig;
+        result.CutsceneConfig = this.CutsceneConfig;
+        MaterializeUser(frame, ref result, in context);
     }
   }
   [System.SerializableAttribute()]
@@ -189,6 +239,7 @@ namespace Quantum.Prototypes {
     public FP Current;
     public FP Max;
     public QBoolean IsAlive;
+    public QBoolean IsInvincible;
     partial void MaterializeUser(Frame frame, ref Quantum.Health result, in PrototypeMaterializationContext context);
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
         Quantum.Health component = default;
@@ -199,6 +250,7 @@ namespace Quantum.Prototypes {
         result.Current = this.Current;
         result.Max = this.Max;
         result.IsAlive = this.IsAlive;
+        result.IsInvincible = this.IsInvincible;
         MaterializeUser(frame, ref result, in context);
     }
   }
@@ -209,8 +261,8 @@ namespace Quantum.Prototypes {
     public QBoolean IsActive;
     public MapEntityId Owner;
     public FP ActiveTime;
-    [DynamicCollectionAttribute()]
-    public MapEntityId[] HitEntities = {};
+    [ArrayLengthAttribute(8)]
+    public MapEntityId[] HitEntities = new MapEntityId[8];
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
         Quantum.HitBox component = default;
         Materialize((Frame)f, ref component, in context);
@@ -221,15 +273,8 @@ namespace Quantum.Prototypes {
         result.IsActive = this.IsActive;
         PrototypeValidator.FindMapEntity(this.Owner, in context, out result.Owner);
         result.ActiveTime = this.ActiveTime;
-        if (this.HitEntities.Length == 0) {
-          result.HitEntities = default;
-        } else {
-          var list = frame.AllocateList(out result.HitEntities, this.HitEntities.Length);
-          for (int i = 0; i < this.HitEntities.Length; ++i) {
-            EntityRef tmp = default;
-            PrototypeValidator.FindMapEntity(this.HitEntities[i], in context, out tmp);
-            list.Add(tmp);
-          }
+        for (int i = 0, count = PrototypeValidator.CheckLength(HitEntities, 8, in context); i < count; ++i) {
+          PrototypeValidator.FindMapEntity(this.HitEntities[i], in context, out *result.HitEntities.GetPointer(i));
         }
     }
   }

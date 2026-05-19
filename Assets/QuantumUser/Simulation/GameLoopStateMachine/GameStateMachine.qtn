@@ -1,0 +1,15 @@
+component GameStateMachine
+{
+    GameStateType CurrentState;
+    AssetRef<GameStateConfig> CurrentStateConfig;
+    FP StateTimer;
+    bool IsTransitioning;
+
+    // Config references (one per state)
+    AssetRef<GameStateConfig> LobbyConfig;
+    AssetRef<GameStateConfig> LoadingConfig;
+    AssetRef<GameStateConfig> RoundActiveConfig;
+    AssetRef<GameStateConfig> RoundEndConfig;
+    AssetRef<GameStateConfig> MatchEndConfig;
+    AssetRef<GameStateConfig> CutsceneConfig;
+}

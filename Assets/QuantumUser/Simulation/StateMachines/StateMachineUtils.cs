@@ -27,6 +27,8 @@ namespace Quantum
                     return master->AttackConfig;
                 case StateType.STUN:
                     return master->StunConfig;
+                case StateType.SPOTDODGE:
+                    return master->SpotDodgeConfig;
 
                 default:
                     return master->IdleConfig;

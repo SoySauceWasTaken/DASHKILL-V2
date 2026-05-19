@@ -1,0 +1,11 @@
+enum GameStateType
+{
+    NONE = 0,
+    LOBBY = 1,           // Waiting for players
+    LOADING = 2,         // Loading assets
+    STARTING = 3,
+    ROUND_ACTIVE = 4,    // Players fighting
+    ROUND_END = 5,       // Between rounds (score display)
+    MATCH_END = 6,       // Winner declared
+    DEATHBLOW = 7         // Optional: victory/defeat animations
+}

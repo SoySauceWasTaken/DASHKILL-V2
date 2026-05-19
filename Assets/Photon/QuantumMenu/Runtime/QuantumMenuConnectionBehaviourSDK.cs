@@ -338,9 +338,9 @@ namespace Quantum.Menu {
       _disconnectSubscription.Dispose();
       _disconnectSubscription = null;
 
-      //for (int i = 0; i < connectArgs.RuntimePlayers.Length; i++) { 
-      //  Runner.Game.AddPlayer(i, connectArgs.RuntimePlayers[i]);
-      //}
+      for (int i = 0; i < connectArgs.RuntimePlayers.Length; i++) { 
+        Runner.Game.AddPlayer(i, connectArgs.RuntimePlayers[i]);
+      }
 
       return new ConnectResult { Success = true }; 
     }

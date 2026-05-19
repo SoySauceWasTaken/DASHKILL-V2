@@ -10,7 +10,7 @@ namespace Quantum
 
             HitBoxConfig config = f.FindAsset<HitBoxConfig>(HitBoxConfig.Id);
 
-            Log.Debug($"[Damage] Entity {target} hit by {source} for {config.Damage} damage! Health: {health->Current} -> {health->Current - config.Damage}");
+            Log.Debug($"[Damage] Entity {target} hit by {source} for {config.Damage} damage! Health: {health->Current} -> {health->Current - config.Damage}. FRAME: {f.Number}, predicted: {f.IsPredicted}");
 
             health->Current -= config.Damage;
 

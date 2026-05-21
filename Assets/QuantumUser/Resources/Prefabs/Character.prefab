@@ -118,6 +118,7 @@ GameObject:
   - component: {fileID: 9056869138067271205}
   - component: {fileID: 3199639961467947015}
   - component: {fileID: 308432618478291336}
+  - component: {fileID: 5919604830661779273}
   m_Layer: 8
   m_Name: Character
   m_TagString: Untagged
@@ -706,3 +707,24 @@ MonoBehaviour:
   Prototype:
     SpotDodgeCooldown:
       RawValue: 0
+--- !u!114 &5919604830661779273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7261769895644465944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78bd808c574f420478918f4a631fadd6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Quantum.Unity::Quantum.QPrototypeStatus
+  Prototype:
+    StatusData:
+      Id:
+        Value: 505809970227801373
+    DisconnectedTimer:
+      Mode: 0
+      Frames: 0
+      Seconds:
+        RawValue: 0

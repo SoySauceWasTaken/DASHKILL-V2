@@ -1,0 +1,5 @@
+component Status
+{
+    asset_ref<StatusData> StatusData;
+    FrameTimer DisconnectedTimer;
+}

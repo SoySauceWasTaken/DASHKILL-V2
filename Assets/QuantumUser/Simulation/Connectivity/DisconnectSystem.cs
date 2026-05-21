@@ -23,6 +23,10 @@ namespace Quantum
             /// Pointer to the entity's PlayerLink component.
             /// </summary>
             public PlayerLink* PlayerLink;
+            /// <summary>
+            /// Pointer to the entity's Status component.
+            /// </summary>
+            public Status* Status;
         }
 
         /// <summary>
@@ -39,10 +43,26 @@ namespace Quantum
             }
 
             var flags = frame.GetPlayerInputFlags(filter.PlayerLink->Player);
+            var status = filter.Status;
+            var statusData = frame.FindAsset(status->StatusData);
 
             if ((flags & DeterministicInputFlags.PlayerNotPresent) == DeterministicInputFlags.PlayerNotPresent)
             {
-                frame.Destroy(filter.Entity);
+                if (status->DisconnectedTimer.IsSet == false)
+                {
+                    status->DisconnectedTimer = FrameTimer.FromSeconds(frame, statusData.TimeToDisconnect);
+                }
+            }
+            else
+            {
+                status->DisconnectedTimer = FrameTimer.None;
+            }
+
+            //Destroys the player disconnected character
+            if (status->DisconnectedTimer.IsSet && status->DisconnectedTimer.HasStoppedThisFrame(frame))
+            {
+                //frame.Destroy(filter.Entity);
+                frame.Events.OnPlayerDisconnected(filter.Entity);
             }
         }
     }

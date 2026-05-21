@@ -1731,6 +1731,28 @@ namespace Quantum {
     }
   }
   [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct Status : Quantum.IComponent {
+    public const Int32 SIZE = 16;
+    public const Int32 ALIGNMENT = 8;
+    [FieldOffset(0)]
+    public AssetRef<StatusData> StatusData;
+    [FieldOffset(8)]
+    public FrameTimer DisconnectedTimer;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 7673;
+        hash = hash * 31 + StatusData.GetHashCode();
+        hash = hash * 31 + DisconnectedTimer.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (Status*)ptr;
+        AssetRef.Serialize(&p->StatusData, serializer);
+        FrameTimer.Serialize(&p->DisconnectedTimer, serializer);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct StatusStateMachine : Quantum.IComponent {
     public const Int32 SIZE = 24;
     public const Int32 ALIGNMENT = 8;
@@ -1904,6 +1926,8 @@ namespace Quantum {
       BuildSignalsArrayOnComponentRemoved<Quantum.PlayerLink>();
       BuildSignalsArrayOnComponentAdded<Quantum.StateComponent>();
       BuildSignalsArrayOnComponentRemoved<Quantum.StateComponent>();
+      BuildSignalsArrayOnComponentAdded<Quantum.Status>();
+      BuildSignalsArrayOnComponentRemoved<Quantum.Status>();
       BuildSignalsArrayOnComponentAdded<Quantum.StatusStateMachine>();
       BuildSignalsArrayOnComponentRemoved<Quantum.StatusStateMachine>();
       BuildSignalsArrayOnComponentAdded<Transform2D>();
@@ -2198,6 +2222,7 @@ namespace Quantum {
       typeRegistry.Register(typeof(Quantum.StateComponent), Quantum.StateComponent.SIZE);
       typeRegistry.Register(typeof(Quantum.StateRequest), Quantum.StateRequest.SIZE);
       typeRegistry.Register(typeof(Quantum.StateType), 4);
+      typeRegistry.Register(typeof(Quantum.Status), Quantum.Status.SIZE);
       typeRegistry.Register(typeof(Quantum.StatusStateMachine), Quantum.StatusStateMachine.SIZE);
       typeRegistry.Register(typeof(Transform2D), Transform2D.SIZE);
       typeRegistry.Register(typeof(Transform2DVertical), Transform2DVertical.SIZE);
@@ -2207,7 +2232,7 @@ namespace Quantum {
       typeRegistry.Register(typeof(Quantum._globals_), Quantum._globals_.SIZE);
     }
     static partial void InitComponentTypeIdGen() {
-      ComponentTypeId.Reset(ComponentTypeId.BuiltInComponentCount + 19)
+      ComponentTypeId.Reset(ComponentTypeId.BuiltInComponentCount + 20)
         .AddBuiltInComponents()
         .Add<AIBlackboardComponent>(AIBlackboardComponent.Serialize, AIBlackboardComponent.OnAdded, AIBlackboardComponent.OnRemoved, ComponentFlags.None)
         .Add<Quantum.ActionStateMachine>(Quantum.ActionStateMachine.Serialize, null, null, ComponentFlags.None)
@@ -2226,6 +2251,7 @@ namespace Quantum {
         .Add<Quantum.MovementStateMachine>(Quantum.MovementStateMachine.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.PlayerLink>(Quantum.PlayerLink.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.StateComponent>(Quantum.StateComponent.Serialize, null, null, ComponentFlags.None)
+        .Add<Quantum.Status>(Quantum.Status.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.StatusStateMachine>(Quantum.StatusStateMachine.Serialize, null, null, ComponentFlags.None)
         .Add<UTAgent>(UTAgent.Serialize, UTAgent.OnAdded, UTAgent.OnRemoved, ComponentFlags.None)
         .Finish();

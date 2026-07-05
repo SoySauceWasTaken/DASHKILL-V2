@@ -7,8 +7,11 @@
     {
         static partial void AddCommandFactoriesUser(ICollection<IDeterministicCommandFactory> factories, RuntimeConfig gameConfig, SimulationConfig simulationConfig)
         {
-            // Add or remove commands to the collection.
-            // factories.Add(new NavMeshAgentTestSystem.RunTest());
+            // Every command that could run in the sim must be added here
+
+            factories.Add(new CommandSelectCharacter());
+            factories.Add(new CommandPlayerReady());
+            
         }
     }
 }

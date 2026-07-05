@@ -9,6 +9,12 @@ EditorBuildSettings:
     path: Assets/Photon/QuantumMenu/QuantumSampleMenu.unity
     guid: f23d3edd333e1dc449a4688e04123759
   - enabled: 1
+    path: Assets/Scenes/MainMenuScene.unity
+    guid: c19694b9d385f15448c3f3d2fa1f7e3f
+  - enabled: 1
+    path: Assets/Scenes/CharacterSelectScene.unity
+    guid: 6b0f1b3315cff1f40b01e952cadd24be
+  - enabled: 1
     path: Assets/Scenes/GameplayScene.unity
     guid: 416235347ec08314d91e98a32fcdc673
   m_configObjects:

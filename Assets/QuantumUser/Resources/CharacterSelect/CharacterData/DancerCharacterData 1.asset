@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2f9ec0886738dc4daedd6629b36a09a, type: 3}
+  m_Name: DancerCharacterData 1
+  m_EditorClassIdentifier: Quantum.Menu::Quantum.Menu.CharacterData
+  characterName: Dancer
+  characterDescription: Here goes the character desc...
+  characterIndex: 2
+  portraitSprite: {fileID: 21300000, guid: 8fdbe816d5cb89e4fa0e3a6d7da11e2a, type: 3}
+  characterIcon: {fileID: 0}
+  characterPrefab: {fileID: 7261769895644465944, guid: 0add131bffdc4e74e9c69cbc0934793f, type: 3}
+  characterPrototype:
+    Id:
+      Value: 1368373241114537190
+  isUnlockedByDefault: 1
+  isLocked: 0

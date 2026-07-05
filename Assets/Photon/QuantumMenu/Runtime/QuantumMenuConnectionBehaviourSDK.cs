@@ -141,85 +141,85 @@ namespace Quantum.Menu {
 
     /// <inheritdoc/>
     protected override async Task<ConnectResult> ConnectAsyncInternal(QuantumMenuConnectArgs connectArgs) {
-      PatchConnectArgs(connectArgs);
+//      PatchConnectArgs(connectArgs);
 
-      if (string.IsNullOrEmpty(connectArgs.AppSettings.AppIdQuantum)) {
-        return ConnectResult.Fail(ConnectFailReason.NoAppId,
-#if UNITY_EDITOR
-          "AppId missing.\n\nOpen the Quantum Hub and follow the installation steps to create a Quantum 3 AppId.");
-#else
-          "AppId missing");
-#endif
-      }
+//      if (string.IsNullOrEmpty(connectArgs.AppSettings.AppIdQuantum)) {
+//        return ConnectResult.Fail(ConnectFailReason.NoAppId,
+//#if UNITY_EDITOR
+//          "AppId missing.\n\nOpen the Quantum Hub and follow the installation steps to create a Quantum 3 AppId.");
+//#else
+//          "AppId missing");
+//#endif
+//      }
 
-      if (_cancellation != null) {
-        throw new Exception("Connection instance still in use");
-      }
+//      if (_cancellation != null) {
+//        throw new Exception("Connection instance still in use");
+//      }
 
-      // CONNECT ---------------------------------------------------------------
+//      // CONNECT ---------------------------------------------------------------
 
-      // Cancellation is used to stop the connection process at any time.
-      _cancellation = new CancellationTokenSource();
-      _linkedCancellation = AsyncSetup.CreateLinkedSource(_cancellation.Token);
-      _shutdownFlags = connectArgs.ShutdownFlags;
-      _disconnectCause = DisconnectCause.None;
+//      // Cancellation is used to stop the connection process at any time.
+//      _cancellation = new CancellationTokenSource();
+//      _linkedCancellation = AsyncSetup.CreateLinkedSource(_cancellation.Token);
+//      _shutdownFlags = connectArgs.ShutdownFlags;
+//      _disconnectCause = DisconnectCause.None;
 
-      var arguments = new MatchmakingArguments {
-        PhotonSettings = new AppSettings(connectArgs.AppSettings) { 
-          AppVersion = connectArgs.AppVersion,
-          FixedRegion = connectArgs.Region
-        },
-        ReconnectInformation = connectArgs.ReconnectInformation,
-        EmptyRoomTtlInSeconds = connectArgs.ServerSettings.EmptyRoomTtlInSeconds,
-        EnableCrc = connectArgs.ServerSettings.EnableCrc,
-        PlayerTtlInSeconds = connectArgs.ServerSettings.PlayerTtlInSeconds,
-        MaxPlayers = connectArgs.MaxPlayerCount,
-        RoomName = connectArgs.Session,
-        CanOnlyJoin = string.IsNullOrEmpty(connectArgs.Session) == false && !connectArgs.Creating,
-        PluginName = connectArgs.PhotonPluginName,
-        AsyncConfig = new AsyncConfig() {
-          TaskFactory = AsyncConfig.CreateUnityTaskFactory(),
-          CancellationToken = _linkedCancellation.Token
-        },
-        NetworkClient = connectArgs.Client,
-        AuthValues = connectArgs.AuthValues,
-      };
+//      var arguments = new MatchmakingArguments {
+//        PhotonSettings = new AppSettings(connectArgs.AppSettings) { 
+//          AppVersion = connectArgs.AppVersion,
+//          FixedRegion = connectArgs.Region
+//        },
+//        ReconnectInformation = connectArgs.ReconnectInformation,
+//        EmptyRoomTtlInSeconds = connectArgs.ServerSettings.EmptyRoomTtlInSeconds,
+//        EnableCrc = connectArgs.ServerSettings.EnableCrc,
+//        PlayerTtlInSeconds = connectArgs.ServerSettings.PlayerTtlInSeconds,
+//        MaxPlayers = connectArgs.MaxPlayerCount,
+//        RoomName = connectArgs.Session,
+//        CanOnlyJoin = string.IsNullOrEmpty(connectArgs.Session) == false && !connectArgs.Creating,
+//        PluginName = connectArgs.PhotonPluginName,
+//        AsyncConfig = new AsyncConfig() {
+//          TaskFactory = AsyncConfig.CreateUnityTaskFactory(),
+//          CancellationToken = _linkedCancellation.Token
+//        },
+//        NetworkClient = connectArgs.Client,
+//        AuthValues = connectArgs.AuthValues,
+//      };
 
-      // Connect to Photon
-      try {
-        OnConnect(connectArgs, ref arguments);
-        if (connectArgs.Reconnecting == false) {
-          ReportProgress("Connecting..");
-          _client = await MatchmakingExtensions.ConnectToRoomAsync(arguments);
-        } else {
-          ReportProgress("Reconnecting..");
-          _client = await MatchmakingExtensions.ReconnectToRoomAsync(arguments);
-        }
-        OnConnected(_client);
+//      // Connect to Photon
+//      try {
+//        OnConnect(connectArgs, ref arguments);
+//        if (connectArgs.Reconnecting == false) {
+//          ReportProgress("Connecting..");
+//          _client = await MatchmakingExtensions.ConnectToRoomAsync(arguments);
+//        } else {
+//          ReportProgress("Reconnecting..");
+//          _client = await MatchmakingExtensions.ReconnectToRoomAsync(arguments);
+//        }
+//        OnConnected(_client);
 
-      } catch (Exception e) {
-        Debug.LogException(e);
-        return new ConnectResult {
-          FailReason =
-            AsyncConfig.Global.IsCancellationRequested ? ConnectFailReason.ApplicationQuit :
-            _disconnectCause == DisconnectCause.None ? ConnectFailReason.RunnerFailed : ConnectFailReason.Disconnect,
-          DisconnectCause = (int)_disconnectCause,
-          DebugMessage = e.Message,
-          WaitForCleanup = CleanupAsync()};
-      }
+//      } catch (Exception e) {
+//        Debug.LogException(e);
+//        return new ConnectResult {
+//          FailReason =
+//            AsyncConfig.Global.IsCancellationRequested ? ConnectFailReason.ApplicationQuit :
+//            _disconnectCause == DisconnectCause.None ? ConnectFailReason.RunnerFailed : ConnectFailReason.Disconnect,
+//          DisconnectCause = (int)_disconnectCause,
+//          DebugMessage = e.Message,
+//          WaitForCleanup = CleanupAsync()};
+//      }
 
       // Save region summary
-      if (!string.IsNullOrEmpty(Client.SummaryToCache)) {
-        connectArgs.ServerSettings.BestRegionSummary = Client.SummaryToCache;
-      }
+      //if (!string.IsNullOrEmpty(Client.SummaryToCache)) {
+      //  connectArgs.ServerSettings.BestRegionSummary = Client.SummaryToCache;
+      //}
 
       //  Make sure to notice socket disconnects during the rest of the connection/start process
-      _disconnectSubscription = Client.CallbackMessage.ListenManual<OnDisconnectedMsg>(m => {
-        if (_cancellation != null && _cancellation.IsCancellationRequested == false) {
-          _disconnectCause = m.cause;
-          _cancellation.Cancel();
-        }
-      });
+      //_disconnectSubscription = Client.CallbackMessage.ListenManual<OnDisconnectedMsg>(m => {
+      //  if (_cancellation != null && _cancellation.IsCancellationRequested == false) {
+      //    _disconnectCause = m.cause;
+      //    _cancellation.Cancel();
+      //  }
+      //});
 
       // LOAD SCENE ---------------------------------------------------------------
 
@@ -272,71 +272,71 @@ namespace Quantum.Menu {
 
           SceneManager.SetActiveScene(SceneManager.GetSceneByName(map.Scene));
         }
-      }
+       }
 
       // START GAME ---------------------------------------------------------------
 
-      ReportProgress("Starting..");
+      //ReportProgress("Starting..");
 
-      var sessionRunnerArguments = new SessionRunner.Arguments {
-        RunnerFactory = QuantumRunnerUnityFactory.DefaultFactory,
-        GameParameters = QuantumRunnerUnityFactory.CreateGameParameters,
-        ClientId = 
-          // Use client id from connection args first
-          string.IsNullOrEmpty(connectArgs.QuantumClientId) == false ? connectArgs.QuantumClientId :
-          // Then chose the user id that was returned by the authentication
-          string.IsNullOrEmpty(Client.UserId) == false ? Client.UserId :
-          // Or create a random id
-          Guid.NewGuid().ToString(),
-        RuntimeConfig = connectArgs.RuntimeConfig,
-        SessionConfig = (connectArgs.SessionConfig != null ? connectArgs.SessionConfig.Config : null) ?? QuantumDeterministicSessionConfigAsset.DefaultConfig,
-        GameMode = DeterministicGameMode.Multiplayer,
-        PlayerCount = connectArgs.MaxPlayerCount,
-        Communicator = new QuantumNetworkCommunicator(Client),
-        CancellationToken = _linkedCancellation.Token,
-        RecordingFlags = connectArgs.RecordingFlags,
-        InstantReplaySettings = connectArgs.InstantReplaySettings,
-        DeltaTimeType = connectArgs.DeltaTimeType,
-        StartGameTimeoutInSeconds = connectArgs.StartGameTimeoutInSeconds,
-        GameFlags = connectArgs.GameFlags,
-        OnShutdown = OnSessionShutdown,
-      };
+      //var sessionRunnerArguments = new SessionRunner.Arguments {
+      //  RunnerFactory = QuantumRunnerUnityFactory.DefaultFactory,
+      //  GameParameters = QuantumRunnerUnityFactory.CreateGameParameters,
+      //  ClientId = 
+      //    // Use client id from connection args first
+      //    string.IsNullOrEmpty(connectArgs.QuantumClientId) == false ? connectArgs.QuantumClientId :
+      //    // Then chose the user id that was returned by the authentication
+      //    string.IsNullOrEmpty(Client.UserId) == false ? Client.UserId :
+      //    // Or create a random id
+      //    Guid.NewGuid().ToString(),
+      //  RuntimeConfig = connectArgs.RuntimeConfig,
+      //  SessionConfig = (connectArgs.SessionConfig != null ? connectArgs.SessionConfig.Config : null) ?? QuantumDeterministicSessionConfigAsset.DefaultConfig,
+      //  GameMode = DeterministicGameMode.Multiplayer,
+      //  PlayerCount = connectArgs.MaxPlayerCount,
+      //  Communicator = new QuantumNetworkCommunicator(Client),
+      //  CancellationToken = _linkedCancellation.Token,
+      //  RecordingFlags = connectArgs.RecordingFlags,
+      //  InstantReplaySettings = connectArgs.InstantReplaySettings,
+      //  DeltaTimeType = connectArgs.DeltaTimeType,
+      //  StartGameTimeoutInSeconds = connectArgs.StartGameTimeoutInSeconds,
+      //  GameFlags = connectArgs.GameFlags,
+      //  OnShutdown = OnSessionShutdown,
+      //};
 
-      if (EnableMppm) {
-        QuantumMppm.MainEditor?.Send(new QuantumMenuMppmJoinCommand() {
-          AppVersion = connectArgs.AppVersion,
-          Session = Client.CurrentRoom.Name,
-          Region = Client.CurrentRegion,
-        });
-      }
+      //if (EnableMppm) {
+      //  QuantumMppm.MainEditor?.Send(new QuantumMenuMppmJoinCommand() {
+      //    AppVersion = connectArgs.AppVersion,
+      //    Session = Client.CurrentRoom.Name,
+      //    Region = Client.CurrentRegion,
+      //  });
+      //}
       
-      // Register to plugin disconnect messages to display errors
-      string pluginDisconnectReason = null;
-      var pluginDisconnectListener = QuantumCallback.SubscribeManual<CallbackPluginDisconnect>(m => pluginDisconnectReason = m.Reason);
+      //// Register to plugin disconnect messages to display errors
+      //string pluginDisconnectReason = null;
+      //var pluginDisconnectListener = QuantumCallback.SubscribeManual<CallbackPluginDisconnect>(m => pluginDisconnectReason = m.Reason);
 
-      try {
-        // Start Quantum and wait for the start protocol to complete
-        OnStart(ref sessionRunnerArguments);
-        Runner = (QuantumRunner)await SessionRunner.StartAsync(sessionRunnerArguments);
-        OnStarted(Runner);
-      } catch (Exception e) {
-        pluginDisconnectListener.Dispose();
-        Debug.LogException(e);
-        return new ConnectResult {
-          FailReason = DetermineFailReason(_disconnectCause, pluginDisconnectReason),
-          DisconnectCause = (int)_disconnectCause,
-          DebugMessage = pluginDisconnectReason ?? e.Message,
-          WaitForCleanup = CleanupAsync()
-        };
-      }
+      //try {
+      //  // Start Quantum and wait for the start protocol to complete
+      //  OnStart(ref sessionRunnerArguments);
+      //  Runner = (QuantumRunner)await SessionRunner.StartAsync(sessionRunnerArguments);
+      //  OnStarted(Runner);
+      //} catch (Exception e) {
+      //  pluginDisconnectListener.Dispose();
+      //  Debug.LogException(e);
+      //  return new ConnectResult {
+      //    FailReason = DetermineFailReason(_disconnectCause, pluginDisconnectReason),
+      //    DisconnectCause = (int)_disconnectCause,
+      //    DebugMessage = pluginDisconnectReason ?? e.Message,
+      //    WaitForCleanup = CleanupAsync()
+      //  };
+      //}
 
-      pluginDisconnectListener.Dispose();
-      _cancellation.Dispose();
-      _cancellation = null;
-      _linkedCancellation.Dispose();
-      _linkedCancellation = null;
-      _disconnectSubscription.Dispose();
-      _disconnectSubscription = null;
+      //pluginDisconnectListener.Dispose();
+      //_cancellation.Dispose();
+      //_cancellation = null;
+      //_linkedCancellation.Dispose();
+      //_linkedCancellation = null;
+      //_disconnectSubscription.Dispose();
+      //_disconnectSubscription = null;
 
       //for (int i = 0; i < connectArgs.RuntimePlayers.Length; i++) { 
       //  Runner.Game.AddPlayer(i, connectArgs.RuntimePlayers[i]);

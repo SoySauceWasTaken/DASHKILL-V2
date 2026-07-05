@@ -30,17 +30,21 @@ namespace Quantum.Menu {
     /// An empty list will hide the related dropdown on the settings screen.
     /// </summary>
     [InlineHelp, SerializeField] protected List<string> _availableRegions = new List<string> { "asia", "eu", "sa", "us" };
-    /// <summary>
-    /// Has been replaced by <see cref="AvailableSceneAssets"/>.
-    /// <para>
-    /// Static list of scenes available in the scenes menu.
-    /// An empty list will hide the related button in the main screen.
-    /// PhotonMenuSceneInfo.Name = displayed name
-    /// PhotonMenuSceneInfo.ScenePath = the actual Unity scene (must be included in BuildSettings)
-    /// PhotonMenuSceneInfo.Preview = a sprite with a preview of the scene (screenshot) that is displayed in the main menu and scene selection screen (can be null)
-    /// </para>
-    /// </summary>
-    [InlineHelp, SerializeField] protected List<PhotonMenuSceneInfo> _availableScenes = new List<PhotonMenuSceneInfo>();
+
+    [InlineHelp, SerializeField, ScenePath] protected string OnlinePlayScenePath;
+    [InlineHelp, SerializeField, ScenePath] protected string LocalPlayScenePath;
+
+        /// <summary>
+        /// Has been replaced by <see cref="AvailableSceneAssets"/>.
+        /// <para>
+        /// Static list of scenes available in the scenes menu.
+        /// An empty list will hide the related button in the main screen.
+        /// PhotonMenuSceneInfo.Name = displayed name
+        /// PhotonMenuSceneInfo.ScenePath = the actual Unity scene (must be included in BuildSettings)
+        /// PhotonMenuSceneInfo.Preview = a sprite with a preview of the scene (screenshot) that is displayed in the main menu and scene selection screen (can be null)
+        /// </para>
+        /// </summary>
+        [InlineHelp, SerializeField] protected List<PhotonMenuSceneInfo> _availableScenes = new List<PhotonMenuSceneInfo>();
     /// <summary>
     /// The <see cref="QuantumMenuMachineId"/> ScriptableObject that stores local ids to use as an option in for AppVersion.
     /// Designed as a convenient development feature.

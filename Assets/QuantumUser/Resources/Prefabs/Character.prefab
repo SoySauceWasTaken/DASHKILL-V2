@@ -119,6 +119,7 @@ GameObject:
   - component: {fileID: 3199639961467947015}
   - component: {fileID: 308432618478291336}
   - component: {fileID: 5919604830661779273}
+  - component: {fileID: 7948198179047225946}
   m_Layer: 8
   m_Name: Character
   m_TagString: Untagged
@@ -728,3 +729,21 @@ MonoBehaviour:
       Frames: 0
       Seconds:
         RawValue: 0
+--- !u!114 &7948198179047225946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7261769895644465944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62b6ba1ae96bf9d4f99a146a27aae122, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Quantum.Unity::Quantum.QPrototypeCharacterSelect
+  Prototype:
+    Player:
+      _index: 0
+    SelectedCharacter: 0
+    IsReady:
+      Value: 0

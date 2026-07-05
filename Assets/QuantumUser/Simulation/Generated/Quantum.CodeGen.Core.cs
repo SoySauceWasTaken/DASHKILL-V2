@@ -1401,6 +1401,32 @@ namespace Quantum {
     }
   }
   [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct CharacterSelect : Quantum.IComponent {
+    public const Int32 SIZE = 12;
+    public const Int32 ALIGNMENT = 4;
+    [FieldOffset(4)]
+    public PlayerRef Player;
+    [FieldOffset(0)]
+    public Int32 SelectedCharacter;
+    [FieldOffset(8)]
+    public QBoolean IsReady;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 13249;
+        hash = hash * 31 + Player.GetHashCode();
+        hash = hash * 31 + SelectedCharacter.GetHashCode();
+        hash = hash * 31 + IsReady.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (CharacterSelect*)ptr;
+        serializer.Stream.Serialize(&p->SelectedCharacter);
+        PlayerRef.Serialize(&p->Player, serializer);
+        QBoolean.Serialize(&p->IsReady, serializer);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct GameStateMachine : Quantum.IComponent {
     public const Int32 SIZE = 72;
     public const Int32 ALIGNMENT = 8;
@@ -1878,6 +1904,8 @@ namespace Quantum {
       BuildSignalsArrayOnComponentRemoved<CharacterController3D>();
       BuildSignalsArrayOnComponentAdded<Quantum.CharacterMaster>();
       BuildSignalsArrayOnComponentRemoved<Quantum.CharacterMaster>();
+      BuildSignalsArrayOnComponentAdded<Quantum.CharacterSelect>();
+      BuildSignalsArrayOnComponentRemoved<Quantum.CharacterSelect>();
       BuildSignalsArrayOnComponentAdded<Quantum.GameStateMachine>();
       BuildSignalsArrayOnComponentRemoved<Quantum.GameStateMachine>();
       BuildSignalsArrayOnComponentAdded<Quantum.GameplayState>();
@@ -2134,6 +2162,7 @@ namespace Quantum {
       typeRegistry.Register(typeof(CharacterController2D), CharacterController2D.SIZE);
       typeRegistry.Register(typeof(CharacterController3D), CharacterController3D.SIZE);
       typeRegistry.Register(typeof(Quantum.CharacterMaster), Quantum.CharacterMaster.SIZE);
+      typeRegistry.Register(typeof(Quantum.CharacterSelect), Quantum.CharacterSelect.SIZE);
       typeRegistry.Register(typeof(ColorRGBA), ColorRGBA.SIZE);
       typeRegistry.Register(typeof(ComponentPrototypeRef), ComponentPrototypeRef.SIZE);
       typeRegistry.Register(typeof(ComponentTypeRef), ComponentTypeRef.SIZE);
@@ -2232,7 +2261,7 @@ namespace Quantum {
       typeRegistry.Register(typeof(Quantum._globals_), Quantum._globals_.SIZE);
     }
     static partial void InitComponentTypeIdGen() {
-      ComponentTypeId.Reset(ComponentTypeId.BuiltInComponentCount + 20)
+      ComponentTypeId.Reset(ComponentTypeId.BuiltInComponentCount + 21)
         .AddBuiltInComponents()
         .Add<AIBlackboardComponent>(AIBlackboardComponent.Serialize, AIBlackboardComponent.OnAdded, AIBlackboardComponent.OnRemoved, ComponentFlags.None)
         .Add<Quantum.ActionStateMachine>(Quantum.ActionStateMachine.Serialize, null, null, ComponentFlags.None)
@@ -2240,6 +2269,7 @@ namespace Quantum {
         .Add<BTAgent>(BTAgent.Serialize, BTAgent.OnAdded, BTAgent.OnRemoved, ComponentFlags.None)
         .Add<BotSDKGlobals>(BotSDKGlobals.Serialize, BotSDKGlobals.OnAdded, BotSDKGlobals.OnRemoved, ComponentFlags.Singleton)
         .Add<Quantum.CharacterMaster>(Quantum.CharacterMaster.Serialize, null, Quantum.CharacterMaster.OnRemoved, ComponentFlags.None)
+        .Add<Quantum.CharacterSelect>(Quantum.CharacterSelect.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.GameStateMachine>(Quantum.GameStateMachine.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.GameplayState>(Quantum.GameplayState.Serialize, null, null, ComponentFlags.None)
         .Add<HFSMAgent>(HFSMAgent.Serialize, HFSMAgent.OnAdded, HFSMAgent.OnRemoved, ComponentFlags.None)

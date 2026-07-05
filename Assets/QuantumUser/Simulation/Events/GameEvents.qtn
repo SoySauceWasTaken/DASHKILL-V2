@@ -1,3 +1,18 @@
 event OnPlayerDisconnected{
   entity_ref DisconnectedPlayer;
 }
+
+// Character Select Events
+
+event CharacterSelected {
+    player_ref Player;
+    int CharacterIndex;
+}
+
+event PlayerReady {
+    player_ref Player;
+    bool IsReady;
+}
+
+event AllPlayersReady {
+}

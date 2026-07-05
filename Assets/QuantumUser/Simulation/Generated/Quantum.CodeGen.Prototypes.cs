@@ -182,6 +182,25 @@ namespace Quantum.Prototypes {
     }
   }
   [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.CharacterSelect))]
+  public unsafe partial class CharacterSelectPrototype : ComponentPrototype<Quantum.CharacterSelect> {
+    public PlayerRef Player;
+    public Int32 SelectedCharacter;
+    public QBoolean IsReady;
+    partial void MaterializeUser(Frame frame, ref Quantum.CharacterSelect result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.CharacterSelect component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.CharacterSelect result, in PrototypeMaterializationContext context = default) {
+        result.Player = this.Player;
+        result.SelectedCharacter = this.SelectedCharacter;
+        result.IsReady = this.IsReady;
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.GameStateMachine))]
   public unsafe partial class GameStateMachinePrototype : ComponentPrototype<Quantum.GameStateMachine> {
     public Quantum.QEnum32<GameStateType> CurrentState;

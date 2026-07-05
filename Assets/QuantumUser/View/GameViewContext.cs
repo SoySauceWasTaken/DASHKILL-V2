@@ -6,10 +6,8 @@ namespace DashKill
     /// <summary>
     /// Provides a custom context for Quantum views, storing local player-specific data.
     /// </summary>
-    public class GameViewContext : MonoBehaviour, IQuantumViewContext
+    public class GameViewContext : QuantumMonoBehaviour, IQuantumViewContext
     {
-        //public CharacterView LocalCharacterView;
-
-        //public FPVector2 LocalCharacterLastDirection;
+        public Camera Camera;
     }
 }

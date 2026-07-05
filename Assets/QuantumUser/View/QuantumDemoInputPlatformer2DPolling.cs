@@ -19,7 +19,7 @@ namespace Quantum
             // Try to find input handler if not assigned
             if (inputHandler == null)
             {
-                inputHandler = FindObjectOfType<UnityInputActionHandler>();
+                inputHandler = FindAnyObjectByType<UnityInputActionHandler>();
                 if (inputHandler != null)
                     Debug.Log($"[{gameObject.name}] Found UnityInputActionHandler: {inputHandler.gameObject.name}");
                 else

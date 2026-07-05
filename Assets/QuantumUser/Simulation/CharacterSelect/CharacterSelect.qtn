@@ -1,0 +1,9 @@
+// CharacterSelect.qtn
+// Component that stores a player's character selection state
+
+component CharacterSelect
+{
+    player_ref Player;          // Which player owns this selection
+    int SelectedCharacter;      // Index of the selected character
+    bool IsReady;               // Is the player ready to start?
+}

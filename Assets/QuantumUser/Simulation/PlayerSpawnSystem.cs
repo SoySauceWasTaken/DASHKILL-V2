@@ -13,16 +13,33 @@ namespace Quantum
             public PlayerLink* PlayerLink;
         }
 
+
+        // This refers to the HUMAN/Connection player. NOT the in-game character
         public void OnPlayerAdded(Frame f, PlayerRef player, bool firstTime)
         {
-            var playerData = f.GetPlayerData(player);
-            Log.Debug($"OnPlayerAdded callback: {playerData.PlayerNickname}, {playerData.PlayerAvatar.Id}");
-            var playerEntity = f.Create(playerData.PlayerAvatar);
+            var data = f.GetPlayerData(player);
+            var prototype = f.FindAsset(data.SelectionPrototype);
+            var entity = f.Create(prototype);
 
-            if (f.Unsafe.TryGetPointer<PlayerLink>(playerEntity, out var playerLink))
+            // Override the PlayerLink with the correct player
+            if (f.TryGet<PlayerLink>(entity, out var playerLink))
             {
-                playerLink->Player = player;
+                playerLink.Player = player;
+                f.Set(entity, playerLink);
             }
+
+
+            // DO NOT SPAWN A "game character" here.
+
+
+            //var playerData = f.GetPlayerData(player);
+            //Log.Debug($"OnPlayerAdded callback: {playerData.PlayerNickname}, {playerData.PlayerAvatar.Id}");
+            //var playerEntity = f.Create(playerData.PlayerAvatar);
+
+            //if (f.Unsafe.TryGetPointer<PlayerLink>(playerEntity, out var playerLink))
+            //{
+            //    playerLink->Player = player;
+            //}
         }
 
         public override void Update(Frame frame, ref Filter filter)

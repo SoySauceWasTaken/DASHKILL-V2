@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d5a3f7e0a65ee14fb3ba5cc4611c7b1, type: 3}
+  m_Name: DefaultCharacterLibrary
+  m_EditorClassIdentifier: Quantum.Menu::Quantum.Menu.CharacterLibrary
+  allCharacters:
+  - {fileID: 11400000, guid: 3ccf48fcc0773fb4a8b8d979e25ffda1, type: 2}
+  - {fileID: 11400000, guid: f94b3f1d590fadd46b10f2ce67f74fa1, type: 2}
+  - {fileID: 11400000, guid: 9c6e22e6c08520149ae0cda97dea665f, type: 2}
+  defaultCharacter: {fileID: 11400000, guid: 3ccf48fcc0773fb4a8b8d979e25ffda1, type: 2}
+  randomCharacter: {fileID: 11400000, guid: 9c6e22e6c08520149ae0cda97dea665f, type: 2}
+  defaultSelectionPrototype:
+    Id:
+      Value: 1491043245334107956
